@@ -23,7 +23,7 @@ public class CreateMemberInDto {
     private String nickName;
 
     @NotBlank(message="전화번호를 입력하세요.")
-    @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
+    @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다.")
     @Schema(description = "핸드폰 번호", example = "010-1234-5678")
     private String phoneNumber;
 
