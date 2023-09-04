@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum SuccessCode {
 
-    SUCCESS_TEST(HttpStatus.OK.value(), "테스트 성공");
+    SUCCESS_TEST(HttpStatus.OK.value(), "테스트 성공"),
+    CREATED(HttpStatus.CREATED.value(), "생성 완료");
 
     private final int code;
     private final String message;
