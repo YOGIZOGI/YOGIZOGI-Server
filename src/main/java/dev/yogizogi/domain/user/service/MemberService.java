@@ -7,6 +7,7 @@ import dev.yogizogi.domain.user.model.entity.Member;
 import dev.yogizogi.domain.user.repository.MemberRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
     public CreateMemberOutDto signUp(CreateMemberInDto response) {
 
         isDuplicate(response.getAccountName(), response.getNickName(), response.getPhoneNumber());
-        Member newMember = CreateMemberInDto.toEntity(response);
+        Member newMember = CreateMemberInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
         memberRepository.save(newMember);
 
         return CreateMemberOutDto.of(newMember);
