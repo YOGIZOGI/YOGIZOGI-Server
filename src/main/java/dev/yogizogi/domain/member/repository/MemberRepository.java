@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.user.repository;
+package dev.yogizogi.domain.member.repository;
 
-import dev.yogizogi.domain.user.model.entity.Member;
+import dev.yogizogi.domain.member.model.entity.Member;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

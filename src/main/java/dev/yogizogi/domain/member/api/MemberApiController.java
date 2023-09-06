@@ -1,8 +1,8 @@
-package dev.yogizogi.domain.user.api;
+package dev.yogizogi.domain.member.api;
 
-import dev.yogizogi.domain.user.model.dto.request.CreateMemberInDto;
-import dev.yogizogi.domain.user.model.dto.response.CreateMemberOutDto;
-import dev.yogizogi.domain.user.service.MemberService;
+import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
+import dev.yogizogi.domain.member.model.dto.response.CreateMemberOutDto;
+import dev.yogizogi.domain.member.service.MemberService;
 import dev.yogizogi.global.common.code.SuccessCode;
 import dev.yogizogi.global.common.model.response.ApiResponse;
 import dev.yogizogi.global.common.model.response.Success;

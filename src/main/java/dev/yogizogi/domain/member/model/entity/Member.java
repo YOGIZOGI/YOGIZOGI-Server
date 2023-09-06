@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.user.model.entity;
+package dev.yogizogi.domain.member.model.entity;
 
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import dev.yogizogi.global.util.UuidUtils;
