@@ -1,4 +1,4 @@
-package dev.yogizogi.global.config;
+package dev.yogizogi.global.config.coolsms;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;

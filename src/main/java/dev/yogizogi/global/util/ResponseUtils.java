@@ -1,4 +1,4 @@
-package dev.yogizogi.global.util.response;
+package dev.yogizogi.global.util;
 
 import dev.yogizogi.global.common.model.response.ApiResponse;
 import dev.yogizogi.global.common.model.response.Result;
