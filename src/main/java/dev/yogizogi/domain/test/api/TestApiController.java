@@ -3,7 +3,7 @@ package dev.yogizogi.domain.test.api;
 import dev.yogizogi.domain.test.model.dto.response.TestOutDto;
 import dev.yogizogi.domain.test.service.TestService;
 import dev.yogizogi.global.common.model.response.ApiResponse;
-import dev.yogizogi.global.util.response.ResponseUtils;
+import dev.yogizogi.global.util.ResponseUtils;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
