@@ -12,7 +12,10 @@ public enum ErrorCode {
     FAIL_TEST(HttpStatus.BAD_REQUEST.value(), "요청 실패"),
 
     WRONG_RESPONSE(HttpStatus.BAD_REQUEST.value(), "잘못된 요청입니다."),
-    DUPLICATE_MEMBER_INFORMATION(HttpStatus.BAD_REQUEST.value(), "중복되는 멤버 정보(닉네임, 아이디, 핸드폰 번호)가 존재합니다.");
+    DUPLICATE_ACCOUNT_NAME(HttpStatus.BAD_REQUEST.value(), "중복된 아이디입니다."),
+    DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST.value(), "중복된 닉네임입니다."),
+    DUPLICATE_PHONE_NUMBER(HttpStatus.BAD_REQUEST.value(), "중복된 핸드폰 번호입니다.")
+    ;
 
     private final int code;
     private final String message;
