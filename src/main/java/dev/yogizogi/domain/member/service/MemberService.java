@@ -32,15 +32,15 @@ public class MemberService {
     private void isDuplicate(String accountName, String nickName, String phoneNumber) {
 
         if (!memberRepository.findByAccountName(accountName).isEmpty()) {
-            throw new MemberException(ErrorCode.DUPLICATE_MEMBER_INFORMATION);
+            throw new MemberException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
         }
 
         if (!memberRepository.findByNickName(nickName).isEmpty()) {
-            throw new MemberException(ErrorCode.DUPLICATE_MEMBER_INFORMATION);
+            throw new MemberException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
         if (!memberRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
-            throw new MemberException(ErrorCode.DUPLICATE_MEMBER_INFORMATION);
+            throw new MemberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
     }
