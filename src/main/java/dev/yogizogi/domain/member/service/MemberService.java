@@ -1,10 +1,10 @@
-package dev.yogizogi.domain.user.service;
+package dev.yogizogi.domain.member.service;
 
-import dev.yogizogi.domain.user.exception.MemberException;
-import dev.yogizogi.domain.user.model.dto.request.CreateMemberInDto;
-import dev.yogizogi.domain.user.model.dto.response.CreateMemberOutDto;
-import dev.yogizogi.domain.user.model.entity.Member;
-import dev.yogizogi.domain.user.repository.MemberRepository;
+import dev.yogizogi.domain.member.exception.MemberException;
+import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
+import dev.yogizogi.domain.member.model.dto.response.CreateMemberOutDto;
+import dev.yogizogi.domain.member.model.entity.Member;
+import dev.yogizogi.domain.member.repository.MemberRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
