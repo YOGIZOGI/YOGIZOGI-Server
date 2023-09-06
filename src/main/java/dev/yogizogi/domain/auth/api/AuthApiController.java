@@ -4,7 +4,7 @@ import dev.yogizogi.domain.auth.service.AuthService;
 import dev.yogizogi.global.common.code.SuccessCode;
 import dev.yogizogi.global.common.model.response.ApiResponse;
 import dev.yogizogi.global.common.model.response.Success;
-import dev.yogizogi.global.util.response.ResponseUtils;
+import dev.yogizogi.global.util.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
