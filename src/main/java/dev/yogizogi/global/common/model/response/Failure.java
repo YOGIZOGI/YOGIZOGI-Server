@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -14,7 +15,7 @@ public class Failure<T> implements Result {
 
     private String timestamp;
     private String trackingId;
-    private int code;
+    private HttpStatus code;
     private String message;
     private T data;
 
