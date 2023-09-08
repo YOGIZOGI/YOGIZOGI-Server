@@ -1,6 +1,6 @@
 package dev.yogizogi.global.util;
 
-import static dev.yogizogi.global.common.constant.Number.VERIFICATION_CODE_LENGTH;
+import static dev.yogizogi.global.common.model.constant.Number.VERIFICATION_CODE_LENGTH;
 
 import java.util.Random;
 

@@ -1,5 +1,6 @@
 package dev.yogizogi.domain.auth.api;
 
+import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.service.AuthService;
 import dev.yogizogi.global.common.code.SuccessCode;
 import dev.yogizogi.global.common.model.response.ApiResponse;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +57,17 @@ public class AuthApiController {
                 (Success.builder()
                         .code(SuccessCode.OK)
                         .data(authService.checkVerificationCode(phoneNumber, code))
+                        .build());
+
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    public ApiResponse login(@RequestBody LoginInDto res) {
+        return ResponseUtils.ok
+                (Success.builder()
+                        .code(SuccessCode.OK)
+                        .data(authService.login(res))
                         .build());
 
     }
