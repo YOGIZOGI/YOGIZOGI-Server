@@ -1,12 +1,11 @@
 package dev.yogizogi.domain.test.api;
 
-import dev.yogizogi.domain.test.model.dto.response.TestOutDto;
 import dev.yogizogi.domain.test.service.TestService;
-import dev.yogizogi.global.common.model.response.ApiResponse;
-import dev.yogizogi.global.util.ResponseUtils;
+import dev.yogizogi.global.common.model.response.Result;
 import dev.yogizogi.global.common.model.response.Success;
-import dev.yogizogi.global.common.code.SuccessCode;
+import dev.yogizogi.global.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,26 +19,21 @@ public class TestApiController {
     private final TestService testService;
 
     @GetMapping("/")
-    public ApiResponse testConnection() {
+    public ResponseEntity testConnection() {
 
-        TestOutDto result = testService.testConnection();
-
-        return ResponseUtils.ok(Success.<TestOutDto>builder()
-                .code(SuccessCode.SUCCESS_TEST)
-                .data(result)
-                .build());
-
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(testService.testConnection())
+                        .build());
     }
 
     @GetMapping("/exception")
-    public ApiResponse testException(@RequestParam String code) {
+    public ResponseEntity testException(@RequestParam String code) {
 
-        TestOutDto result = testService.testException(code);
-
-        return ResponseUtils.ok(Success.<TestOutDto>builder()
-                .code(SuccessCode.SUCCESS_TEST)
-                .data(result)
-                .build());
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(testService.testException(code))
+                        .build());
 
     }
 
