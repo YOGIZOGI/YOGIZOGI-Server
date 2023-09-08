@@ -5,12 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Success<T> implements Result {
 
-    private int code;
+    private HttpStatus code;
     private String message;
     private T data;
 
