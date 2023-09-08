@@ -58,12 +58,12 @@ public class AuthService {
     public LoginOutDto login(LoginInDto res) throws AuthException {
 
         Member findMember = memberRepository.findByAccountName(res.getAccountName())
-                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
+                .orElseThrow(() -> new AuthException(ErrorCode.NOT_EXIST_ACCOUNT));
 
         if (!passwordEncoder.matches(
                 res.getPassword(), findMember.getPassword()
         )) {
-            throw new FailLoginException(ErrorCode.FAIL_LOGIN);
+            throw new AuthException(ErrorCode.FAIL_LOGIN);
         }
 
         return LoginOutDto.of(findMember.getId());
