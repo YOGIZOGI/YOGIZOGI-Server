@@ -1,4 +1,4 @@
-package dev.yogizogi.global.common.constant;
+package dev.yogizogi.global.common.model.constant;
 
 public class Format {
 

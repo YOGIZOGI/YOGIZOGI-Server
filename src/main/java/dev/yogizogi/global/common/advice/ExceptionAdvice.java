@@ -1,6 +1,6 @@
 package dev.yogizogi.global.common.advice;
 
-import static dev.yogizogi.global.common.constant.Format.VALIDATION_RESULT;
+import static dev.yogizogi.global.common.model.constant.Format.VALIDATION_RESULT;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
