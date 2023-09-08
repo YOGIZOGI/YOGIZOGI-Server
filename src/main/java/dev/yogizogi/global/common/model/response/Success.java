@@ -1,6 +1,8 @@
 package dev.yogizogi.global.common.model.response;
 
-import dev.yogizogi.global.common.code.SuccessCode;
+import dev.yogizogi.global.common.status.response.ResponseStatus;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,20 +10,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Success<T> implements Result {
+public class Success<T>  implements Result {
 
-    private int code;
-    private String message;
+    private String timestamp;
+    private String trackingId;
+    private ResponseStatus status;
     private T data;
 
     @Builder
-    private Success(SuccessCode code, T data) {
+    public Success(T data) {
 
-        this.code = code.getCode();
-        this.message = code.getMessage();
+        this.timestamp = LocalDateTime.now().toString();
+        this.trackingId = UUID.randomUUID().toString();
+        this.status = ResponseStatus.SUCCESS;
         this.data = data;
 
     }
-
 
 }

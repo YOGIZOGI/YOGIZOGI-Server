@@ -1,6 +1,6 @@
 package dev.yogizogi.global.common.model.response;
 
-import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.response.ResponseStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -14,18 +14,16 @@ public class Failure<T> implements Result {
 
     private String timestamp;
     private String trackingId;
-    private int code;
-    private String message;
-    private T data;
+    private ResponseStatus status;
+    private T message;
 
     @Builder
-    public Failure(ErrorCode code, T data) {
+    public Failure(ResponseStatus status, T message) {
 
         this.timestamp = LocalDateTime.now().toString();
         this.trackingId = UUID.randomUUID().toString();
-        this.code = code.getCode();
-        this.message = code.getMessage();
-        this.data = data;
+        this.status = ResponseStatus.FAILURE;
+        this.message = message;
 
     }
 

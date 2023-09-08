@@ -1,8 +1,8 @@
 package dev.yogizogi.domain.auth.api;
 
+import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.service.AuthService;
-import dev.yogizogi.global.common.code.SuccessCode;
-import dev.yogizogi.global.common.model.response.ApiResponse;
+import dev.yogizogi.global.common.model.response.Result;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +11,10 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,13 +30,12 @@ public class AuthApiController {
     @Operation(summary = "인증번호 요청")
     @GetMapping("/send-verification-code")
     @Parameter(name = "phoneNumber", description = "인증하고 싶은 핸드폰 번호", example = "01032527971")
-    public ApiResponse sendVerificationCode(
+    public ResponseEntity sendVerificationCode(
             @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber
     ) {
 
-        return ResponseUtils.ok
-                (Success.builder()
-                        .code(SuccessCode.OK)
+        return ResponseUtils.ok(
+                Success.builder()
                         .data(authService.sendVerificationCode(phoneNumber))
                         .build());
 
@@ -45,17 +47,25 @@ public class AuthApiController {
             @Parameter(name = "phoneNumber", description = "인증하고 싶은 핸드폰 번호", example = "01032527971"),
             @Parameter(name = "code", description = "인증코드", example = "123456"),
     })
-    public ApiResponse checkVerificationCode(
+    public ResponseEntity checkVerificationCode(
             @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber,
             @RequestParam @Pattern(regexp = "\\d{6}$", message = "6자리 숫자를 입력해주세요.") String code
     ) {
 
-        return ResponseUtils.ok
-                (Success.builder()
-                        .code(SuccessCode.OK)
+        return ResponseUtils.ok(
+                Success.builder()
                         .data(authService.checkVerificationCode(phoneNumber, code))
                         .build());
 
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginInDto res) {
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(authService.login(res))
+                        .build());
     }
 
 }
