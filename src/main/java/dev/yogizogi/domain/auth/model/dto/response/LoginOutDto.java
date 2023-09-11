@@ -14,9 +14,13 @@ public class LoginOutDto {
     @Schema(name = "유저 식별자")
     private UUID id;
 
-    public static LoginOutDto of(UUID id) {
+    @Schema(name = "어세스 토큰")
+    private String accessToken;
+
+    public static LoginOutDto of(UUID id, String accessToken) {
         return LoginOutDto.builder()
                 .id(id)
+                .accessToken(accessToken)
                 .build();
     }
 

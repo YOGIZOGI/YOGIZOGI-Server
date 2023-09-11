@@ -17,7 +17,7 @@ public class TestService {
     public TestOutDto testException(String code) {
 
         if  (code.equals("실패")) {
-            throw new BaseException(ErrorCode.FAIL_TEST);
+            throw new BaseException(ErrorCode.FAIL_TO_TEST);
         }
 
         return TestOutDto.of("연결 완료");

@@ -1,14 +1,13 @@
 package dev.yogizogi.domain.auth.service;
 
 import dev.yogizogi.domain.auth.exception.AuthException;
-import dev.yogizogi.domain.auth.exception.FailLoginException;
-import dev.yogizogi.domain.auth.exception.NotExistAccountException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
 import dev.yogizogi.domain.member.exception.MemberException;
 import dev.yogizogi.domain.member.model.entity.Member;
 import dev.yogizogi.domain.member.repository.MemberRepository;
+import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.VerificationStatus;
 import dev.yogizogi.global.util.CodeUtils;
@@ -27,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
+
+    private final JwtService jwtService;
 
     private final PasswordEncoder passwordEncoder;
     private final SmsUtils smsUtils;
@@ -63,10 +64,10 @@ public class AuthService {
         if (!passwordEncoder.matches(
                 res.getPassword(), findMember.getPassword()
         )) {
-            throw new AuthException(ErrorCode.FAIL_LOGIN);
+            throw new AuthException(ErrorCode.FAIL_TO_LOGIN);
         }
 
-        return LoginOutDto.of(findMember.getId());
+        return LoginOutDto.of(findMember.getId(), jwtService.createAccessToken(findMember));
 
     }
 
