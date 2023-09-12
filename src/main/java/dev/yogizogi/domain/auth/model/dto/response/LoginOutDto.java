@@ -17,10 +17,14 @@ public class LoginOutDto {
     @Schema(name = "어세스 토큰")
     private String accessToken;
 
-    public static LoginOutDto of(UUID id, String accessToken) {
+    @Schema(name = "리프레쉬 토큰")
+    private String refreshToken;
+
+    public static LoginOutDto of(UUID id, String accessToken, String refreshToken) {
         return LoginOutDto.builder()
                 .id(id)
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
