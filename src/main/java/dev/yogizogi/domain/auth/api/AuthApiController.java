@@ -2,6 +2,8 @@ package dev.yogizogi.domain.auth.api;
 
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.service.AuthService;
+import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
+import dev.yogizogi.domain.member.service.MemberService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthApiController {
 
+    private final MemberService memberService;
     private final AuthService authService;
     private final JwtService jwtService;
 
@@ -60,6 +64,17 @@ public class AuthApiController {
 
     }
 
+    @Operation(summary = "회원 가입")
+    @PostMapping("/sign-up")
+    public ResponseEntity createMember(@RequestBody @Valid CreateMemberInDto response) {
+
+        return ResponseUtils.created(
+                Success.builder()
+                        .data(memberService.signUp(response))
+                        .build());
+
+    }
+
     @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginInDto res) {
@@ -77,5 +92,6 @@ public class AuthApiController {
                         .data(jwtService.reissueAccessToken(refreshToken))
                         .build());
     }
+
 
 }
