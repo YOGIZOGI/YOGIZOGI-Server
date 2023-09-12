@@ -6,10 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "로그인 응답 Dto")
+@Schema(name = "accessToken 재발급 응답 Dto")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class LoginOutDto {
+public class ReissueAccessTokenOutDto {
 
     @Schema(name = "유저 식별자")
     private UUID id;
@@ -17,14 +17,10 @@ public class LoginOutDto {
     @Schema(name = "어세스 토큰")
     private String accessToken;
 
-    @Schema(name = "리프레쉬 토큰")
-    private String refreshToken;
-
-    public static LoginOutDto of(UUID id, String accessToken, String refreshToken) {
-        return LoginOutDto.builder()
+    public static ReissueAccessTokenOutDto of(UUID id, String accessToken) {
+        return ReissueAccessTokenOutDto.builder()
                 .id(id)
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
     }
 
