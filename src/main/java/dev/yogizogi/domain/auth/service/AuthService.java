@@ -1,5 +1,7 @@
 package dev.yogizogi.domain.auth.service;
 
+import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
+
 import dev.yogizogi.domain.auth.exception.AuthException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
@@ -33,6 +35,7 @@ public class AuthService {
     private final SmsUtils smsUtils;
     private final RedisUtils redisUtils;
 
+    @Transactional(readOnly = true)
     public SingleMessageSentResponse sendVerificationCode(String phoneNumber) {
 
         if (!memberRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
@@ -43,6 +46,7 @@ public class AuthService {
 
     }
 
+    @Transactional(readOnly = true)
     public VerifyCodeOutDto checkVerificationCode(String phoneNumber, String code) {
 
         VerificationStatus status = VerificationStatus.PASS;
@@ -56,6 +60,7 @@ public class AuthService {
 
     }
 
+    @Transactional(readOnly = true)
     public LoginOutDto login(LoginInDto res) throws AuthException {
 
         Member findMember = memberRepository.findByAccountName(res.getAccountName())
@@ -71,7 +76,7 @@ public class AuthService {
                 findMember.getId(),
                 jwtService.createAccessToken(findMember),
                 jwtService.createRefreshToken(findMember)
-                );
+        );
 
     }
 

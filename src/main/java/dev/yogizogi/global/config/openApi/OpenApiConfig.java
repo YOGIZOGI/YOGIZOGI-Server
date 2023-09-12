@@ -2,8 +2,12 @@ package dev.yogizogi.global.config.openApi;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.Arrays;
+import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +32,24 @@ public class OpenApiConfig {
 
     }
 
+    @Bean
+    public GroupedOpenApi SecurityGroup() {
+        return GroupedOpenApi
+                .builder()
+                .group("토큰 필요 API")
+                .pathsToExclude( "/api/auth/**")
+                .addOpenApiCustomizer(buildSecurityOpenApi())
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi NonSecurityGroup() {
+        return GroupedOpenApi
+                .builder()
+                .group("토큰 불필요 API")
+                .pathsToMatch("/api/auth/**")
+                .build();
+    }
 
     private Info getInfo() {
         return new Info()
@@ -35,18 +57,22 @@ public class OpenApiConfig {
                 .description("YOGIZOGI API DOCS");
     }
 
-//    private OpenApiCustomiser buildSecurityOpenApi() {
-//        SecurityScheme securityScheme = new SecurityScheme()
-//                .name("Authorization")
-//                .type(SecurityScheme.Type.HTTP)
-//                .in(SecurityScheme.In.HEADER)
-//                .bearerFormat("JWT")
-//                .scheme("bearer");
-//
-//        return OpenApi -> OpenApi
-//                .addSecurityItem(new SecurityRequirement().addList("Authorization"))
-//                .getComponents().addSecuritySchemes("Authorization", securityScheme);
-//    }
+    private OpenApiCustomizer buildSecurityOpenApi() {
+        SecurityScheme securityScheme = new SecurityScheme()
+                .name("Authorization")
+                .type(SecurityScheme.Type.HTTP)
+                .in(SecurityScheme.In.HEADER)
+                .bearerFormat("JWT")
+                .scheme("Bearer");
+
+        return OpenApi -> OpenApi
+                .addSecurityItem(
+                        new SecurityRequirement()
+                                .addList("Authorization")
+                )
+                .getComponents()
+                .addSecuritySchemes("Authorization", securityScheme);
+    }
 
 }
 
