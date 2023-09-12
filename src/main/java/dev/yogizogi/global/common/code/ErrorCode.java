@@ -19,11 +19,13 @@ public enum ErrorCode {
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
     DUPLICATE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "중복된 핸드폰 번호입니다."),
 
-
     /**
      * Code : 401
      * - Unauthorized (권한이 없어 인증 불가)
      */
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 없습니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다." ),
 
     /**
      * Code : 403
@@ -41,9 +43,10 @@ public enum ErrorCode {
 
     /**
      * Code : 500
-     * - Not Found (존재하지 않는 자원임)
+     * - INTERNAL_SERVER_ERROR (서버 오류)
      */
-    FAIL_TO_CREATE_JWT(HttpStatus.INTERNAL_SERVER_ERROR, "JWT를 생성하지 못했습니다.");
+    FAIL_TO_CREATE_JWT(HttpStatus.INTERNAL_SERVER_ERROR, "JWT를 생성하지 못했습니다."),
+    FAIL_TO_EXTRACT_SUBJECT(HttpStatus.INTERNAL_SERVER_ERROR, "Subject를 추출할 수 없습니다.");
 
     private final HttpStatus code;
     private final String message;
