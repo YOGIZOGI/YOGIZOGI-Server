@@ -5,9 +5,9 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class FailSetClaimsException extends BaseException {
+public class FailToSetClaimsException extends BaseException {
 
-    public FailSetClaimsException(ErrorCode errorCode) {
+    public FailToSetClaimsException(ErrorCode errorCode) {
         super(errorCode);
     }
 

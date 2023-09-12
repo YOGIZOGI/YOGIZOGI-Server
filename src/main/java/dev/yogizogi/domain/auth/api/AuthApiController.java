@@ -2,7 +2,7 @@ package dev.yogizogi.domain.auth.api;
 
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.service.AuthService;
-import dev.yogizogi.global.common.model.response.Result;
+import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthApiController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
 
     @Operation(summary = "인증번호 요청")
     @GetMapping("/send-verification-code")
@@ -65,6 +66,15 @@ public class AuthApiController {
         return ResponseUtils.ok(
                 Success.builder()
                         .data(authService.login(res))
+                        .build());
+    }
+
+    @Operation(summary = "Access Token 재발급")
+    @GetMapping("/reissue-access-token")
+    public ResponseEntity reissueAccessToken(@RequestParam String refreshToken) {
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(jwtService.reissueAccessToken(refreshToken))
                         .build());
     }
 
