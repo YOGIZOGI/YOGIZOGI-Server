@@ -4,27 +4,37 @@ import static dev.yogizogi.domain.security.model.TokenType.ACCESS_TOKEN;
 import static dev.yogizogi.domain.security.model.TokenType.REFRESH_TOKEN;
 import static dev.yogizogi.global.common.code.ErrorCode.EXPIRED_TOKEN;
 import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_ACCOUNT;
+import static dev.yogizogi.global.common.model.constant.Format.TOKEN_HEADER_NAME;
+import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.member.exception.NotExistAccountException;
+import dev.yogizogi.domain.member.model.entity.Authority;
 import dev.yogizogi.domain.member.repository.MemberRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.exception.FailToSetClaimsException;
 import dev.yogizogi.domain.member.model.entity.Member;
+import dev.yogizogi.domain.security.exception.InvalidTokenException;
+import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.domain.security.model.Subject;
 import dev.yogizogi.domain.security.model.TokenType;
 import dev.yogizogi.global.util.RedisUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -52,18 +62,16 @@ public class JwtService {
      * ACCESS 토큰 생성
      */
     public String createAccessToken(Member member) {
-        String accessToken = issueToken(member.getId(), member.getAccountName(), ACCESS_TOKEN);
-        return accessToken;
+        return TOKEN_PREFIX.concat(issueToken(member.getId(), member.getAccountName(), ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
     public String createRefreshToken(Member member) {
-        String accountName = member.getAccountName();
-        String refreshToken = issueToken(member.getId(), accountName, REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
-        return refreshToken;
+        String refreshToken = issueToken(member.getId(), member.getAccountName(), REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(member.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
+        return TOKEN_PREFIX.concat(refreshToken);
     }
 
     /**
@@ -101,10 +109,6 @@ public class JwtService {
 
     }
 
-    /**
-     * 토큰 발행
-     * Token Type은 매개 변수를 통해 받아 지정
-     */
     private String issueToken(UUID id, String email, TokenType type) {
 
         Date now = new Date();
@@ -146,9 +150,6 @@ public class JwtService {
 
     }
 
-    /**
-     *  Claims 추출
-     */
     private Jws<Claims> extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -156,6 +157,35 @@ public class JwtService {
                 .parseClaimsJws(token);
     }
 
+    /**
+     * 토큰 추출
+     */
+    public Optional<String> extractToken(HttpServletRequest request) {
+        return Optional.ofNullable(request.getHeader(TOKEN_HEADER_NAME).replace("Bearer ", ""));
+    }
+
+    /**
+     * 토큰 검증
+     */
+    public boolean isValid(String token) {
+
+        try {
+            extractClaims(token);
+            return true;
+        } catch (ExpiredJwtException exception) {
+            throw new ExpiredTokenException(EXPIRED_TOKEN);
+        } catch (JwtException exception) {
+            throw new InvalidTokenException(ErrorCode.INVALID_TOKEN);
+        }
+    }
+
+    /**
+     * 인증 등록
+     */
+    public Authentication getAuthentication(String token) {
+        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getAccountName());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
 
 
 }
