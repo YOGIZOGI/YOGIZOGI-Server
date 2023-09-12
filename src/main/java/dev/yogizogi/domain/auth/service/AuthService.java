@@ -67,7 +67,11 @@ public class AuthService {
             throw new AuthException(ErrorCode.FAIL_TO_LOGIN);
         }
 
-        return LoginOutDto.of(findMember.getId(), jwtService.createAccessToken(findMember));
+        return LoginOutDto.of(
+                findMember.getId(),
+                jwtService.createAccessToken(findMember),
+                jwtService.createRefreshToken(findMember)
+                );
 
     }
 

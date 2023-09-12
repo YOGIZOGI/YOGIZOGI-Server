@@ -5,6 +5,7 @@ import static dev.yogizogi.domain.security.model.TokenType.REFRESH_TOKEN;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.member.repository.MemberRepository;
 import dev.yogizogi.domain.security.exception.FailSetClaimsException;
 import dev.yogizogi.domain.member.model.entity.Member;
 import dev.yogizogi.global.common.code.ErrorCode;
@@ -16,7 +17,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.transaction.Transactional;
 import java.util.Date;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,29 +33,26 @@ public class JwtService {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
+    private final MemberRepository memberRepository;
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
 
     /**
-     * 토큰 생성
+     * 어세스 토큰 생성
      */
     public String createAccessToken(Member member) {
-
-        log.info("-----Start To Create Token-----");
-
-        String accountName = member.getAccountName();
-
-        String accessToken = issueToken(accountName, ACCESS_TOKEN);
-
-        if (Objects.isNull(redisUtils.findByKey(accountName))) {
-            String refreshToken = issueToken(accountName, REFRESH_TOKEN);
-            redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
-        }
-
-        log.info("-----Complete To Create Token-----");
-
+        String accessToken = issueToken(member.getAccountName(), ACCESS_TOKEN);
         return accessToken;
+    }
 
+    /**
+     *  리프레쉬 토큰 생성
+     */
+    public String createRefreshToken(Member member) {
+        String accountName = member.getAccountName();
+        String refreshToken = issueToken(accountName, REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
+        return refreshToken;
     }
 
     /**
@@ -66,23 +63,18 @@ public class JwtService {
 
         Date now = new Date();
         Claims claims = setClaims(email, type);
-        Date expirationDate = getExpirationDate(now, type.getExpirationTime());
+        Date expirationTime = setExpirationTime(now, type.getExpirationTime());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(expirationDate)
+                .setExpiration(expirationTime)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
 
     }
 
     private Claims setClaims(String accountName, TokenType type) {
-
-        log.info("Type");
-        log.info("-> " + type.getName());
-        log.info("Email Information");
-        log.info("-> " + accountName);
 
         Subject subject = Subject.builder()
                 .accountName(accountName)
@@ -100,17 +92,11 @@ public class JwtService {
 
     }
 
-    private Date getExpirationDate(Date now, long expirationTime) {
+    private Date setExpirationTime(Date now, long expirationTime) {
 
         Date expirationDate = new Date(now.getTime() + expirationTime);
-
-        log.info("Expiration Date");
-        log.info("-> " + expirationDate);
-
         return expirationDate;
 
     }
-
-
 
 }
