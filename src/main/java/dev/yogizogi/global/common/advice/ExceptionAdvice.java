@@ -2,7 +2,6 @@ package dev.yogizogi.global.common.advice;
 
 import static dev.yogizogi.global.common.model.constant.Format.VALIDATION_RESULT;
 
-import dev.yogizogi.domain.auth.exception.FailLoginException;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
 import dev.yogizogi.global.common.model.response.Failure;
@@ -59,7 +58,7 @@ public class ExceptionAdvice {
                 Failure.builder()
                         .message(errors)
                         .build(),
-                ErrorCode.FAIL_VALIDATION
+                ErrorCode.FAIL_TO_VALIDATE
         );
 
     }

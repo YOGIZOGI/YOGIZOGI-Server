@@ -1,5 +1,6 @@
 package dev.yogizogi.global.config.security;
 
+import dev.yogizogi.domain.security.service.JwtService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -28,6 +31,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final JwtService jwtService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -37,7 +43,7 @@ public class SecurityConfig {
 
                 .csrf(CsrfConfigurer::disable)
 
-                .cors(configurer -> {
+                .cors(cors -> {
 
                     CorsConfigurationSource source = request -> {
 
@@ -49,25 +55,21 @@ public class SecurityConfig {
                         return configuration;
                     };
 
-                    configurer.configurationSource(source);
+                    cors.configurationSource(source);
                 })
 
-                .sessionManagement(configure -> configure.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .authorizeHttpRequests(authorize ->
-                        authorize
-                                // Open API(Swagger) 관련 Uri
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**")
-                                .permitAll()
-
-                                // Todo: 토큰 구현 후 권한에 맞게 Uri 수정
-                                .requestMatchers("/**").permitAll()
+                .authorizeHttpRequests(request ->
+                        request.anyRequest().authenticated()
                 )
 
-                //에러 핸들링
-                .exceptionHandling(configurer -> {
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
 
-                    configurer.authenticationEntryPoint(new AuthenticationEntryPoint() {
+                //에러 핸들링
+                .exceptionHandling(exception -> {
+
+                    exception.authenticationEntryPoint(new AuthenticationEntryPoint() {
                         @Override
                         public void commence(
                                 HttpServletRequest request,
@@ -77,11 +79,12 @@ public class SecurityConfig {
                             response.setStatus(401);
                             response.setCharacterEncoding("utf-8");
                             response.setContentType("text/html; charset=UTF-8");
-                            response.getWriter().write("인증되지 않은 사용자입니다.");
+                            response.getWriter().write("유효하지 않은 토큰입니다.");
                         }
+
                     });
 
-                    configurer.accessDeniedHandler(new AccessDeniedHandler() {
+                    exception.accessDeniedHandler(new AccessDeniedHandler() {
                         @Override
                         public void handle(
                                 HttpServletRequest request,
@@ -91,13 +94,25 @@ public class SecurityConfig {
                             response.setStatus(403);
                             response.setCharacterEncoding("utf-8");
                             response.setContentType("text/html; charset=UTF-8");
-                            response.getWriter().write("권한이 없는 사용자입니다.");
+                            response.getWriter().write("유효하지 않은 토큰입니다.");
                         }
+
                     });
                 });
 
         return httpSecurity.getOrBuild();
 
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                // Open API(Swagger) 관련 Uri
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**")
+                // h2
+                .requestMatchers("/h2-console/**")
+                // 제외할 API Uri
+                .requestMatchers("/api/auth/**");
     }
 
     @Bean

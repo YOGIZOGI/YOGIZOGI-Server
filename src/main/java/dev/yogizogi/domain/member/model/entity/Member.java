@@ -2,9 +2,14 @@ package dev.yogizogi.domain.member.model.entity;
 
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import dev.yogizogi.global.util.UuidUtils;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,6 +36,10 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Authority> roles = new ArrayList<>();
+
 
     @Builder
     public Member(String accountName, String password, String nickName, String phoneNumber) {

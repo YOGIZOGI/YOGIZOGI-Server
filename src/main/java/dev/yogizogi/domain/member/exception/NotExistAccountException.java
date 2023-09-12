@@ -1,10 +1,8 @@
-package dev.yogizogi.domain.auth.exception;
+package dev.yogizogi.domain.member.exception;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 public class NotExistAccountException extends BaseException {
