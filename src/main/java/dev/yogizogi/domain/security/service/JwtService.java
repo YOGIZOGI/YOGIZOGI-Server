@@ -77,13 +77,13 @@ public class JwtService {
     /**
      * ACCESS 토큰 재발급
      */
-    public ReissueAccessTokenOutDto reissueAccessToken(String refreshToken) {
+    public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String accountName) {
 
-        Subject subject = extractSubject(refreshToken);
-        Member findMember = memberRepository.findByAccountName(subject.getAccountName())
+        Member findMember = memberRepository.findByIdAndAccountName(id, accountName)
                 .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
 
-        if (Objects.isNull(redisUtils.findByKey(subject.getAccountName()))) {
+        String refreshToken = redisUtils.findByKey(findMember.getAccountName());
+        if (Objects.isNull(refreshToken)) {
             throw new ExpiredTokenException(EXPIRED_TOKEN);
         }
 
