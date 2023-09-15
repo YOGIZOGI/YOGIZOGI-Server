@@ -11,7 +11,10 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 public class VerifyCodeOutDto {
 
+    @Schema(description = "결과", allowableValues = {"PASS", "NOT_PASS"})
     private VerificationStatus status;
+
+    @Schema(description = "입력한 핸드폰 번호")
     private String phoneNumber;
 
     public static VerifyCodeOutDto of(VerificationStatus status, String phoneNumber) {
