@@ -119,7 +119,7 @@ public class AuthApiController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "회원가입 완료",
+                    description = "로그인 완료",
                     content = @Content(schema = @Schema(implementation = LoginOutDto.class))
             ),
             @ApiResponse(responseCode = "403", description = "아이디 or 비밀번호 불일치"),
