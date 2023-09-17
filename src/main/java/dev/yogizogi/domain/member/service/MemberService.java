@@ -21,7 +21,7 @@ public class MemberService {
 
     public CreateMemberOutDto signUp(CreateMemberInDto response) {
 
-        isDuplicate(response.getAccountName(), response.getNickName(), response.getPhoneNumber());
+        checkDuplication(response.getAccountName(), response.getNickName(), response.getPhoneNumber());
         Member newMember = CreateMemberInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
         memberRepository.save(newMember);
 
@@ -29,7 +29,7 @@ public class MemberService {
 
     }
 
-    private void isDuplicate(String accountName, String nickName, String phoneNumber) {
+    private void checkDuplication(String accountName, String nickName, String phoneNumber) {
 
         if (!memberRepository.findByAccountName(accountName).isEmpty()) {
             throw new MemberException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
