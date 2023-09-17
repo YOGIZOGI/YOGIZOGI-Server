@@ -59,6 +59,7 @@ public class AuthService {
         }
 
         return MessageStatus.SUCCESS;
+
     }
 
     @Transactional(readOnly = true)
