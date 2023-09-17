@@ -11,10 +11,10 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 public class ReissueAccessTokenOutDto {
 
-    @Schema(name = "유저 식별자")
+    @Schema(description = "유저 식별자")
     private UUID id;
 
-    @Schema(name = "어세스 토큰")
+    @Schema(description = "어세스 토큰")
     private String accessToken;
 
     public static ReissueAccessTokenOutDto of(UUID id, String accessToken) {
