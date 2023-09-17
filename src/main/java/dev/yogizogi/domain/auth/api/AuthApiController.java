@@ -150,12 +150,10 @@ public class AuthApiController {
     })
     @GetMapping("/reissue-access-token")
     public ResponseEntity reissueAccessToken(
-            @RequestParam UUID id, @RequestParam String accountName
-    ) {
+            @RequestParam UUID id, @RequestParam String accountName) {
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(jwtService.reissueAccessToken(id, accountName))
-                        .build());
+                        .data(jwtService.reissueAccessToken(id, accountName));
     }
 
 

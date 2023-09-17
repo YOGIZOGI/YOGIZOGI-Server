@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.auth.service;
 
 import static dev.yogizogi.global.common.model.constant.Number.COOLSMS_SUCCESS_CODE;
+import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import dev.yogizogi.domain.auth.exception.AuthException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
@@ -39,8 +40,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
-
-
+  
         if (!memberRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
             throw new MemberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
