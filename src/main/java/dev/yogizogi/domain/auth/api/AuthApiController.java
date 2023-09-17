@@ -3,6 +3,7 @@ package dev.yogizogi.domain.auth.api;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
+import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
 import dev.yogizogi.domain.auth.service.AuthService;
 import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
@@ -23,7 +24,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +47,7 @@ public class AuthApiController {
             @ApiResponse(
                     responseCode = "200",
                     description = "요청 완료",
-                    content = @Content(schema = @Schema(implementation = SingleMessageSentResponse.class))
+                    content = @Content(schema = @Schema(implementation = SendVerificationCodeOutDto.class))
             ),
             @ApiResponse(
                     responseCode = "400",

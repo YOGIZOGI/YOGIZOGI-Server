@@ -1,16 +1,18 @@
 package dev.yogizogi.domain.auth.service;
 
-import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
+import static dev.yogizogi.global.common.model.constant.Number.COOLSMS_SUCCESS_CODE;
 
 import dev.yogizogi.domain.auth.exception.AuthException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
+import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
 import dev.yogizogi.domain.member.exception.MemberException;
 import dev.yogizogi.domain.member.model.entity.Member;
 import dev.yogizogi.domain.member.repository.MemberRepository;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.common.status.VerificationStatus;
 import dev.yogizogi.global.util.CodeUtils;
 import dev.yogizogi.global.util.RedisUtils;
@@ -36,14 +38,27 @@ public class AuthService {
     private final RedisUtils redisUtils;
 
     @Transactional(readOnly = true)
-    public SingleMessageSentResponse sendVerificationCode(String phoneNumber) {
+    public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
+
 
         if (!memberRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
             throw new MemberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
-        return smsUtils.sendOne(phoneNumber, CodeUtils.verification());
+        SingleMessageSentResponse result = smsUtils.sendOne(phoneNumber, CodeUtils.verification());
+        MessageStatus status = checkSentSuccessfully(result);
 
+        return SendVerificationCodeOutDto.of(status, result.getStatusMessage());
+
+    }
+
+    private static MessageStatus checkSentSuccessfully(SingleMessageSentResponse result) {
+
+        if (!COOLSMS_SUCCESS_CODE.contains(result.getStatusCode())) {
+            return MessageStatus.FAIL;
+        }
+
+        return MessageStatus.SUCCESS;
     }
 
     @Transactional(readOnly = true)
