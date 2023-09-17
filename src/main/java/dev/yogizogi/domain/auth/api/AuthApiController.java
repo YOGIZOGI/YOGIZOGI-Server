@@ -153,8 +153,8 @@ public class AuthApiController {
             @RequestParam UUID id, @RequestParam String accountName) {
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(jwtService.reissueAccessToken(id, accountName));
+                        .data(jwtService.reissueAccessToken(id, accountName))
+                        .build());
     }
-
 
 }
