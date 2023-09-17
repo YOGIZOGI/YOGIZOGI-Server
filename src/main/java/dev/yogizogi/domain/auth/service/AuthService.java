@@ -89,6 +89,7 @@ public class AuthService {
 
         return LoginOutDto.of(
                 findMember.getId(),
+                findMember.getAccountName(),
                 jwtService.createAccessToken(findMember),
                 jwtService.createRefreshToken(findMember)
         );
