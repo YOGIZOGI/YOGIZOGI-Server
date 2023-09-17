@@ -20,14 +20,17 @@ public class SmsUtils {
 
     public SingleMessageSentResponse sendOne(String to, String code) {
 
-        message.setTo(to);
-        message.setText(String.format(VERIFICATION_CODE_MESSAGE, code));
-        System.out.println();
+        setMessage(to, code);
         SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
-
         redisUtils.saveWithExpirationTime(to, code, VERIFICATION_CODE_EXPIRATION_TIME);
+
         return response;
 
+    }
+
+    private void setMessage(String to, String code) {
+        message.setTo(to);
+        message.setText(String.format(VERIFICATION_CODE_MESSAGE, code));
     }
 
 }
