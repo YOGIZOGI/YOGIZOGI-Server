@@ -15,6 +15,7 @@ public enum ErrorCode {
      */
     FAIL_TO_TEST(HttpStatus.BAD_REQUEST, "요청 실패"),
     FAIL_TO_VALIDATE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    FAIL_TO_SEND_MESSAGE(HttpStatus.BAD_REQUEST, "인증번호 전송 실패"),
     DUPLICATE_ACCOUNT_NAME(HttpStatus.BAD_REQUEST, "중복된 아이디입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
     DUPLICATE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "중복된 핸드폰 번호입니다."),
