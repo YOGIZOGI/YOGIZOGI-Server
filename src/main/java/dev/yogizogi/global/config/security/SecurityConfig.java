@@ -1,7 +1,6 @@
 package dev.yogizogi.global.config.security;
 
 import dev.yogizogi.domain.security.service.JwtService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

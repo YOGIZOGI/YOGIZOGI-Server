@@ -30,17 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtService.extractToken(request).filter(jwtService::isValid)
                 .orElseThrow(() -> new EmptyTokenException(ErrorCode.EMPTY_TOKEN));
 
-        if (Objects.equals(request.getRequestURI(), REISSUE_ACCESS_TOKEN_URL)) {
+        if (Objects.equals(request.getRequestURI(), REISSUE_ACCESS_TOKEN_URL)
+                && !Objects.equals(jwtService.extractSubject(token).getType(), REFRESH_TOKEN)) {
 
-            if (!Objects.equals(jwtService.extractSubject(token).getType(), REFRESH_TOKEN)) {
-                throw new InvalidTokenException(ErrorCode.INVALID_TOKEN);
-            }
+            throw new InvalidTokenException(ErrorCode.INVALID_TOKEN);
 
         }
 
         Authentication auth = jwtService.getAuthentication(token);
         SecurityContextHolder.getContext().setAuthentication(auth);
-
         filterChain.doFilter(request, response);
 
     }
