@@ -1,7 +1,6 @@
 package dev.yogizogi.domain.auth.service;
 
 import static dev.yogizogi.global.common.model.constant.Number.COOLSMS_SUCCESS_CODE;
-import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import dev.yogizogi.domain.auth.exception.AuthException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
@@ -17,7 +16,7 @@ import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.common.status.VerificationStatus;
 import dev.yogizogi.global.util.CodeUtils;
 import dev.yogizogi.global.util.RedisUtils;
-import dev.yogizogi.global.util.SmsUtils;
+import dev.yogizogi.infra.coolsms.CoolSmsService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
@@ -35,7 +34,7 @@ public class AuthService {
     private final JwtService jwtService;
 
     private final PasswordEncoder passwordEncoder;
-    private final SmsUtils smsUtils;
+    private final CoolSmsService coolSmsService;
     private final RedisUtils redisUtils;
 
     @Transactional(readOnly = true)
@@ -45,7 +44,7 @@ public class AuthService {
             throw new MemberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
-        SingleMessageSentResponse result = smsUtils.sendOne(phoneNumber, CodeUtils.verification());
+        SingleMessageSentResponse result = coolSmsService.sendOne(phoneNumber, CodeUtils.verification());
         MessageStatus status = checkSentSuccessfully(result);
 
         return SendVerificationCodeOutDto.of(status, result.getStatusMessage());

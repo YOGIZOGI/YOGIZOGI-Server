@@ -1,5 +1,7 @@
 package dev.yogizogi.global.config.openApi;
 
+import static dev.yogizogi.global.common.model.constant.Format.TOKEN_HEADER_NAME;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -15,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI openApi() {
 
         Server devServer = new Server();
         devServer.setDescription("dev");
@@ -33,7 +35,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi SecurityGroup() {
+    public GroupedOpenApi securityGroup() {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 필요 API")
@@ -43,7 +45,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public GroupedOpenApi NonSecurityGroup() {
+    public GroupedOpenApi nonSecurityGroup() {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 불필요 API")
@@ -59,19 +61,19 @@ public class OpenApiConfig {
 
     private OpenApiCustomizer buildSecurityOpenApi() {
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("Authorization")
+                .name(TOKEN_HEADER_NAME)
                 .type(SecurityScheme.Type.HTTP)
                 .in(SecurityScheme.In.HEADER)
                 .bearerFormat("JWT")
                 .scheme("Bearer");
 
-        return OpenApi -> OpenApi
+        return openApi -> openApi
                 .addSecurityItem(
                         new SecurityRequirement()
-                                .addList("Authorization")
+                                .addList(TOKEN_HEADER_NAME)
                 )
                 .getComponents()
-                .addSecuritySchemes("Authorization", securityScheme);
+                .addSecuritySchemes(TOKEN_HEADER_NAME, securityScheme);
     }
 
 }

@@ -1,18 +1,19 @@
-package dev.yogizogi.global.util;
+package dev.yogizogi.infra.coolsms;
 
 import static dev.yogizogi.global.common.model.constant.Format.VERIFICATION_CODE_MESSAGE;
 import static dev.yogizogi.global.common.model.constant.Number.VERIFICATION_CODE_EXPIRATION_TIME;
 
+import dev.yogizogi.global.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class SmsUtils {
+public class CoolSmsService {
 
     private final DefaultMessageService messageService;
     private final RedisUtils redisUtils;

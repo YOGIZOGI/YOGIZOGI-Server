@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.model.entity.Authority;
 import dev.yogizogi.domain.member.repository.MemberRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
@@ -29,10 +28,11 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,6 +53,7 @@ public class JwtService {
 
     @Value("${jwt.secretKey}")
     private String secretKey;
+
     private final MemberRepository memberRepository;
     private final CustomUserDetailsService userDetailsService;
     private final RedisUtils redisUtils;
@@ -119,7 +120,10 @@ public class JwtService {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expirationTime)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(
+                        Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)),
+                        SignatureAlgorithm.HS512
+                )
                 .compact();
 
     }
@@ -145,14 +149,15 @@ public class JwtService {
 
     private Date setExpirationTime(Date now, long expirationTime) {
 
-        Date expirationDate = new Date(now.getTime() + expirationTime);
-        return expirationDate;
+        return new Date(now.getTime() + expirationTime);
 
     }
 
     private Jws<Claims> extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(
+                        Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8))
+                )
                 .build()
                 .parseClaimsJws(token);
     }
