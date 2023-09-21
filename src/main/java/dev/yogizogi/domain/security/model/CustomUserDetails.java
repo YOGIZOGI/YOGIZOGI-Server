@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.security.model;
 
-import dev.yogizogi.domain.member.model.entity.Member;
+import dev.yogizogi.domain.member.model.entity.User;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -12,30 +12,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder(access = AccessLevel.PRIVATE)
 public class CustomUserDetails implements UserDetails {
 
-    private final Member member;
+    private final User user;
 
-    public static CustomUserDetails of(Member member) {
+    public static CustomUserDetails of(User user) {
         return CustomUserDetails.builder()
-                .member(member)
+                .user(user)
                 .build();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return member.getRoles().stream()
+        return user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public String getPassword() {
 
-        return member.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getAccountName();
+        return user.getAccountName();
     }
 
     @Override

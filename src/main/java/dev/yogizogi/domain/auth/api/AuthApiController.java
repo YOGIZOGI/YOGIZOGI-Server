@@ -6,11 +6,13 @@ import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
 import dev.yogizogi.domain.auth.service.AuthService;
-import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
-import dev.yogizogi.domain.member.model.dto.response.CreateMemberOutDto;
-import dev.yogizogi.domain.member.service.MemberService;
+import dev.yogizogi.domain.member.model.dto.request.CreateUserInDto;
+import dev.yogizogi.domain.member.model.dto.response.CheckDuplicationOutDto;
+import dev.yogizogi.domain.member.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.member.service.UserService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
+import dev.yogizogi.global.common.status.DuplicationStatus;
 import dev.yogizogi.global.util.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthApiController {
 
-    private final MemberService memberService;
+    private final UserService userService;
     private final AuthService authService;
     private final JwtService jwtService;
 
@@ -96,21 +98,69 @@ public class AuthApiController {
 
     }
 
+    @Operation(summary = "계정 중복 확인")
+    @ApiResponse(
+            responseCode = "200",
+            description = "확인 완료",
+            content = @Content(schema = @Schema(implementation = CheckDuplicationOutDto.class))
+    )
+
+    @Parameter(name = "accountName", description = "중복 확인할 계정")
+    @GetMapping("/check-duplication-account")
+    public ResponseEntity checkAccountDuplication(@RequestParam String accountName) {
+
+        DuplicationStatus status = DuplicationStatus.NOT_EXIST;
+
+        if (userService.checkAccountNameDuplication(accountName)) {
+                    status = DuplicationStatus.EXIST;
+        }
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(CheckDuplicationOutDto.of(status, accountName))
+                        .build());
+
+    }
+
+    @Operation(summary = "닉네임 중복 확인")
+    @ApiResponse(
+            responseCode = "200",
+            description = "확인 완료",
+            content = @Content(schema = @Schema(implementation = CheckDuplicationOutDto.class))
+    )
+
+    @Parameter(name = "nickname", description = "중복 확인할 닉네임")
+    @GetMapping("/check-duplication-nickname")
+    public ResponseEntity checkNicknameDuplication(@RequestParam String nickname) {
+
+        DuplicationStatus status = DuplicationStatus.NOT_EXIST;
+
+        if (userService.checkNicknameDuplication(nickname)) {
+            status = DuplicationStatus.EXIST;
+        }
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(CheckDuplicationOutDto.of(status, nickname))
+                        .build());
+
+    }
+
     @Operation(summary = "회원 가입")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
                     description = "회원가입 완료",
-                    content = @Content(schema = @Schema(implementation = CreateMemberOutDto.class))
+                    content = @Content(schema = @Schema(implementation = CreateUserOutDto.class))
             ),
             @ApiResponse(responseCode = "400", description = "중복된 정보(아이디, 닉네임, 핸드폰 번호)")
     })
     @PostMapping("/sign-up")
-    public ResponseEntity createMember(@RequestBody @Valid CreateMemberInDto response) {
+    public ResponseEntity createMember(@RequestBody @Valid CreateUserInDto response) {
 
         return ResponseUtils.created(
                 Success.builder()
-                        .data(memberService.signUp(response))
+                        .data(userService.signUp(response))
                         .build());
 
     }
