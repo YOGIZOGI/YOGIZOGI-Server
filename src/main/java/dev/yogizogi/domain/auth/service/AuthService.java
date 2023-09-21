@@ -7,9 +7,9 @@ import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
-import dev.yogizogi.domain.member.exception.MemberException;
-import dev.yogizogi.domain.member.model.entity.Member;
-import dev.yogizogi.domain.member.repository.MemberRepository;
+import dev.yogizogi.domain.member.exception.UserException;
+import dev.yogizogi.domain.member.model.entity.User;
+import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.MessageStatus;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     private final JwtService jwtService;
 
@@ -40,8 +40,8 @@ public class AuthService {
     @Transactional(readOnly = true)
     public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
   
-        if (!memberRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
-            throw new MemberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+        if (!userRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
+            throw new UserException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
         SingleMessageSentResponse result = coolSmsService.sendOne(phoneNumber, CodeUtils.verification());
@@ -78,20 +78,20 @@ public class AuthService {
     @Transactional(readOnly = true)
     public LoginOutDto login(LoginInDto res) throws AuthException {
 
-        Member findMember = memberRepository.findByAccountName(res.getAccountName())
+        User findUser = userRepository.findByAccountName(res.getAccountName())
                 .orElseThrow(() -> new AuthException(ErrorCode.NOT_EXIST_ACCOUNT));
 
         if (!passwordEncoder.matches(
-                res.getPassword(), findMember.getPassword()
+                res.getPassword(), findUser.getPassword()
         )) {
             throw new AuthException(ErrorCode.FAIL_TO_LOGIN);
         }
 
         return LoginOutDto.of(
-                findMember.getId(),
-                findMember.getAccountName(),
-                jwtService.createAccessToken(findMember),
-                jwtService.createRefreshToken(findMember)
+                findUser.getId(),
+                findUser.getAccountName(),
+                jwtService.createAccessToken(findUser),
+                jwtService.createRefreshToken(findUser)
         );
 
     }

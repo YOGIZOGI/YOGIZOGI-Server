@@ -11,11 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.repository.MemberRepository;
+import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.exception.FailToSetClaimsException;
-import dev.yogizogi.domain.member.model.entity.Member;
+import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.security.exception.InvalidTokenException;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
@@ -54,7 +54,7 @@ public class JwtService {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
     private final RedisUtils redisUtils;
     private final ObjectMapper objectMapper;
@@ -62,16 +62,16 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String createAccessToken(Member member) {
-        return TOKEN_PREFIX.concat(issueToken(member.getId(), member.getAccountName(), ACCESS_TOKEN));
+    public String createAccessToken(User user) {
+        return TOKEN_PREFIX.concat(issueToken(user.getId(), user.getAccountName(), ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String createRefreshToken(Member member) {
-        String refreshToken = issueToken(member.getId(), member.getAccountName(), REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(member.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
+    public String createRefreshToken(User user) {
+        String refreshToken = issueToken(user.getId(), user.getAccountName(), REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(user.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
 
@@ -80,17 +80,17 @@ public class JwtService {
      */
     public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String accountName) {
 
-        Member findMember = memberRepository.findByIdAndAccountName(id, accountName)
+        User findUser = userRepository.findByIdAndAccountName(id, accountName)
                 .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
 
-        String refreshToken = redisUtils.findByKey(findMember.getAccountName());
+        String refreshToken = redisUtils.findByKey(findUser.getAccountName());
         if (Objects.isNull(refreshToken)) {
             throw new ExpiredTokenException(EXPIRED_TOKEN);
         }
 
         return ReissueAccessTokenOutDto.of(
-                findMember.getId(),
-                issueToken(findMember.getId(), findMember.getAccountName(), ACCESS_TOKEN)
+                findUser.getId(),
+                issueToken(findUser.getId(), findUser.getAccountName(), ACCESS_TOKEN)
         );
 
     }

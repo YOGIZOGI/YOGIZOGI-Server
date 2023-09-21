@@ -6,9 +6,9 @@ import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
 import dev.yogizogi.domain.auth.service.AuthService;
-import dev.yogizogi.domain.member.model.dto.request.CreateMemberInDto;
-import dev.yogizogi.domain.member.model.dto.response.CreateMemberOutDto;
-import dev.yogizogi.domain.member.service.MemberService;
+import dev.yogizogi.domain.member.model.dto.request.CreateUserInDto;
+import dev.yogizogi.domain.member.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.member.service.UserService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthApiController {
 
-    private final MemberService memberService;
+    private final UserService userService;
     private final AuthService authService;
     private final JwtService jwtService;
 
@@ -101,16 +101,16 @@ public class AuthApiController {
             @ApiResponse(
                     responseCode = "201",
                     description = "회원가입 완료",
-                    content = @Content(schema = @Schema(implementation = CreateMemberOutDto.class))
+                    content = @Content(schema = @Schema(implementation = CreateUserOutDto.class))
             ),
             @ApiResponse(responseCode = "400", description = "중복된 정보(아이디, 닉네임, 핸드폰 번호)")
     })
     @PostMapping("/sign-up")
-    public ResponseEntity createMember(@RequestBody @Valid CreateMemberInDto response) {
+    public ResponseEntity createMember(@RequestBody @Valid CreateUserInDto response) {
 
         return ResponseUtils.created(
                 Success.builder()
-                        .data(memberService.signUp(response))
+                        .data(userService.signUp(response))
                         .build());
 
     }
