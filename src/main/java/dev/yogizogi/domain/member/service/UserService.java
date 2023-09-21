@@ -3,9 +3,11 @@ package dev.yogizogi.domain.member.service;
 import dev.yogizogi.domain.member.exception.UserException;
 import dev.yogizogi.domain.member.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.member.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.member.model.entity.Authority;
 import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,11 +36,15 @@ public class UserService {
         }
 
         User newUser = CreateUserInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
+        newUser.setRoles(Collections.singletonList(
+                Authority.builder().name("ROLE_USER").build())
+        );
         userRepository.save(newUser);
 
         return CreateUserOutDto.of(newUser);
 
     }
+
     public boolean checkAccountNameDuplication(String accountName) {
         return userRepository.findByAccountName(accountName).isPresent();
     }

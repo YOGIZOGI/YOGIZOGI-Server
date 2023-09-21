@@ -105,7 +105,7 @@ public class AuthApiController {
             content = @Content(schema = @Schema(implementation = CheckDuplicationOutDto.class))
     )
 
-    @Parameter(name = "accountName", description = "중복확인 할 계정")
+    @Parameter(name = "accountName", description = "중복 확인할 계정")
     @GetMapping("/check-duplication-account")
     public ResponseEntity checkAccountDuplication(@RequestParam String accountName) {
 
@@ -129,7 +129,7 @@ public class AuthApiController {
             content = @Content(schema = @Schema(implementation = CheckDuplicationOutDto.class))
     )
 
-    @Parameter(name = "nickname", description = "중복확인 할 닉네임")
+    @Parameter(name = "nickname", description = "중복 확인할 닉네임")
     @GetMapping("/check-duplication-nickname")
     public ResponseEntity checkNicknameDuplication(@RequestParam String nickname) {
 

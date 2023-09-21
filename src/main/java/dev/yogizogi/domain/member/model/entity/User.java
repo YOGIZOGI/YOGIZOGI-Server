@@ -40,6 +40,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();
 
+    public void setRoles(List<Authority> roles) {
+        this.roles = roles;
+        roles.forEach(role -> role.setUser(this));
+    }
 
     @Builder
     public User(String accountName, String password, String nickname, String phoneNumber) {
@@ -49,6 +53,5 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }
-
 
 }
