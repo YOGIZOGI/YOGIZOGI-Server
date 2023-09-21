@@ -21,30 +21,34 @@ public class UserService {
 
     public CreateUserOutDto signUp(CreateUserInDto response) {
 
-        checkDuplication(response.getAccountName(), response.getNickname(), response.getPhoneNumber());
+        if (checkAccountNameDuplication(response.getAccountName())) {
+            throw new UserException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
+        }
+
+        if (checkNicknameDuplication(response.getNickname())) {
+            throw new UserException(ErrorCode.DUPLICATE_NICKNAME);
+        }
+
+        if (checkPhoneNumberDuplication(response.getPhoneNumber())) {
+            throw new UserException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+        }
+
         User newUser = CreateUserInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
         userRepository.save(newUser);
 
         return CreateUserOutDto.of(newUser);
 
     }
-
-    private void checkDuplication(String accountName, String nickName, String phoneNumber) {
-
-        if (!userRepository.findByAccountName(accountName).isEmpty()) {
-            throw new UserException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
-        }
-
-        if (!userRepository.findByNickname(nickName).isEmpty()) {
-            throw new UserException(ErrorCode.DUPLICATE_NICKNAME);
-        }
-
-        if (!userRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
-            throw new UserException(ErrorCode.DUPLICATE_PHONE_NUMBER);
-        }
-
+    public boolean checkAccountNameDuplication(String accountName) {
+        return userRepository.findByAccountName(accountName).isPresent();
     }
 
+    public boolean checkNicknameDuplication(String nickname) {
+        return userRepository.findByNickname(nickname).isPresent();
+    }
 
+    public boolean checkPhoneNumberDuplication(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).isPresent();
+    }
 
 }
