@@ -5,9 +5,9 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class MemberException extends BaseException {
+public class UserException extends BaseException {
 
-    public MemberException(ErrorCode error) {
+    public UserException(ErrorCode error) {
         super(error);
     }
 

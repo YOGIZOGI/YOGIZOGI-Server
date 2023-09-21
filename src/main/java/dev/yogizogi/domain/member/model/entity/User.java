@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @Column(columnDefinition = "BINARY(16)")
@@ -32,23 +32,26 @@ public class Member extends BaseEntity {
     private String password;
 
     @Column(nullable = false, unique = true)
-    private String nickName;
+    private String nickname;
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();
 
+    public void setRoles(List<Authority> roles) {
+        this.roles = roles;
+        roles.forEach(role -> role.setUser(this));
+    }
 
     @Builder
-    public Member(String accountName, String password, String nickName, String phoneNumber) {
+    public User(String accountName, String password, String nickname, String phoneNumber) {
         this.id = UuidUtils.createSequentialUUID();
         this.accountName = accountName;
         this.password = password;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.phoneNumber = phoneNumber;
     }
-
 
 }
