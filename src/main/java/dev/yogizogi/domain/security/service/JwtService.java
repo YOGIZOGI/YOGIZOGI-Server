@@ -21,6 +21,7 @@ import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.domain.security.model.Subject;
 import dev.yogizogi.domain.security.model.TokenType;
+import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.util.RedisUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -80,7 +81,7 @@ public class JwtService {
      */
     public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String accountName) {
 
-        User findUser = userRepository.findByIdAndAccountName(id, accountName)
+        User findUser = userRepository.findByIdAndAccountNameAndStatus(id, accountName, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
 
         String refreshToken = redisUtils.findByKey(findUser.getAccountName());

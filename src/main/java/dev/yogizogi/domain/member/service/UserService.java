@@ -1,12 +1,15 @@
 package dev.yogizogi.domain.member.service;
 
+import dev.yogizogi.domain.member.exception.NotExistAccountException;
 import dev.yogizogi.domain.member.exception.UserException;
 import dev.yogizogi.domain.member.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.member.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.member.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.member.model.entity.Authority;
 import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.BaseStatus;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,15 +49,30 @@ public class UserService {
     }
 
     public boolean checkAccountNameDuplication(String accountName) {
-        return userRepository.findByAccountName(accountName).isPresent();
+        return userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE).isPresent();
     }
 
     public boolean checkNicknameDuplication(String nickname) {
-        return userRepository.findByNickname(nickname).isPresent();
+        return userRepository.findByNicknameAndStatus(nickname, BaseStatus.ACTIVE).isPresent();
     }
 
     public boolean checkPhoneNumberDuplication(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber).isPresent();
+        return userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE).isPresent();
     }
+
+
+    public DeleteUserOutDto deleteUser(String accountName) throws NotExistAccountException {
+
+        User deleteUser = userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE)
+                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
+
+        deleteUser.inactive();
+
+        return DeleteUserOutDto.of(
+                deleteUser.getAccountName()
+        );
+
+    }
+
 
 }

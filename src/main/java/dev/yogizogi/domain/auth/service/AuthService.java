@@ -12,6 +12,7 @@ import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.common.status.VerificationStatus;
 import dev.yogizogi.global.util.CodeUtils;
@@ -40,7 +41,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
   
-        if (!userRepository.findByPhoneNumber(phoneNumber).isEmpty()) {
+        if (!userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE).isEmpty()) {
             throw new UserException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
@@ -78,7 +79,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public LoginOutDto login(LoginInDto res) throws AuthException {
 
-        User findUser = userRepository.findByAccountName(res.getAccountName())
+        User findUser = userRepository.findByAccountNameAndStatus(res.getAccountName(), BaseStatus.ACTIVE)
                 .orElseThrow(() -> new AuthException(ErrorCode.NOT_EXIST_ACCOUNT));
 
         if (!passwordEncoder.matches(
