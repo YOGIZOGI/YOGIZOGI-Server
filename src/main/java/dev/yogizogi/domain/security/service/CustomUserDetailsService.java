@@ -5,6 +5,7 @@ import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.member.repository.UserRepository;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.BaseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public CustomUserDetails loadUserByUsername(String accountName) {
 
-        User user = userRepository.findByAccountName(accountName)
+        User user = userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
 
         return CustomUserDetails.of(user);
