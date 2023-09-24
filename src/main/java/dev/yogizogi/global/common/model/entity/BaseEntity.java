@@ -36,6 +36,14 @@ public abstract class BaseEntity {
         this.status = BaseStatus.ACTIVE;
     }
 
+    public void active() {
+        this.status = BaseStatus.ACTIVE;
+    }
+
+    public void inactive() {
+        this.status = BaseStatus.INACTIVE;
+    }
+
     @PrePersist
     public void onPrePersist(){
         this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
