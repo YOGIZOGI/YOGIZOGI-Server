@@ -2,6 +2,7 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -11,7 +12,6 @@ import dev.yogizogi.domain.user.exception.DuplicatedAccountException;
 import dev.yogizogi.domain.user.exception.DuplicatedNicknameException;
 import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
-import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
@@ -22,13 +22,14 @@ import dev.yogizogi.global.common.status.BaseStatus;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import dev.yogizogi.domain.user.exception.UserException;
+
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserService 비즈니스 로직 동작 테스트")
@@ -59,6 +60,20 @@ class UserServiceTest {
 
         // then
         Assertions.assertThat(request.getAccountName()).isEqualTo(response.getAccountName());
+
+    }
+
+    @Test
+    void 비밀번호_암호화() {
+
+        // given
+        String password = 비밀번호;
+
+        // when
+        String encode = passwordEncoder.encode(password);
+
+        // then
+        Assertions.assertThat(passwordEncoder.matches(password, encode)).isFalse();
 
     }
 
