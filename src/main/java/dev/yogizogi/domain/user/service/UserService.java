@@ -1,7 +1,9 @@
 package dev.yogizogi.domain.user.service;
 
+import dev.yogizogi.domain.user.exception.DuplicatedAccountException;
+import dev.yogizogi.domain.user.exception.DuplicatedNicknameException;
+import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
-import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
@@ -27,15 +29,15 @@ public class UserService {
     public CreateUserOutDto signUp(CreateUserInDto response) {
 
         if (checkAccountNameDuplication(response.getAccountName())) {
-            throw new UserException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
+            throw new DuplicatedAccountException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
         }
 
         if (checkNicknameDuplication(response.getNickname())) {
-            throw new UserException(ErrorCode.DUPLICATE_NICKNAME);
+            throw new DuplicatedNicknameException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
         if (checkPhoneNumberDuplication(response.getPhoneNumber())) {
-            throw new UserException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+            throw new DuplicatedPhoneNumberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
         User newUser = CreateUserInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
@@ -69,7 +71,8 @@ public class UserService {
         deleteUser.inactive();
 
         return DeleteUserOutDto.of(
-                deleteUser.getAccountName()
+                deleteUser.getAccountName(),
+                deleteUser.getStatus()
         );
 
     }
