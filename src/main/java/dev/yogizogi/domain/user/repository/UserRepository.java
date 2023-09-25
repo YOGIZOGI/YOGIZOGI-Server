@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.member.repository;
+package dev.yogizogi.domain.user.repository;
 
-import dev.yogizogi.domain.member.model.entity.User;
+import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.global.common.status.BaseStatus;
 import java.util.Optional;
 import java.util.UUID;

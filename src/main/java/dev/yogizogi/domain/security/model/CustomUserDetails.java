@@ -1,8 +1,7 @@
 package dev.yogizogi.domain.security.model;
 
-import dev.yogizogi.domain.member.model.entity.User;
+import dev.yogizogi.domain.user.model.entity.User;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,8 +1,6 @@
-package dev.yogizogi.domain.member.model.dto.response;
+package dev.yogizogi.domain.user.model.dto.response;
 
-import dev.yogizogi.domain.member.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.member.model.dto.response;
+package dev.yogizogi.domain.user.model.dto.response;
 
 import dev.yogizogi.global.common.status.DuplicationStatus;
 import io.swagger.v3.oas.annotations.media.Schema;

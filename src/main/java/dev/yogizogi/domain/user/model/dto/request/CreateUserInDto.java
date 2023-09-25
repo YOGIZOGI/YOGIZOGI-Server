@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.member.model.dto.request;
+package dev.yogizogi.domain.user.model.dto.request;
 
-import dev.yogizogi.domain.member.model.entity.User;
+import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

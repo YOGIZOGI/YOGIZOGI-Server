@@ -1,13 +1,13 @@
-package dev.yogizogi.domain.member.service;
+package dev.yogizogi.domain.user.service;
 
-import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.exception.UserException;
-import dev.yogizogi.domain.member.model.dto.request.CreateUserInDto;
-import dev.yogizogi.domain.member.model.dto.response.CreateUserOutDto;
-import dev.yogizogi.domain.member.model.dto.response.DeleteUserOutDto;
-import dev.yogizogi.domain.member.model.entity.Authority;
-import dev.yogizogi.domain.member.model.entity.User;
-import dev.yogizogi.domain.member.repository.UserRepository;
+import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.UserException;
+import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
+import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
+import dev.yogizogi.domain.user.model.entity.Authority;
+import dev.yogizogi.domain.user.model.entity.User;
+import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;
 import java.util.Collections;

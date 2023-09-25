@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.member.model.entity;
+package dev.yogizogi.domain.user.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -36,6 +36,7 @@ public class Authority {
     public Authority(String name) {
         this.name = name;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
