@@ -4,10 +4,12 @@ import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Schema(name = "회원가입 요청 Dto")
 @Getter
+@AllArgsConstructor
+@Schema(name = "회원가입 요청 Dto")
 public class CreateUserInDto {
 
     @NotBlank(message="아이디를 입력하세요.")
