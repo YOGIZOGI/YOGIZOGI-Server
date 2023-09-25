@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
 }
 
 group = 'dev'
@@ -67,6 +68,59 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
+}
+
+jacoco {
+	toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+
+	reports {
+		html.required = true
+		xml.required = false
+		csv.required = false
+	}
+
+	def Qdomains = []
+
+	for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+		Qdomains.add(qPattern + '*')
+	}
+
+	afterEvaluate {
+
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, exclude: [] + "*.Q*" + "*.global.*" + "*.infra.*")
+		}))
+	}
+
+	finalizedBy 'jacocoTestCoverageVerification'
+
+}
+
+jacocoTestCoverageVerification {
+
+	violationRules {
+
+		rule {
+
+			enabled = true
+			element = 'CLASS'
+
+			limit {
+
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.6
+
+			}
+
+			excludes = [] + "*.Q*" + "*.global.*" + "*.infra.*";
+		}
+	}
 }
