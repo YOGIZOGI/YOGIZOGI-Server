@@ -51,9 +51,9 @@ class UserServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(anyString(), any(BaseStatus.class))).willReturn(Optional.empty());
-        given(userRepository.findByNicknameAndStatus(anyString(), any(BaseStatus.class))).willReturn(Optional.empty());
-        given(userRepository.findByPhoneNumberAndStatus(anyString(), any(BaseStatus.class))).willReturn(Optional.empty());
+        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+        given(userRepository.findByNicknameAndStatus(eq(request.getNickname()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
 
         // when
         CreateUserOutDto response = userService.signUp(request);
