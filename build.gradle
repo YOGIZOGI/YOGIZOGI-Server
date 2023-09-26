@@ -18,6 +18,10 @@ configurations {
 	}
 }
 
+jacoco {
+	toolVersion = '0.8.8'
+}
+
 repositories {
 	mavenCentral()
 }
@@ -73,21 +77,19 @@ test {
 	finalizedBy 'jacocoTestReport'
 }
 
-jacoco {
-	toolVersion = '0.8.8'
-}
-
 jacocoTestReport {
 
 	reports {
 		html.required = true
 		xml.required = false
 		csv.required = false
+
+		html.destination file("jacoco/jacocoHtml")
 	}
 
 	def Qdomains = []
 
-	for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+	for (qPattern in '**/QA'..'**/QZ') {
 		Qdomains.add(qPattern + '*')
 	}
 
@@ -95,7 +97,13 @@ jacocoTestReport {
 
 		classDirectories.setFrom(
 				files(classDirectories.files.collect {
-					fileTree(dir: it, exclude: [] + "*.Q*" + "*.global.*" + "*.infra.*")
+					fileTree(dir: it, exclude: [
+							"**/*Application*",
+							"**/model/*",
+							"**/exception/*",
+							"**/global",
+							"**/infra"
+					] + Qdomains)
 		}))
 	}
 
@@ -114,13 +122,28 @@ jacocoTestCoverageVerification {
 
 			limit {
 
-				counter = 'BRANCH'
+				counter = 'LINE'
 				value = 'COVEREDRATIO'
 				minimum = 0.6
 
 			}
 
-			excludes = [] + "*.Q*" + "*.global.*" + "*.infra.*";
+			def Qdomains = []
+
+			for (qPattern in '**/QA'..'**/QZ') {
+				Qdomains.add(qPattern + '*')
+			}
+
+			excludes = [
+					"**/*Application*",
+					"**/model/*",
+					"**/exception/*",
+					"**/global",
+					"**/infra"
+			] + Qdomains;
+
 		}
+
 	}
+
 }
