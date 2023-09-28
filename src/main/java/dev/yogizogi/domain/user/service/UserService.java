@@ -46,7 +46,7 @@ public class UserService {
         );
         userRepository.save(newUser);
 
-        return CreateUserOutDto.of(newUser);
+        return CreateUserOutDto.of(newUser.getId(), newUser.getAccountName());
 
     }
 

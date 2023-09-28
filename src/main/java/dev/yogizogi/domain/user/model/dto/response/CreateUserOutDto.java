@@ -18,10 +18,10 @@ public class CreateUserOutDto {
     @Schema(description = "아이디", example = "yogizogi")
     private String accountName;
 
-    public static CreateUserOutDto of(User user) {
+    public static CreateUserOutDto of(UUID id, String accountName) {
         return CreateUserOutDto.builder()
-                .id(user.getId())
-                .accountName(user.getAccountName())
+                .id(id)
+                .accountName(accountName)
                 .build();
     }
 
