@@ -24,4 +24,20 @@ public class UserFactory {
         return user;
     }
 
+    public static User createUserPasswordEncrypt() {
+
+        User user = User.builder()
+                .accountName(계정)
+                .password(암호화_비밀번호)
+                .nickname(닉네임)
+                .phoneNumber(핸드폰번호)
+                .build();
+
+        user.setRoles(Collections.singletonList(
+                Authority.builder().name(역할).build()
+        ));
+
+        return user;
+    }
+
 }

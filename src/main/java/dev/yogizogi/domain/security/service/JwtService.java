@@ -63,16 +63,16 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String createAccessToken(User user) {
-        return TOKEN_PREFIX.concat(issueToken(user.getId(), user.getAccountName(), ACCESS_TOKEN));
+    public String createAccessToken(UUID id, String accountName) {
+        return TOKEN_PREFIX.concat(issueToken(id, accountName, ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String createRefreshToken(User user) {
-        String refreshToken = issueToken(user.getId(), user.getAccountName(), REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(user.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
+    public String createRefreshToken(UUID id, String accountName) {
+        String refreshToken = issueToken(id, accountName, REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
 

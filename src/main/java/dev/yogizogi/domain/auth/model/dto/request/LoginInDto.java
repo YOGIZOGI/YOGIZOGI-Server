@@ -1,10 +1,12 @@
 package dev.yogizogi.domain.auth.model.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Schema(name = "로그인 요청 Dto", description = "로그인에 필요한 정보")
 @Getter
+@AllArgsConstructor
+@Schema(name = "로그인 요청 Dto", description = "로그인에 필요한 정보")
 public class LoginInDto {
 
     @Schema(description = "계정이름", example = "yogizogi")

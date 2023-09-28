@@ -3,10 +3,12 @@ package dev.yogizogi.domain.auth.service;
 import static dev.yogizogi.global.common.model.constant.Number.COOLSMS_SUCCESS_CODE;
 
 import dev.yogizogi.domain.auth.exception.AuthException;
+import dev.yogizogi.domain.auth.exception.FailLoginException;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.auth.model.dto.response.VerifyCodeOutDto;
+import dev.yogizogi.domain.user.exception.NotExistAccountException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
@@ -77,22 +79,22 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public LoginOutDto login(LoginInDto res) throws AuthException {
+    public LoginOutDto login(LoginInDto req) throws AuthException {
 
-        User findUser = userRepository.findByAccountNameAndStatus(res.getAccountName(), BaseStatus.ACTIVE)
-                .orElseThrow(() -> new AuthException(ErrorCode.NOT_EXIST_ACCOUNT));
+        User findUser = userRepository.findByAccountNameAndStatus(req.getAccountName(), BaseStatus.ACTIVE)
+                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
 
         if (!passwordEncoder.matches(
-                res.getPassword(), findUser.getPassword()
+                req.getPassword(), findUser.getPassword()
         )) {
-            throw new AuthException(ErrorCode.FAIL_TO_LOGIN);
+            throw new FailLoginException(ErrorCode.FAIL_TO_LOGIN);
         }
 
         return LoginOutDto.of(
                 findUser.getId(),
                 findUser.getAccountName(),
-                jwtService.createAccessToken(findUser),
-                jwtService.createRefreshToken(findUser)
+                jwtService.createAccessToken(findUser.getId(), findUser.getAccountName()),
+                jwtService.createRefreshToken(findUser.getId(), findUser.getAccountName())
         );
 
     }
