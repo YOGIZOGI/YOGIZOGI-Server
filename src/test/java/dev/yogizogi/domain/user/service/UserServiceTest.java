@@ -78,7 +78,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원_가입_계정_중복() throws UserException {
+    void 계정_중복() throws UserException {
 
         // given
         CreateUserInDto request = createUserInDto();
@@ -93,7 +93,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원_가입_닉네임_중복() throws UserException {
+    void 닉네임_중복() throws UserException {
 
         // given
         CreateUserInDto request = createUserInDto();
@@ -108,7 +108,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원_가입_핸드폰_번호_중복() throws UserException {
+    void 핸드폰_번호_중복() throws UserException {
 
         // given
         CreateUserInDto request = createUserInDto();

@@ -4,10 +4,14 @@ import static dev.yogizogi.domain.auth.factory.factory.LoginFactory.LoginOutDto;
 import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.어세스_토큰;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.닉네임;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,6 +35,7 @@ import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.BaseStatus;
+import dev.yogizogi.global.common.status.DuplicationStatus;
 import dev.yogizogi.global.util.RedisUtils;
 import dev.yogizogi.infra.coolsms.CoolSmsService;
 import java.nio.charset.StandardCharsets;
@@ -103,6 +108,7 @@ class AuthApiControllerTest {
                                 .content(objectMapper.writeValueAsString(req))
                 )
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(
                         content()
                                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
@@ -141,6 +147,7 @@ class AuthApiControllerTest {
                                 .content(objectMapper.writeValueAsString(req))
                 )
                 .andExpect(status().isCreated())
+                .andDo(print())
                 .andExpect(
                         content()
                                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
@@ -153,5 +160,114 @@ class AuthApiControllerTest {
                 );
 
     }
+
+    @Test
+    void 계정_중복_존재() throws Exception {
+
+        // given
+        String accountName = 계정;
+
+        // mocking
+        given(userService.checkAccountNameDuplication(eq(accountName))).willReturn(true);
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/check-duplication-account")
+                                .param("accountName", accountName)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(DuplicationStatus.EXIST.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.checked").value(accountName)
+                );
+
+    }
+
+    @Test
+    void 계정_중복_미존재() throws Exception {
+
+        // given
+        String accountName = 계정;
+
+        // mocking
+        given(userService.checkAccountNameDuplication(eq(accountName))).willReturn(false);
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/check-duplication-account")
+                                .param("accountName", accountName)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(DuplicationStatus.NOT_EXIST.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.checked").value(accountName)
+                );
+
+    }
+
+    @Test
+    void 닉네임_중복_존재() throws Exception {
+
+        // given
+        String nickname = 닉네임;
+
+        // mocking
+        given(userService.checkNicknameDuplication(eq(nickname))).willReturn(true);
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/check-duplication-nickname")
+                                .param("nickname", nickname)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(DuplicationStatus.EXIST.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.checked").value(nickname)
+                );
+
+    }
+
+    @Test
+    void 닉네임_중복_미존재() throws Exception {
+
+        // given
+        String nickname = 닉네임;
+
+        // mocking
+        given(userService.checkNicknameDuplication(eq(nickname))).willReturn(false);
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/check-duplication-nickname")
+                                .param("nickname", nickname)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(DuplicationStatus.NOT_EXIST.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.checked").value(nickname)
+                );
+
+    }
+
 
 }

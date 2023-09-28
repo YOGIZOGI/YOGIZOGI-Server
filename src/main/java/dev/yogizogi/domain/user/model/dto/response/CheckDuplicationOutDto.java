@@ -16,12 +16,12 @@ public class CheckDuplicationOutDto {
     private DuplicationStatus status;
 
     @Schema(description = "확인한 데이터")
-    private String data;
+    private String checked;
 
     public static CheckDuplicationOutDto  of(DuplicationStatus status, String data) {
         return CheckDuplicationOutDto.builder()
                 .status(status)
-                .data(data)
+                .checked(data)
                 .build();
     }
 
