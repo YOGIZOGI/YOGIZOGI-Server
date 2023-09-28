@@ -24,7 +24,10 @@ import dev.yogizogi.domain.auth.service.AuthService;
 import dev.yogizogi.domain.security.service.CustomUserDetailsService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.api.UserApiController;
+import dev.yogizogi.domain.user.factory.dto.CreateUserFactory;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
+import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
+import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.BaseStatus;
@@ -115,6 +118,38 @@ class AuthApiControllerTest {
                 )
                 .andExpect(
                         jsonPath("$.data.refreshToken").value(리프레쉬_토큰)
+                );
+
+    }
+
+    @Test
+    void 회원_가입() throws Exception {
+
+        // given
+        CreateUserInDto req = CreateUserFactory.createUserInDto();
+        CreateUserOutDto res = CreateUserFactory.createUserOutDto();
+
+        // mocking
+        given(userService.signUp(any())).willReturn(res);
+
+        // when
+        // then
+        mockMvc.perform(
+                        post("/api/auth/sign-up")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .content(objectMapper.writeValueAsString(req))
+                )
+                .andExpect(status().isCreated())
+                .andExpect(
+                        content()
+                                .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.data.id").value(식별자.toString())
+                )
+                .andExpect(
+                        jsonPath("$.data.accountName").value(계정)
                 );
 
     }
