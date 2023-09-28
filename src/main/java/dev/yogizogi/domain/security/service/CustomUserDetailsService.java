@@ -1,8 +1,8 @@
 package dev.yogizogi.domain.security.service;
 
-import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.model.entity.User;
-import dev.yogizogi.domain.member.repository.UserRepository;
+import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.model.entity.User;
+import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;

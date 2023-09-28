@@ -10,12 +10,12 @@ import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
-import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.repository.UserRepository;
+import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.exception.FailToSetClaimsException;
-import dev.yogizogi.domain.member.model.entity.User;
+import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.security.exception.InvalidTokenException;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
 import dev.yogizogi.global.common.code.ErrorCode;
@@ -63,16 +63,16 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String createAccessToken(User user) {
-        return TOKEN_PREFIX.concat(issueToken(user.getId(), user.getAccountName(), ACCESS_TOKEN));
+    public String createAccessToken(UUID id, String accountName) {
+        return TOKEN_PREFIX.concat(issueToken(id, accountName, ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String createRefreshToken(User user) {
-        String refreshToken = issueToken(user.getId(), user.getAccountName(), REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(user.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
+    public String createRefreshToken(UUID id, String accountName) {
+        String refreshToken = issueToken(id, accountName, REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
 
