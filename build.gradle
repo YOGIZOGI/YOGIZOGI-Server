@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
 
-    // Web
+	// Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
@@ -81,10 +81,12 @@ jacocoTestReport {
 
 	reports {
 		html.required = true
-		xml.required = false
+		xml.required = true
 		csv.required = false
 
-		html.destination file("jacoco/jacocoHtml")
+		html.destination file("jacoco/html")
+		xml.destination file("jacoco/xml")
+
 	}
 
 	def Qdomains = []
@@ -104,7 +106,7 @@ jacocoTestReport {
 							"**/global",
 							"**/infra"
 					] + Qdomains)
-		}))
+				}))
 	}
 
 	finalizedBy 'jacocoTestCoverageVerification'

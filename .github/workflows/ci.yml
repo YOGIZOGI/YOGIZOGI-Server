@@ -1,6 +1,14 @@
 name: CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options: [ info, warning, debug ]
 
   pull_request:
     branches:
@@ -35,6 +43,6 @@ jobs:
       run: chmod +x ./gradlew
         
     - name: Build with Gradle
-      run: ./gradlew build -x test
+      run: ./gradlew build
 
         
