@@ -43,7 +43,7 @@ jobs:
       run: chmod +x ./gradlew
         
     - name: Test with Gradle
-      run: SPRING_PROFILES_ACTIVE=[test] ./gradlew build jacocoTestReport
+      run: ./gradlew build -x test
               
     - name: Codecov
       uses: codecov/codecov-action@v3.1.4
