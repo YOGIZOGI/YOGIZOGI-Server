@@ -42,7 +42,10 @@ jobs:
     - name: ./gradlew 권한 설정
       run: chmod +x ./gradlew
         
-    - name: Build with Gradle
-      run: ./gradlew build
-
-        
+    - name: Test with Gradle
+      run: ./gradlew build jacocoTestReport
+              
+    - name: Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
