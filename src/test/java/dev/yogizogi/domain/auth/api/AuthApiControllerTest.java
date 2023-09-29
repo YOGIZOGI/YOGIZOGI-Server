@@ -5,8 +5,9 @@ import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.리프레�
 import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.어세스_토큰;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.닉네임;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
+import static dev.yogizogi.domain.auth.factory.fixtures.VerificationFixture.*;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -22,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.auth.factory.factory.LoginFactory;
+import dev.yogizogi.domain.auth.factory.factory.VerificationFactory;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.auth.service.AuthService;
@@ -36,9 +38,12 @@ import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.common.status.DuplicationStatus;
+import dev.yogizogi.global.common.status.MessageStatus;
+import dev.yogizogi.global.common.status.VerificationStatus;
 import dev.yogizogi.global.util.RedisUtils;
 import dev.yogizogi.infra.coolsms.CoolSmsService;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,13 +86,19 @@ class AuthApiControllerTest {
     UserService userService;
 
     @MockBean
-    UserRepository userRepository;
-
-    @MockBean
-    PasswordEncoder passwordEncoder;
+    CoolSmsService coolSmsService;
 
     @MockBean
     JwtService jwtService;
+
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    RedisUtils redisUtils;
+
+    @MockBean
+    PasswordEncoder passwordEncoder;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -270,6 +281,70 @@ class AuthApiControllerTest {
                 );
 
     }
+
+    @Test
+    void 인증번호_요청() throws Exception {
+
+        // given
+        String 받을_핸드폰_번호 = 핸드폰번호;
+        String 받은_핸드폰_번호 = 핸드폰번호;
+
+        // mocking
+        given(authService.sendVerificationCode(eq(받은_핸드폰_번호)))
+                .willReturn(VerificationFactory.sendVerificationCodeOutDto());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/send-verification-code")
+                                .param("phoneNumber", 받을_핸드폰_번호)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(MessageStatus.SUCCESS.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.message").value(상태_메시지)
+                );
+
+    }
+
+    @Test
+    void 인증번호_확인() throws Exception {
+
+        // given
+        String 받을_핸드폰_번호 = 핸드폰번호;
+        String 받을_인증코드 = 인증코드;
+
+
+        // mocking
+        given(redisUtils.findByKey(eq(받은_핸드폰_번호)))
+                .willReturn(저장된_인증코드);
+
+        given(authService.checkVerificationCode(eq(받은_핸드폰_번호), eq(받은_인증코드)))
+                .willReturn(VerificationFactory.pass());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/auth/check-verification-code")
+                                .param("phoneNumber", 받을_핸드폰_번호)
+                                .param("code", 받을_인증코드)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(
+                        jsonPath("$.data.status")
+                                .value(VerificationStatus.PASS.getDescription())
+                )
+                .andExpect(
+                        jsonPath("$.data.phoneNumber").value(받은_핸드폰_번호)
+                );
+
+    }
+
 
 
 }
