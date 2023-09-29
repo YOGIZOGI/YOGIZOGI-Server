@@ -41,18 +41,20 @@ jobs:
     # (3) gradle 관련 설정
     - name: ./gradlew 권한 설정
       run: chmod +x ./gradlew
- 
+
+    # (4) build 실행
     - name: Test with Gradle
-      run: ./gradlew build --info
-              
+      run: ./gradlew build
+
+    # (5) Test 결과 업로드
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3.1.4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./build/reports/jacoco/test/jacocoTestReport.xml
-    
+        file: ./build/test-results/test/*.xml
+    # (6) Test 결과 PR에 코멘트
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: ${{ always() }}
       with:
-        files: ./build/reports/jacoco/test/jacocoTestReport.xml
+        files:./build/test-results/test/*.xml
