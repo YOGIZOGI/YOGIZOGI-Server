@@ -56,7 +56,7 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./build/jacoco/TestReport.xml
         
-    # (6) Test 결과 반영
+    # (6) Test 결과 PR에 반영
     - name: publish unit test results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
