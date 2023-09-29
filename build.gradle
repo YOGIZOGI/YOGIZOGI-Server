@@ -19,7 +19,9 @@ configurations {
 }
 
 jacoco {
-	toolVersion = '0.8.8'
+
+	toolVersion = '0.8.10'
+
 }
 
 repositories {
@@ -87,12 +89,13 @@ jacocoTestReport {
 
 
 	reports {
+
 		html.required = true
 		xml.required = true
 		csv.required = false
 
-		html.destination file("jacoco/html")
-		xml.destination file("jacoco/TestReport.xml")
+		html.destination file("$buildDir/jacoco/html")
+		xml.destination file("$buildDir/jacoco/TestReport.xml")
 
 	}
 
