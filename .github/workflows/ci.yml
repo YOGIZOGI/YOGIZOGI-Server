@@ -53,9 +53,15 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./build/jacoco/TestReport.xml
         
-    # (6) Test 결과 PR에 코멘트
-    - name: Publish Unit Test Results
+    # (6) Test 결과 반영
+    - name: publish unit test results
       uses: EnricoMi/publish-unit-test-result-action@v2
-      if: ${{ always() }}
+      if: always()
       with:
-        files: ./build/test-results/**/*.xml
+        files: '**/build/test-results/test/TEST-*.xml'
+      
+    - name: add comments to a pull request
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: '**/build/test-results/test/TEST-*.xml'
