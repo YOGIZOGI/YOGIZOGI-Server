@@ -49,10 +49,10 @@ jobs:
       uses: codecov/codecov-action@v3.1.4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./jacoco/TestReport.xml
+        file: ./YOGIZOGI-Server/build/test-results/test/jacocoTestReport.xml
     
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: ${{ always() }}
       with:
-        files: ./jacoco/TestReport.xml
+        files: ./YOGIZOGI-Server/build/test-results/test/jacocoTestReport.xml
