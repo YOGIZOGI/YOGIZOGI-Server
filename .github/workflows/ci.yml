@@ -51,11 +51,11 @@ jobs:
       uses: codecov/codecov-action@v3.1.4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./build/test-results/test/TestReport.xml
+        file: ./build/jacoco/TestReport.xml
         
     # (6) Test 결과 PR에 코멘트
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: ${{ always() }}
       with:
-        files: ./build/test-results/test/TestReport.xml
+        files: ./build/jacoco/TestReport.xml
