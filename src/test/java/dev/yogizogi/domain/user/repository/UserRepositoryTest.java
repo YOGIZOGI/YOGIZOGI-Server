@@ -16,11 +16,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-
 @DataJpaTest
 @ActiveProfiles("test")
-@DisplayName("UserRepository JPA 동작 테스트")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DisplayName("UserRepository JPA 동작 테스트")
 class UserRepositoryTest {
 
     @Autowired
