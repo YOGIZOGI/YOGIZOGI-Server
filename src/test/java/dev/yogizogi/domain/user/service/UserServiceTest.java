@@ -29,8 +29,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import dev.yogizogi.domain.user.exception.UserException;
+import org.springframework.test.context.ActiveProfiles;
 
-
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserService 비즈니스 로직 동작 테스트")
 class UserServiceTest {

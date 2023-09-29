@@ -42,6 +42,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -67,6 +68,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
         }
 )
 @AutoConfigureMockMvc(addFilters = false)
+@DisplayName("AuthApiController 동작 테스트")
 class AuthApiControllerTest {
 
     @Autowired
