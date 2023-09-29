@@ -51,6 +51,7 @@ jobs:
     # (5) Test 결과 업로드
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3.1.4
+      if: always()
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./build/jacoco/TestReport.xml
