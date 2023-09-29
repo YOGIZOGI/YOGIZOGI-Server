@@ -85,7 +85,7 @@ jacocoTestReport {
 		csv.required = false
 
 		html.destination file("jacoco/html")
-		xml.destination file("jacoco/xml")
+		xml.destination file("jacoco/TestReport.xml")
 
 	}
 
