@@ -79,6 +79,13 @@ test {
 
 jacocoTestReport {
 
+	def Qdomains = []
+
+	for (qPattern in '**/QA'..'**/QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
+
 	reports {
 		html.required = true
 		xml.required = true
@@ -87,12 +94,6 @@ jacocoTestReport {
 		html.destination file("jacoco/html")
 		xml.destination file("jacoco/TestReport.xml")
 
-	}
-
-	def Qdomains = []
-
-	for (qPattern in '**/QA'..'**/QZ') {
-		Qdomains.add(qPattern + '*')
 	}
 
 	afterEvaluate {
@@ -137,12 +138,12 @@ jacocoTestCoverageVerification {
 			}
 
 			excludes = [
-					"**/*Application*",
-					"**/model/*",
-					"**/exception/*",
-					"**/global",
-					"**/infra"
-			] + Qdomains;
+					"*.*Application*",
+					"*.model.*",
+					"*.exception.*",
+					"*.global.*",
+					"*.infra.*"
+			] + Qdomains
 
 		}
 
