@@ -19,12 +19,14 @@ on:
       - 'dev/*'
     
 permissions:
+  checks: write
+  issues: write
+  pull-requests: write
   contents: read
 
 jobs:
   CI:
     runs-on: ubuntu-22.04
-
     steps:
     
     # (1) CheckOut
