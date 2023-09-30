@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.auth.factory.factory;
+package dev.yogizogi.domain.auth.factory.dto;
 
-import static dev.yogizogi.domain.auth.factory.fixtures.VerificationFixture.*;
+import static dev.yogizogi.domain.auth.factory.fixtures.VerificationCodeFixtures.*;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 
 import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;

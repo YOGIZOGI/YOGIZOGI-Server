@@ -3,8 +3,6 @@ package dev.yogizogi.domain.user.service;
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 

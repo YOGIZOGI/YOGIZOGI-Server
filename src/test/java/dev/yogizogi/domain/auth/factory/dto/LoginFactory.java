@@ -1,7 +1,7 @@
-package dev.yogizogi.domain.auth.factory.factory;
+package dev.yogizogi.domain.auth.factory.dto;
 
-import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.리프레쉬_토큰;
-import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.어세스_토큰;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;

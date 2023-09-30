@@ -1,9 +1,9 @@
 package dev.yogizogi.domain.auth.service;
 
-import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.리프레쉬_토큰;
-import static dev.yogizogi.domain.auth.factory.fixtures.TokenFixtures.어세스_토큰;
-import static dev.yogizogi.domain.auth.factory.fixtures.VerificationFixture.받은_핸드폰_번호;
-import static dev.yogizogi.domain.auth.factory.fixtures.VerificationFixture.인증코드;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
+import static dev.yogizogi.domain.auth.factory.fixtures.VerificationCodeFixtures.받은_핸드폰_번호;
+import static dev.yogizogi.domain.auth.factory.fixtures.VerificationCodeFixtures.인증코드;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.암호화_비밀번호;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -11,8 +11,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.auth.exception.FailLoginException;
-import dev.yogizogi.domain.auth.factory.factory.LoginFactory;
-import dev.yogizogi.domain.auth.factory.factory.VerificationFactory;
+import dev.yogizogi.domain.auth.factory.dto.LoginFactory;
+import dev.yogizogi.domain.auth.factory.dto.VerificationFactory;
 import dev.yogizogi.domain.auth.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.auth.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.security.service.JwtService;
@@ -73,8 +73,8 @@ class AuthServiceTest {
         // mocking
         given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
         given(passwordEncoder.matches(eq(request.getPassword()), eq(암호화_비밀번호))).willReturn(true);
-        given(jwtService.createAccessToken(any(), eq(request.getAccountName()))).willReturn(어세스_토큰);
-        given(jwtService.createRefreshToken(any(), eq(request.getAccountName()))).willReturn(리프레쉬_토큰);
+        given(jwtService.issueAccessToken(any(), eq(request.getAccountName()))).willReturn(어세스_토큰);
+        given(jwtService.issueRefreshToken(any(), eq(request.getAccountName()))).willReturn(리프레쉬_토큰);
 
         // when
         LoginOutDto response = authService.login(request);

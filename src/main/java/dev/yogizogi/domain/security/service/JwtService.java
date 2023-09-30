@@ -63,15 +63,15 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String createAccessToken(UUID id, String accountName) {
-        return TOKEN_PREFIX.concat(issueToken(id, accountName, ACCESS_TOKEN));
+    public String issueAccessToken(UUID id, String accountName) {
+        return TOKEN_PREFIX.concat(createToken(id, accountName, ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String createRefreshToken(UUID id, String accountName) {
-        String refreshToken = issueToken(id, accountName, REFRESH_TOKEN);
+    public String issueRefreshToken(UUID id, String accountName) {
+        String refreshToken = createToken(id, accountName, REFRESH_TOKEN);
         redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
@@ -84,15 +84,24 @@ public class JwtService {
         User findUser = userRepository.findByIdAndAccountNameAndStatus(id, accountName, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
 
-        String refreshToken = redisUtils.findByKey(findUser.getAccountName());
+        checkRefreshToken(findUser.getAccountName());
+
+        return ReissueAccessTokenOutDto.of(
+                findUser.getId(),
+                issueAccessToken(findUser.getId(), findUser.getAccountName())
+        );
+
+    }
+
+    private String checkRefreshToken(String accountName) {
+
+        String refreshToken = redisUtils.findByKey(accountName);
+
         if (Objects.isNull(refreshToken)) {
             throw new ExpiredTokenException(EXPIRED_TOKEN);
         }
 
-        return ReissueAccessTokenOutDto.of(
-                findUser.getId(),
-                issueToken(findUser.getId(), findUser.getAccountName(), ACCESS_TOKEN)
-        );
+        return refreshToken;
 
     }
 
@@ -111,7 +120,7 @@ public class JwtService {
 
     }
 
-    private String issueToken(UUID id, String email, TokenType type) {
+    private String createToken(UUID id, String email, TokenType type) {
 
         Date now = new Date();
         Claims claims = setClaims(id, email, type);
@@ -167,7 +176,7 @@ public class JwtService {
      * 토큰 추출
      */
     public Optional<String> extractToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(TOKEN_HEADER_NAME).replace("Bearer ", ""));
+        return Optional.ofNullable(request.getHeader(TOKEN_HEADER_NAME).replace(TOKEN_PREFIX, ""));
     }
 
     /**
