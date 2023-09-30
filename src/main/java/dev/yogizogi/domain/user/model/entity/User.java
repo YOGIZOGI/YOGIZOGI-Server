@@ -1,7 +1,6 @@
 package dev.yogizogi.domain.user.model.entity;
 
 import dev.yogizogi.global.common.model.entity.BaseEntity;
-import dev.yogizogi.global.util.UuidUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +45,8 @@ public class User extends BaseEntity {
     }
 
     @Builder
-    public User(String accountName, String password, String nickname, String phoneNumber) {
-        this.id = UuidUtils.createSequentialUUID();
+    public User(UUID id, String accountName, String password, String nickname, String phoneNumber) {
+        this.id = id;
         this.accountName = accountName;
         this.password = password;
         this.nickname = nickname;

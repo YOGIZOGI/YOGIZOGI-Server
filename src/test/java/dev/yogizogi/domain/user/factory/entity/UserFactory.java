@@ -11,6 +11,7 @@ public class UserFactory {
     public static User createUser() {
 
         User user = User.builder()
+                .id(식별자)
                 .accountName(계정)
                 .password(비밀번호)
                 .nickname(닉네임)
@@ -27,6 +28,7 @@ public class UserFactory {
     public static User createUserPasswordEncrypt() {
 
         User user = User.builder()
+                .id(식별자)
                 .accountName(계정)
                 .password(암호화_비밀번호)
                 .nickname(닉네임)
