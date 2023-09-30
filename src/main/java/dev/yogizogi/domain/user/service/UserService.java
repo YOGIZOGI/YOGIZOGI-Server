@@ -12,6 +12,7 @@ import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;
+import dev.yogizogi.global.util.UuidUtils;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,12 +41,15 @@ public class UserService {
             throw new DuplicatedPhoneNumberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
         }
 
-        User newUser = CreateUserInDto.toEntity(response, passwordEncoder.encode(response.getPassword()));
-        newUser.setRoles(Collections.singletonList(
-                Authority.builder().name("ROLE_USER").build())
-        );
-        userRepository.save(newUser);
+        User newUser =
+                CreateUserInDto.toEntity(
+                        UuidUtils.createSequentialUUID(),
+                        response,
+                        passwordEncoder.encode(response.getPassword()));
 
+        newUser.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
+
+        userRepository.save(newUser);
         return CreateUserOutDto.of(newUser.getId(), newUser.getAccountName());
 
     }

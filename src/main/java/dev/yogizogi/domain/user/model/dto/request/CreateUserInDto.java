@@ -4,6 +4,7 @@ import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -29,8 +30,10 @@ public class CreateUserInDto {
     @Schema(description = "핸드폰 번호", example = "01012345678")
     private String phoneNumber;
 
-    public static User toEntity(CreateUserInDto createUserInDto, String password){
+    public static User toEntity(
+            UUID id, CreateUserInDto createUserInDto, String password){
         return User.builder()
+                .id(id)
                 .accountName(createUserInDto.getAccountName())
                 .password(password)
                 .nickname(createUserInDto.getNickname())
