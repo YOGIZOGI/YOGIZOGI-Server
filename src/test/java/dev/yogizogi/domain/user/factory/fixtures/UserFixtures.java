@@ -1,7 +1,5 @@
 package dev.yogizogi.domain.user.factory.fixtures;
 
-import dev.yogizogi.domain.user.model.entity.User;
-import dev.yogizogi.global.util.UuidUtils;
 import java.util.UUID;
 
 public class UserFixtures {

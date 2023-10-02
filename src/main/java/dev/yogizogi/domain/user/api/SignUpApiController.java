@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.authorization.api;
+package dev.yogizogi.domain.user.api;
 
-import dev.yogizogi.domain.authorization.service.SignUpService;
+import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CheckDuplicationOutDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;

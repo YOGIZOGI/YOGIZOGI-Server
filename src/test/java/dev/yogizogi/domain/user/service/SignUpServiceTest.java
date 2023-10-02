@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.authorization.service;
+package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
@@ -11,6 +11,7 @@ import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
+import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.user.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.authorization.api;
+package dev.yogizogi.domain.user.api;
 
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.닉네임;
@@ -14,8 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.authorization.service.SignUpService;
+import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.security.service.JwtService;
+import dev.yogizogi.domain.user.api.SignUpApiController;
 import dev.yogizogi.domain.user.factory.dto.CreateUserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
