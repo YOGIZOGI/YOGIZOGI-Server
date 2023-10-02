@@ -27,33 +27,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public CreateUserOutDto signUp(CreateUserInDto response) {
-
-        if (checkAccountNameDuplication(response.getAccountName())) {
-            throw new DuplicatedAccountException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
-        }
-
-        if (checkNicknameDuplication(response.getNickname())) {
-            throw new DuplicatedNicknameException(ErrorCode.DUPLICATE_NICKNAME);
-        }
-
-        if (checkPhoneNumberDuplication(response.getPhoneNumber())) {
-            throw new DuplicatedPhoneNumberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
-        }
-
-        User newUser =
-                CreateUserInDto.toEntity(
-                        UuidUtils.createSequentialUUID(),
-                        response,
-                        passwordEncoder.encode(response.getPassword()));
-
-        newUser.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
-
-        userRepository.save(newUser);
-        return CreateUserOutDto.of(newUser.getId(), newUser.getAccountName());
-
-    }
-
     public boolean checkAccountNameDuplication(String accountName) {
         return userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE).isPresent();
     }
@@ -65,7 +38,6 @@ public class UserService {
     public boolean checkPhoneNumberDuplication(String phoneNumber) {
         return userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE).isPresent();
     }
-
 
     public DeleteUserOutDto deleteUser(String accountName) throws NotExistAccountException {
 

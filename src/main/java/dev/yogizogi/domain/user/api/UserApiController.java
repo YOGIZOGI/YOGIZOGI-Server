@@ -1,6 +1,5 @@
 package dev.yogizogi.domain.user.api;
 
-import dev.yogizogi.domain.auth.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.model.response.Success;

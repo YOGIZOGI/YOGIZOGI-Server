@@ -2,7 +2,6 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
@@ -12,7 +11,6 @@ import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
-import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
@@ -25,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import dev.yogizogi.domain.user.exception.UserException;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -40,54 +37,17 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Test
-    void 회원_가입() {
-
-        // given
-        CreateUserInDto request = createUserInDto();
-
-        // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
-        given(userRepository.findByNicknameAndStatus(eq(request.getNickname()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
-        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
-
-        // when
-        CreateUserOutDto response = userService.signUp(request);
-
-        // then
-        Assertions.assertThat(request.getAccountName()).isEqualTo(response.getAccountName());
-
-    }
-
-    @Test
-    void 비밀번호_암호화() {
-
-        // given
-        String password = 비밀번호;
-
-        // when
-        String encode = passwordEncoder.encode(password);
-
-        // then
-        Assertions.assertThat(passwordEncoder.matches(password, encode)).isFalse();
-
-    }
-
     @Test
     void 계정_중복() throws UserException {
 
         // given
-        CreateUserInDto request = createUserInDto();
+        CreateUserInDto req = createUserInDto();
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByAccountNameAndStatus(eq(req.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThatThrownBy(() -> userService.signUp(request)).isInstanceOf(DuplicatedAccountException.class);
+        Assertions.assertThat(userService.checkAccountNameDuplication(req.getAccountName())).isEqualTo(true);
 
     }
 
@@ -95,14 +55,13 @@ class UserServiceTest {
     void 닉네임_중복() throws UserException {
 
         // given
-        CreateUserInDto request = createUserInDto();
+        CreateUserInDto req = createUserInDto();
 
         // mocking
-        given(userRepository.findByNicknameAndStatus(eq(request.getNickname()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByNicknameAndStatus(eq(req.getNickname()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThatThrownBy(() -> userService.signUp(request)).isInstanceOf(DuplicatedNicknameException.class);
+        Assertions.assertThat(userService.checkNicknameDuplication(req.getNickname())).isEqualTo(true);
 
     }
 
@@ -110,14 +69,13 @@ class UserServiceTest {
     void 핸드폰_번호_중복() throws UserException {
 
         // given
-        CreateUserInDto request = createUserInDto();
+        CreateUserInDto req = createUserInDto();
 
         // mocking
-        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(req.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThatThrownBy(() -> userService.signUp(request)).isInstanceOf(DuplicatedPhoneNumberException.class);
+        Assertions.assertThat(userService.checkPhoneNumberDuplication(req.getPhoneNumber())).isEqualTo(true);
 
     }
 
