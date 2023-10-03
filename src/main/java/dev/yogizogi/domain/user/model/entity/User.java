@@ -44,6 +44,10 @@ public class User extends BaseEntity {
         roles.forEach(role -> role.setUser(this));
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Builder
     public User(UUID id, String accountName, String password, String nickname, String phoneNumber) {
         this.id = id;

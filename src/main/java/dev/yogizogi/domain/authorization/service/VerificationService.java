@@ -4,7 +4,7 @@ import static dev.yogizogi.global.common.model.constant.Number.COOLSMS_SUCCESS_C
 
 import dev.yogizogi.domain.authorization.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.authorization.model.dto.response.VerifyCodeOutDto;
-import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
+import dev.yogizogi.domain.user.exception.AlreadyUsePhoneNumberException;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.MessageStatus;
@@ -31,8 +31,8 @@ public class VerificationService {
     @Transactional(readOnly = true)
     public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
 
-        if (userService.checkPhoneNumberDuplication(phoneNumber)) {
-            throw new DuplicatedPhoneNumberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+        if (userService.isUsePhoneNumber(phoneNumber)) {
+            throw new AlreadyUsePhoneNumberException(ErrorCode.ALREADY_USE_PHONE_NUMBER);
         }
 
         SingleMessageSentResponse result = coolSmsService.sendOne(phoneNumber, CodeUtils.verification());

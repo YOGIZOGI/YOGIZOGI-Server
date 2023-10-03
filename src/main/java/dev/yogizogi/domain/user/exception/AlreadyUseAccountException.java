@@ -5,9 +5,9 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class DuplicatedNicknameException extends BaseException {
+public class AlreadyUseAccountException extends BaseException {
 
-    public DuplicatedNicknameException(ErrorCode error) {
+    public AlreadyUseAccountException(ErrorCode error) {
         super(error);
     }
 

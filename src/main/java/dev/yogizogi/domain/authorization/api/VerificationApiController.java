@@ -54,7 +54,7 @@ public class VerificationApiController {
 
     }
 
-    @Operation(summary = "인증번호 확인")
+    @Operation(summary = "인증번호 확인(회원 가입)")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -82,4 +82,5 @@ public class VerificationApiController {
                         .build());
 
     }
+
 }

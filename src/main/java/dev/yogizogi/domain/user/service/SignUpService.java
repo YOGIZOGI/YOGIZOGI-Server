@@ -1,8 +1,8 @@
 package dev.yogizogi.domain.user.service;
 
-import dev.yogizogi.domain.user.exception.DuplicatedAccountException;
-import dev.yogizogi.domain.user.exception.DuplicatedNicknameException;
-import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
+import dev.yogizogi.domain.user.exception.AlreadyUseAccountException;
+import dev.yogizogi.domain.user.exception.AlreadyUseNicknameException;
+import dev.yogizogi.domain.user.exception.AlreadyUsePhoneNumberException;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.model.entity.Authority;
@@ -27,16 +27,16 @@ public class SignUpService {
 
     public CreateUserOutDto signUp(CreateUserInDto response) {
 
-        if (userService.checkAccountNameDuplication(response.getAccountName())) {
-            throw new DuplicatedAccountException(ErrorCode.DUPLICATE_ACCOUNT_NAME);
+        if (userService.isUsedAccountName(response.getAccountName())) {
+            throw new AlreadyUseAccountException(ErrorCode.ALREADY_USE_ACCOUNT_NAME);
         }
 
-        if (userService.checkNicknameDuplication(response.getNickname())) {
-            throw new DuplicatedNicknameException(ErrorCode.DUPLICATE_NICKNAME);
+        if (userService.isUsedNickname(response.getNickname())) {
+            throw new AlreadyUseNicknameException(ErrorCode.ALREADY_USE_NICKNAME);
         }
 
-        if (userService.checkPhoneNumberDuplication(response.getPhoneNumber())) {
-            throw new DuplicatedPhoneNumberException(ErrorCode.DUPLICATE_PHONE_NUMBER);
+        if (userService.isUsePhoneNumber(response.getPhoneNumber())) {
+            throw new AlreadyUsePhoneNumberException(ErrorCode.ALREADY_USE_PHONE_NUMBER);
         }
 
         User newUser =

@@ -66,7 +66,7 @@ public class SignUpApiController {
 
         DuplicationStatus status = DuplicationStatus.NOT_EXIST;
 
-        if (userService.checkAccountNameDuplication(accountName)) {
+        if (userService.isUsedAccountName(accountName)) {
             status = DuplicationStatus.EXIST;
         }
 
@@ -90,7 +90,7 @@ public class SignUpApiController {
 
         DuplicationStatus status = DuplicationStatus.NOT_EXIST;
 
-        if (userService.checkNicknameDuplication(nickname)) {
+        if (userService.isUsedNickname(nickname)) {
             status = DuplicationStatus.EXIST;
         }
 
