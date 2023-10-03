@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.security.service.JwtService;
-import dev.yogizogi.domain.user.api.SignUpApiController;
 import dev.yogizogi.domain.user.factory.dto.CreateUserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
@@ -100,7 +99,7 @@ class SignUpApiControllerTest {
         String accountName = 계정;
 
         // mocking
-        given(userService.checkAccountNameDuplication(eq(accountName))).willReturn(true);
+        given(userService.isUsedAccountName(eq(accountName))).willReturn(true);
 
         // when
         // then
@@ -127,7 +126,7 @@ class SignUpApiControllerTest {
         String accountName = 계정;
 
         // mocking
-        given(userService.checkAccountNameDuplication(eq(accountName))).willReturn(false);
+        given(userService.isUsedAccountName(eq(accountName))).willReturn(false);
 
         // when
         // then
@@ -154,7 +153,7 @@ class SignUpApiControllerTest {
         String nickname = 닉네임;
 
         // mocking
-        given(userService.checkNicknameDuplication(eq(nickname))).willReturn(true);
+        given(userService.isUsedNickname(eq(nickname))).willReturn(true);
 
         // when
         // then
@@ -181,7 +180,7 @@ class SignUpApiControllerTest {
         String nickname = 닉네임;
 
         // mocking
-        given(userService.checkNicknameDuplication(eq(nickname))).willReturn(false);
+        given(userService.isUsedNickname(eq(nickname))).willReturn(false);
 
         // when
         // then

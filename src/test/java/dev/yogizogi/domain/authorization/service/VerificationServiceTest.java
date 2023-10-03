@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.authorization.factory.dto.VerificationFactory;
-import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
+import dev.yogizogi.domain.user.exception.AlreadyUsePhoneNumberException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.MessageStatus;
@@ -46,7 +46,7 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.checkPhoneNumberDuplication(eq(받은_핸드폰_번호)))
+        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
         given(coolSmsService.sendOne(eq(받은_핸드폰_번호), anyString()))
@@ -65,7 +65,7 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.checkPhoneNumberDuplication(eq(받은_핸드폰_번호)))
+        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
         given(coolSmsService.sendOne(eq(받은_핸드폰_번호), anyString()))
@@ -84,13 +84,13 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.checkPhoneNumberDuplication(eq(받은_핸드폰_번호)))
+        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(true);
 
         // then
         Assertions.assertThatThrownBy
                         (() -> verificationService.sendVerificationCode(받은_핸드폰_번호))
-                .isInstanceOf(DuplicatedPhoneNumberException.class);
+                .isInstanceOf(AlreadyUsePhoneNumberException.class);
 
     }
 

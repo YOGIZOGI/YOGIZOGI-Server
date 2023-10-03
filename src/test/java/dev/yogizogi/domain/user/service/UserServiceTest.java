@@ -2,16 +2,17 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import dev.yogizogi.domain.user.exception.DuplicatedAccountException;
-import dev.yogizogi.domain.user.exception.DuplicatedNicknameException;
-import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
+import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
+import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.common.status.BaseStatus;
@@ -23,7 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import dev.yogizogi.domain.user.exception.UserException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
@@ -37,6 +38,9 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void 계정_중복() throws UserException {
 
@@ -47,7 +51,7 @@ class UserServiceTest {
         given(userRepository.findByAccountNameAndStatus(eq(req.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThat(userService.checkAccountNameDuplication(req.getAccountName())).isEqualTo(true);
+        Assertions.assertThat(userService.isUsedAccountName(req.getAccountName())).isEqualTo(true);
 
     }
 
@@ -61,7 +65,7 @@ class UserServiceTest {
         given(userRepository.findByNicknameAndStatus(eq(req.getNickname()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThat(userService.checkNicknameDuplication(req.getNickname())).isEqualTo(true);
+        Assertions.assertThat(userService.isUsedNickname(req.getNickname())).isEqualTo(true);
 
     }
 
@@ -75,7 +79,7 @@ class UserServiceTest {
         given(userRepository.findByPhoneNumberAndStatus(eq(req.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
 
         // then
-        Assertions.assertThat(userService.checkPhoneNumberDuplication(req.getPhoneNumber())).isEqualTo(true);
+        Assertions.assertThat(userService.isUsePhoneNumber(req.getPhoneNumber())).isEqualTo(true);
 
     }
 
@@ -110,6 +114,97 @@ class UserServiceTest {
         // then
         Assertions.assertThatThrownBy(() -> userService.deleteUser(계정))
                 .isInstanceOf(NotExistAccountException.class);
+
+    }
+
+    @Test
+    void 비밀번호_찾기() {
+
+        // given
+        String 찾을_계정 = 계정;
+
+        // mocking
+        given(userRepository.findByAccountNameAndStatus(eq(찾을_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+
+        // when
+        FindPasswordOutDto req = userService.findPassword(찾을_계정);
+
+        // then
+        Assertions.assertThat(req.getAccountName()).isEqualTo(찾을_계정);
+
+    }
+
+    @Test
+    void 비밀번호_찾기_실패_존재하지_않는_계정() {
+
+        // given
+        String 찾을_계정 = 계정;
+
+        // mocking
+        given(userRepository.findByAccountNameAndStatus(eq(찾을_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> userService.findPassword(찾을_계정))
+                .isInstanceOf(NotExistAccountException.class);
+
+    }
+
+
+    @Test
+    void 비밀번호_변경() {
+
+        // given
+        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_비밀번호 = "update124!!";
+
+        // mocking
+        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
+
+        // when
+        String result = userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호);
+
+        // then
+        Assertions.assertThat(result).isEqualTo("변경 완료");
+
+    }
+
+    @Test
+    void 비밀번호_변경_실패_존재하지_않는_회원() {
+
+        // given
+        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_비밀번호 = "update124!!";
+
+        // mocking
+        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호)).isInstanceOf(
+                NotExistAccountException.class);
+
+    }
+
+    @Test
+    void 비밀번호_변경_실패_이미_사용중인_비밀번호() {
+
+        // given
+        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_비밀번호 = "update124!!";
+
+        // mocking
+        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호)).isInstanceOf(
+                AlreadyUsePasswordException.class);
 
     }
 

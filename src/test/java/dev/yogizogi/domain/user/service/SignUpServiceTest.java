@@ -4,15 +4,13 @@ import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserI
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
 import static org.mockito.BDDMockito.given;
 
-import dev.yogizogi.domain.user.exception.DuplicatedAccountException;
-import dev.yogizogi.domain.user.exception.DuplicatedNicknameException;
-import dev.yogizogi.domain.user.exception.DuplicatedPhoneNumberException;
+import dev.yogizogi.domain.user.exception.AlreadyUseAccountException;
+import dev.yogizogi.domain.user.exception.AlreadyUseNicknameException;
+import dev.yogizogi.domain.user.exception.AlreadyUsePhoneNumberException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
-import dev.yogizogi.domain.user.service.SignUpService;
-import dev.yogizogi.domain.user.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,9 +45,9 @@ class SignUpServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userService.checkAccountNameDuplication(request.getAccountName())).willReturn(false);
-        given(userService.checkNicknameDuplication(request.getNickname())).willReturn(false);
-        given(userService.checkPhoneNumberDuplication(request.getPhoneNumber())).willReturn(false);
+        given(userService.isUsedAccountName(request.getAccountName())).willReturn(false);
+        given(userService.isUsedNickname(request.getNickname())).willReturn(false);
+        given(userService.isUsePhoneNumber(request.getPhoneNumber())).willReturn(false);
 
         // when
         CreateUserOutDto response = signUpService.signUp(request);
@@ -66,10 +64,10 @@ class SignUpServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userService.checkAccountNameDuplication(request.getAccountName())).willReturn(true);
+        given(userService.isUsedAccountName(request.getAccountName())).willReturn(true);
 
         // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(DuplicatedAccountException.class);
+        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUseAccountException.class);
 
     }
 
@@ -80,10 +78,10 @@ class SignUpServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userService.checkNicknameDuplication(request.getNickname())).willReturn(true);
+        given(userService.isUsedNickname(request.getNickname())).willReturn(true);
 
         // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(DuplicatedNicknameException.class);
+        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUseNicknameException.class);
 
     }
 
@@ -94,10 +92,10 @@ class SignUpServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userService.checkPhoneNumberDuplication(request.getPhoneNumber())).willReturn(true);
+        given(userService.isUsePhoneNumber(request.getPhoneNumber())).willReturn(true);
 
         // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(DuplicatedPhoneNumberException.class);
+        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUsePhoneNumberException.class);
 
     }
 
