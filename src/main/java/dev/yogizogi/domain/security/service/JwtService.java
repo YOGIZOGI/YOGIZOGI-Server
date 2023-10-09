@@ -9,7 +9,7 @@ import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
+import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;

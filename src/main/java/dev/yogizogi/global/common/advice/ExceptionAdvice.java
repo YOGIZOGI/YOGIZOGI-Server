@@ -5,12 +5,12 @@ import static dev.yogizogi.global.common.model.constant.Format.VALIDATION_RESULT
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
 import dev.yogizogi.global.common.model.response.Failure;
+import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.util.ResponseUtils;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.exception.NurigoApiKeyException;
 import net.nurigo.sdk.message.exception.NurigoBadRequestException;
-import net.nurigo.sdk.message.exception.NurigoException;
 import net.nurigo.sdk.message.exception.NurigoUnknownException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -46,9 +46,12 @@ public class ExceptionAdvice {
     })
     protected ResponseEntity handleCoolSmsException(NurigoUnknownException exception) {
 
+        StringBuilder message = new StringBuilder();
+        message.append(MessageStatus.FAIL).append(" = {").append(exception.getMessage()).append("}");
+
         return ResponseUtils.error(
                 Failure.builder()
-                        .message(exception.getMessage())
+                        .message(message)
                         .build(),
                 ErrorCode.FAIL_TO_SEND_MESSAGE
         );

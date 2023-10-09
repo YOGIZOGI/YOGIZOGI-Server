@@ -107,12 +107,11 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                // Open API(Swagger) 관련 Uri
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**")
-                // h2
                 .requestMatchers("/h2-console/**")
-                // 제외할 API Uri
-                .requestMatchers("/api/auth/**");
+                .requestMatchers(
+                        "/api/auth/**", "/api/sign-up/**", "/api/verification/**",
+                        "/api/users/find-password", "/api/users/update-password");
     }
 
     @Bean

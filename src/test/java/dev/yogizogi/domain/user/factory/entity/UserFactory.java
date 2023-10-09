@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.user.factory.entity;
 
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.*;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.*;
 
 import dev.yogizogi.domain.user.model.entity.Authority;
 import dev.yogizogi.domain.user.model.entity.User;

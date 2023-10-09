@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.user.factory.dto;
 
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.*;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.*;
 
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;

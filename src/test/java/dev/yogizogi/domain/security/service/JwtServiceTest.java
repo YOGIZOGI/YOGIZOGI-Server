@@ -5,7 +5,7 @@ import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_식별자;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함할_계정;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함할_식별자;
-import static dev.yogizogi.domain.security.service.SecretKeyFixtures.암호화키;
+import static dev.yogizogi.domain.security.factory.fixtures.SecretKeyFixtures.암호화키;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
@@ -14,7 +14,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
+import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.factory.entity.SubjectFactory;

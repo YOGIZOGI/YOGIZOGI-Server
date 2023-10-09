@@ -11,18 +11,18 @@ public enum ErrorCode {
 
     /**
      * Code : 400
-     * Bad Request
+     * - Bad Request
      */
     FAIL_TO_TEST(HttpStatus.BAD_REQUEST, "요청 실패"),
     FAIL_TO_VALIDATE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     FAIL_TO_SEND_MESSAGE(HttpStatus.BAD_REQUEST, "인증번호 전송 실패"),
-    DUPLICATE_ACCOUNT_NAME(HttpStatus.BAD_REQUEST, "중복된 아이디입니다."),
-    DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
-    DUPLICATE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "중복된 핸드폰 번호입니다."),
+    ALREADY_USE_ACCOUNT_NAME(HttpStatus.BAD_REQUEST, "이미 사용중인 계정입니다."),
+    ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
+    ALREADY_USE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 사용중인 전화번호입니다."),
+    ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
     /**
-     * Code : 401
-     * - Unauthorized (권한이 없어 인증 불가)
+     * Code : 401인
      */
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 없습니다."),
