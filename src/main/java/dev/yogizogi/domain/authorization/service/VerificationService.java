@@ -9,7 +9,6 @@ import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.common.status.VerificationStatus;
-import dev.yogizogi.global.util.CodeUtils;
 import dev.yogizogi.global.util.RedisUtils;
 import dev.yogizogi.infra.coolsms.CoolSmsService;
 import java.util.Objects;
@@ -29,13 +28,13 @@ public class VerificationService {
     private final RedisUtils redisUtils;
 
     @Transactional(readOnly = true)
-    public SendVerificationCodeOutDto sendVerificationCode(String phoneNumber) {
+    public SendVerificationCodeOutDto sendVerificationCodeForSignUp(String phoneNumber) {
 
         if (userService.isUsePhoneNumber(phoneNumber)) {
             throw new AlreadyUsePhoneNumberException(ErrorCode.ALREADY_USE_PHONE_NUMBER);
         }
 
-        SingleMessageSentResponse result = coolSmsService.sendOne(phoneNumber, CodeUtils.verification());
+        SingleMessageSentResponse result = coolSmsService.sendOne(phoneNumber);
         MessageStatus status = checkSentSuccessfully(result);
 
         return SendVerificationCodeOutDto.of(status, result.getStatusMessage());

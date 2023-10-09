@@ -4,11 +4,10 @@ import dev.yogizogi.domain.authorization.exception.AuthException;
 import dev.yogizogi.domain.authorization.exception.FailLoginException;
 import dev.yogizogi.domain.authorization.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.authorization.model.dto.response.LoginOutDto;
+import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
-import dev.yogizogi.domain.security.service.JwtService;
-import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class AuthorizationService {
 
     private final UserRepository userRepository;
 
-    private final UserService userService;
     private final JwtService jwtService;
 
     private final PasswordEncoder passwordEncoder;

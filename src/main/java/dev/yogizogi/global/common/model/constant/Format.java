@@ -7,4 +7,5 @@ public class Format {
     public static final String TOKEN_HEADER_NAME = "Authorization";
     public static final String REISSUE_ACCESS_TOKEN_URL = "/api/auth/reissue-access-token";
     public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String DONE = "수행 완료";
 }

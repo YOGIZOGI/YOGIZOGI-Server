@@ -49,7 +49,7 @@ public class VerificationApiController {
 
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(verificationService.sendVerificationCode(phoneNumber))
+                        .data(verificationService.sendVerificationCodeForSignUp(phoneNumber))
                         .build());
 
     }

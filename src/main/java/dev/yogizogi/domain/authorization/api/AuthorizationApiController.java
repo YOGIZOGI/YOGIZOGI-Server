@@ -4,7 +4,6 @@ import dev.yogizogi.domain.authorization.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.authorization.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
 import dev.yogizogi.domain.authorization.service.AuthorizationService;
-import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthorizationApiController {
 
-    private final UserService userService;
     private final AuthorizationService authorizationService;
     private final JwtService jwtService;
 

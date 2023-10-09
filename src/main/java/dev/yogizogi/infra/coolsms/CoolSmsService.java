@@ -3,6 +3,7 @@ package dev.yogizogi.infra.coolsms;
 import static dev.yogizogi.global.common.model.constant.Format.VERIFICATION_CODE_MESSAGE;
 import static dev.yogizogi.global.common.model.constant.Number.VERIFICATION_CODE_EXPIRATION_TIME;
 
+import dev.yogizogi.global.util.CodeUtils;
 import dev.yogizogi.global.util.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.message.model.Message;
@@ -19,7 +20,9 @@ public class CoolSmsService {
     private final RedisUtils redisUtils;
     private final Message message;
 
-    public SingleMessageSentResponse sendOne(String to, String code) {
+    public SingleMessageSentResponse sendOne(String to) {
+
+        String code = CodeUtils.verification();
 
         setMessage(to, code);
         SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));

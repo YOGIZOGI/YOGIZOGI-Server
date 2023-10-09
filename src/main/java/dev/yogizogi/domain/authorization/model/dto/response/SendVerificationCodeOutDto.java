@@ -14,13 +14,13 @@ public class SendVerificationCodeOutDto {
     @Schema(description = "전송 결과", allowableValues = {"SUCCESS", "FAIL"})
     private MessageStatus status;
 
-    @Schema(description = "이유")
-    private String message;
+    @Schema(description = "결과에 대한 설명")
+    private String description;
 
     public static SendVerificationCodeOutDto of(MessageStatus status, String message) {
         return SendVerificationCodeOutDto.builder()
                 .status(status)
-                .message(message)
+                .description(message)
                 .build();
     }
 }

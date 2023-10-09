@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.user.api;
 
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
+import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
@@ -54,20 +55,25 @@ public class UserApiController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "확인 완료"
+                    description = "요청 완료",
+                    content = @Content(schema = @Schema(implementation = FindPasswordOutDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "인증번호 전송 실패"
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "존재하지 않는 유저"
+                    description = "존재하지 않는 계정"
             )
     })
-    @Parameter(name = "accountName", description = "찾고 싶은 계정", example = "yogizogi")
+    @Parameter(name = "phoneNumber", description = "찾고 싶은 계정", example = "01012345678")
     @GetMapping("/find-password")
-    public ResponseEntity changePassword(@RequestParam String accountName) {
+    public ResponseEntity findPassword(@RequestParam String phoneNumber) {
 
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(userService.findPassword(accountName))
+                        .data(userService.findPassword(phoneNumber))
                         .build());
 
     }
@@ -76,7 +82,7 @@ public class UserApiController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "확인 완료"
+                    description = "요청 완료"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -88,18 +94,18 @@ public class UserApiController {
             )
     })
     @Parameters({
-            @Parameter(name = "accountName", description = "변경하고 싶은 계정", example = "yogizogi"),
+            @Parameter(name = "phoneNumber", description = "변경하고 싶은 계정", example = "01012345678"),
             @Parameter(name = "password", description = "변경하고 싶은 비밀번호", example = "yogi5678!")
     })
     @PutMapping("/update-password")
     public ResponseEntity updatePassword(
-            @RequestParam String accountName,
+            @RequestParam String phoneNumber,
             @RequestParam String password
     ) {
 
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(userService.updatePassword(accountName, password))
+                        .data(userService.updatePassword(phoneNumber, password))
                         .build());
 
     }
