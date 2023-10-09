@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 public class Subject {
 
     private UUID id;
-    private String accountName;
+    private String phoneNumber;
     private TokenType type;
 
     @Builder
-    public Subject(UUID id, String accountName, TokenType type) {
+    public Subject(UUID id, String phoneNumber, TokenType type) {
         this.id = id;
-        this.accountName = accountName;
+        this.phoneNumber = phoneNumber;
         this.type = type;
     }
 

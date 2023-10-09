@@ -12,7 +12,7 @@ import dev.yogizogi.domain.authorization.factory.dto.LoginFactory;
 import dev.yogizogi.domain.authorization.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.authorization.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.security.service.JwtService;
-import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
@@ -63,10 +63,10 @@ class AuthorizationServiceTest {
         LoginInDto request = LoginFactory.LoginInDto();
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
         given(passwordEncoder.matches(eq(request.getPassword()), eq(암호화_비밀번호))).willReturn(true);
-        given(jwtService.issueAccessToken(any(), eq(request.getAccountName()))).willReturn(어세스_토큰);
-        given(jwtService.issueRefreshToken(any(), eq(request.getAccountName()))).willReturn(리프레쉬_토큰);
+        given(jwtService.issueAccessToken(any(), eq(request.getPhoneNumber()))).willReturn(어세스_토큰);
+        given(jwtService.issueRefreshToken(any(), eq(request.getPhoneNumber()))).willReturn(리프레쉬_토큰);
 
         // when
         LoginOutDto response = authorizationService.login(request);
@@ -84,11 +84,12 @@ class AuthorizationServiceTest {
         LoginInDto request = LoginFactory.LoginInDto();
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
 
         // when
         // then
-        Assertions.assertThatThrownBy(() -> authorizationService.login(request)).isInstanceOf(NotExistAccountException.class);
+        Assertions.assertThatThrownBy(() -> authorizationService.login(request)).isInstanceOf(
+                NotExistPhoneNumberException.class);
 
     }
 
@@ -100,7 +101,7 @@ class AuthorizationServiceTest {
         LoginInDto request = LoginFactory.LoginInDto();
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(request.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(request.getPhoneNumber()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
         given(passwordEncoder.matches(eq(request.getPassword()), eq(암호화_비밀번호))).willReturn(false);
 
         // when

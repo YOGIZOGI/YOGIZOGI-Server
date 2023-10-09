@@ -46,7 +46,7 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
+        given(userService.isUsedPhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
         given(coolSmsService.sendOne(eq(받은_핸드폰_번호)))
@@ -65,7 +65,7 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
+        given(userService.isUsedPhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
         given(coolSmsService.sendOne(eq(받은_핸드폰_번호)))
@@ -84,7 +84,7 @@ class VerificationServiceTest {
         // given
 
         // when
-        given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
+        given(userService.isUsedPhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(true);
 
         // then

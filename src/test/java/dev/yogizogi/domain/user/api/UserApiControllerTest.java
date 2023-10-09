@@ -2,7 +2,7 @@ package dev.yogizogi.domain.user.api;
 
 import static dev.yogizogi.domain.user.factory.dto.DeleteUserFactory.deleteUserOutDto;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.변경할_비밀번호;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.eq;
@@ -50,10 +50,10 @@ class UserApiControllerTest {
     void 회원_탈퇴() throws Exception {
 
         // given
-        String accountName = 계정;
+        String accountName = 핸드폰_번호;
 
         // mocking
-        given(userService.deleteUser(eq(계정))).willReturn(deleteUserOutDto());
+        given(userService.deleteUser(eq(핸드폰_번호))).willReturn(deleteUserOutDto());
 
         // when
         // then
@@ -67,7 +67,7 @@ class UserApiControllerTest {
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
-                        jsonPath("$.data.accountName").value(계정)
+                        jsonPath("$.data.accountName").value(핸드폰_번호)
                 )
                 .andExpect(
                         jsonPath("$.data.status").value("INACTIVE")

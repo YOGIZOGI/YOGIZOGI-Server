@@ -4,9 +4,7 @@ import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserI
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
 import static org.mockito.BDDMockito.given;
 
-import dev.yogizogi.domain.user.exception.AlreadyUseAccountException;
 import dev.yogizogi.domain.user.exception.AlreadyUseNicknameException;
-import dev.yogizogi.domain.user.exception.AlreadyUsePhoneNumberException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
@@ -45,29 +43,11 @@ class SignUpServiceTest {
         CreateUserInDto request = createUserInDto();
 
         // mocking
-        given(userService.isUsedAccountName(request.getAccountName())).willReturn(false);
-        given(userService.isUsedNickname(request.getNickname())).willReturn(false);
-        given(userService.isUsePhoneNumber(request.getPhoneNumber())).willReturn(false);
-
         // when
         CreateUserOutDto response = signUpService.signUp(request);
 
         // then
-        Assertions.assertThat(request.getAccountName()).isEqualTo(response.getAccountName());
-
-    }
-
-    @Test
-    void 계정_중복() throws UserException {
-
-        // given
-        CreateUserInDto request = createUserInDto();
-
-        // mocking
-        given(userService.isUsedAccountName(request.getAccountName())).willReturn(true);
-
-        // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUseAccountException.class);
+        Assertions.assertThat(request.getPhoneNumber()).isEqualTo(response.getPhoneNumber());
 
     }
 
@@ -86,20 +66,6 @@ class SignUpServiceTest {
     }
 
     @Test
-    void 핸드폰_번호_중복() throws UserException {
-
-        // given
-        CreateUserInDto request = createUserInDto();
-
-        // mocking
-        given(userService.isUsePhoneNumber(request.getPhoneNumber())).willReturn(true);
-
-        // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUsePhoneNumberException.class);
-
-    }
-
-    @Test
     void 비밀번호_암호화() {
 
         // given
@@ -112,7 +78,5 @@ class SignUpServiceTest {
         Assertions.assertThat(passwordEncoder.matches(password, encode)).isFalse();
 
     }
-
-
 
 }

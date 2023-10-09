@@ -3,7 +3,7 @@ package dev.yogizogi.domain.user.service;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
-import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
@@ -28,17 +28,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public boolean isUsedAccountName(String accountName) {
-        return userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE).isPresent();
-    }
-
-    @Transactional(readOnly = true)
     public boolean isUsedNickname(String nickname) {
         return userRepository.findByNicknameAndStatus(nickname, BaseStatus.ACTIVE).isPresent();
     }
 
     @Transactional(readOnly = true)
-    public boolean isUsePhoneNumber(String phoneNumber) {
+    public boolean isUsedPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE).isPresent();
     }
 
@@ -46,7 +41,7 @@ public class UserService {
     public FindPasswordOutDto findPassword(String phoneNumber) {
 
         User findUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
+                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
 
         coolSmsService.sendOne(phoneNumber);
 
@@ -59,7 +54,7 @@ public class UserService {
     public String updatePassword(String phoneNumber, String password) {
 
         User findUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
+                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
 
         if (passwordEncoder.matches(password, findUser.getPassword())) {
             throw new AlreadyUsePasswordException(ErrorCode.ALREADY_USE_PASSWORD);
@@ -72,16 +67,16 @@ public class UserService {
 
     }
 
-    public DeleteUserOutDto deleteUser(String accountName) throws NotExistAccountException {
+    public DeleteUserOutDto deleteUser(String phoneNumber) throws NotExistPhoneNumberException {
 
-        User deleteUser = userRepository.findByAccountNameAndStatus(accountName, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistAccountException(ErrorCode.NOT_EXIST_ACCOUNT));
+        User deleteUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
+                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
 
         deleteUser.inactive();
         userRepository.save(deleteUser);
 
         return DeleteUserOutDto.of(
-                deleteUser.getAccountName(),
+                deleteUser.getPhoneNumber(),
                 deleteUser.getStatus()
         );
 

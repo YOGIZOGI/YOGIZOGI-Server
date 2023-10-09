@@ -36,7 +36,7 @@ class UserRepositoryTest {
         User savedUser = userRepository.save(user);
 
         // then
-        Assertions.assertThat(user.getAccountName()).isEqualTo(savedUser.getAccountName());
+        Assertions.assertThat(user.getPhoneNumber()).isEqualTo(savedUser.getPhoneNumber());
 
         Assertions.assertThat(user.getNickname()).isEqualTo(savedUser.getNickname());
 
@@ -74,7 +74,7 @@ class UserRepositoryTest {
         User user = userRepository.save(UserFactory.createUser());
 
         // when
-        Optional<User> users = userRepository.findByAccountNameAndStatus(user.getAccountName(), BaseStatus.ACTIVE);
+        Optional<User> users = userRepository.findByPhoneNumberAndStatus(user.getPhoneNumber(), BaseStatus.ACTIVE);
 
         // then
         Assertions.assertThat(user).isEqualTo(users.get());

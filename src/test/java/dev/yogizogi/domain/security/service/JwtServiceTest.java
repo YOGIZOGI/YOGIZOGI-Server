@@ -1,12 +1,12 @@
 package dev.yogizogi.domain.security.service;
 
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.저장된_리프레쉬_토큰;
-import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_계정;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_핸드포_번호;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_식별자;
-import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함할_계정;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함할_핸드폰_번호;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함할_식별자;
 import static dev.yogizogi.domain.security.factory.fixtures.SecretKeyFixtures.암호화키;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 import static org.mockito.ArgumentMatchers.eq;
@@ -20,7 +20,7 @@ import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.factory.entity.SubjectFactory;
 import dev.yogizogi.domain.security.model.Subject;
 import dev.yogizogi.domain.security.model.TokenType;
-import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
@@ -69,7 +69,7 @@ class JwtServiceTest {
         // given
 
         // when
-        String 발행한_토큰 = jwtService.issueAccessToken(토큰에_포함할_식별자, 토큰에_포함할_계정);
+        String 발행한_토큰 = jwtService.issueAccessToken(토큰에_포함할_식별자, 토큰에_포함할_핸드폰_번호);
 
         // then
         Assertions.assertThat(발행한_토큰).startsWith(TOKEN_PREFIX);
@@ -84,17 +84,17 @@ class JwtServiceTest {
 
         // mocking
         given(userRepository
-                .findByIdAndAccountNameAndStatus(
+                .findByIdAndPhoneNumberAndStatus(
                         eq(식별자),
-                        eq(계정),
+                        eq(핸드폰_번호),
                         eq(BaseStatus.ACTIVE)))
                 .willReturn(Optional.of(받은_정보와_일치하는_계정));
 
-        given(redisUtils.findByKey(eq(토큰에_포함된_계정)))
+        given(redisUtils.findByKey(eq(토큰에_포함된_핸드포_번호)))
                 .willReturn(저장된_리프레쉬_토큰);
 
         // when
-        ReissueAccessTokenOutDto res = jwtService.reissueAccessToken(식별자, 계정);
+        ReissueAccessTokenOutDto res = jwtService.reissueAccessToken(식별자, 핸드폰_번호);
 
         // then
         Assertions.assertThat(res.getId()).isEqualTo(토큰에_포함된_식별자);
@@ -108,16 +108,16 @@ class JwtServiceTest {
         // given
         // mocking
         given(userRepository
-                .findByIdAndAccountNameAndStatus(
+                .findByIdAndPhoneNumberAndStatus(
                         eq(식별자),
-                        eq(계정),
+                        eq(핸드폰_번호),
                         eq(BaseStatus.ACTIVE)))
                 .willReturn(Optional.empty());
 
         // when
         // then
         Assertions.assertThatThrownBy
-                (() -> jwtService.reissueAccessToken(식별자, 계정)).isInstanceOf(NotExistAccountException.class);
+                (() -> jwtService.reissueAccessToken(식별자, 핸드폰_번호)).isInstanceOf(NotExistPhoneNumberException.class);
 
     }
 
@@ -129,19 +129,19 @@ class JwtServiceTest {
 
         // mocking
         given(userRepository
-                .findByIdAndAccountNameAndStatus(
+                .findByIdAndPhoneNumberAndStatus(
                         eq(식별자),
-                        eq(계정),
+                        eq(핸드폰_번호),
                         eq(BaseStatus.ACTIVE)))
                 .willReturn(Optional.of(받은_정보와_일치하는_계정));
 
-        given(redisUtils.findByKey(eq(토큰에_포함된_계정)))
+        given(redisUtils.findByKey(eq(토큰에_포함된_핸드포_번호)))
                 .willReturn(null);
 
         // when
         // then
         Assertions.assertThatThrownBy
-                (() -> jwtService.reissueAccessToken(식별자, 계정)).isInstanceOf(ExpiredTokenException.class);
+                (() -> jwtService.reissueAccessToken(식별자, 핸드폰_번호)).isInstanceOf(ExpiredTokenException.class);
 
     }
 
@@ -150,7 +150,7 @@ class JwtServiceTest {
 
         // given
         // when
-        String 발행한_리프레쉬_토큰 = jwtService.issueRefreshToken(토큰에_포함할_식별자, 토큰에_포함할_계정);
+        String 발행한_리프레쉬_토큰 = jwtService.issueRefreshToken(토큰에_포함할_식별자, 토큰에_포함할_핸드폰_번호);
 
         // then
         Assertions.assertThat(발행한_리프레쉬_토큰).startsWith(TOKEN_PREFIX);
@@ -161,7 +161,7 @@ class JwtServiceTest {
     void 토큰_서브젝트_추출() {
 
         // given
-        String 토큰 = jwtService.issueAccessToken(식별자, 계정).replace(TOKEN_PREFIX, "");
+        String 토큰 = jwtService.issueAccessToken(식별자, 핸드폰_번호).replace(TOKEN_PREFIX, "");
 
         // mocking
         given(jwtService.extractSubject(토큰))
@@ -172,7 +172,7 @@ class JwtServiceTest {
 
         // then
         Assertions.assertThat(추출된_서브젝트.getId()).isEqualTo(식별자);
-        Assertions.assertThat(추출된_서브젝트.getAccountName()).isEqualTo(계정);
+        Assertions.assertThat(추출된_서브젝트.getPhoneNumber()).isEqualTo(핸드폰_번호);
         Assertions.assertThat(추출된_서브젝트.getType()).isEqualTo(TokenType.ACCESS_TOKEN);
 
     }
@@ -181,7 +181,7 @@ class JwtServiceTest {
     void 토큰_서브젝트_추출_실패() {
 
         // given
-        String 토큰 = jwtService.issueAccessToken(식별자, 계정).replace(TOKEN_PREFIX, "");
+        String 토큰 = jwtService.issueAccessToken(식별자, 핸드폰_번호).replace(TOKEN_PREFIX, "");
 
         // mocking
         given(jwtService.extractSubject(토큰))
