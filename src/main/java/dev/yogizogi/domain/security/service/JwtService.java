@@ -3,14 +3,14 @@ package dev.yogizogi.domain.security.service;
 import static dev.yogizogi.domain.security.model.TokenType.ACCESS_TOKEN;
 import static dev.yogizogi.domain.security.model.TokenType.REFRESH_TOKEN;
 import static dev.yogizogi.global.common.code.ErrorCode.EXPIRED_TOKEN;
-import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_ACCOUNT;
+import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_PHONE_NUMBER;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_HEADER_NAME;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
-import dev.yogizogi.domain.user.exception.NotExistAccountException;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
@@ -63,39 +63,39 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String issueAccessToken(UUID id, String accountName) {
-        return TOKEN_PREFIX.concat(createToken(id, accountName, ACCESS_TOKEN));
+    public String issueAccessToken(UUID id, String phoneNumber) {
+        return TOKEN_PREFIX.concat(createToken(id, phoneNumber, ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String issueRefreshToken(UUID id, String accountName) {
-        String refreshToken = createToken(id, accountName, REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(accountName, refreshToken, REFRESH_TOKEN.getExpirationTime());
+    public String issueRefreshToken(UUID id, String phoneNumber) {
+        String refreshToken = createToken(id, phoneNumber, REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(phoneNumber, refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
 
     /**
      * ACCESS 토큰 재발급
      */
-    public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String accountName) {
+    public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String phoneNumber) {
 
-        User findUser = userRepository.findByIdAndAccountNameAndStatus(id, accountName, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
+        User findUser = userRepository.findByIdAndPhoneNumberAndStatus(id, phoneNumber, BaseStatus.ACTIVE)
+                .orElseThrow(() -> new NotExistPhoneNumberException(NOT_EXIST_PHONE_NUMBER));
 
-        checkRefreshToken(findUser.getAccountName());
+        checkRefreshToken(findUser.getPhoneNumber());
 
         return ReissueAccessTokenOutDto.of(
                 findUser.getId(),
-                issueAccessToken(findUser.getId(), findUser.getAccountName())
+                issueAccessToken(findUser.getId(), findUser.getPhoneNumber())
         );
 
     }
 
-    private String checkRefreshToken(String accountName) {
+    private String checkRefreshToken(String phoneNumber) {
 
-        String refreshToken = redisUtils.findByKey(accountName);
+        String refreshToken = redisUtils.findByKey(phoneNumber);
 
         if (Objects.isNull(refreshToken)) {
             throw new ExpiredTokenException(EXPIRED_TOKEN);
@@ -138,11 +138,11 @@ public class JwtService {
 
     }
 
-    private Claims setClaims(UUID id, String accountName, TokenType type) {
+    private Claims setClaims(UUID id, String phoneNumber, TokenType type) {
 
         Subject subject = Subject.builder()
                 .id(id)
-                .accountName(accountName)
+                .phoneNumber(phoneNumber)
                 .type(type).build();
 
         Claims claims;
@@ -198,7 +198,7 @@ public class JwtService {
      * 인증 등록
      */
     public Authentication getAuthentication(String token) {
-        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getAccountName());
+        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getPhoneNumber());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

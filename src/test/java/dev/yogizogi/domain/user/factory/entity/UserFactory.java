@@ -13,10 +13,9 @@ public class UserFactory {
 
         User user = User.builder()
                 .id(식별자)
-                .accountName(계정)
+                .phoneNumber(핸드폰_번호)
                 .password(비밀번호)
                 .nickname(닉네임)
-                .phoneNumber(핸드폰번호)
                 .build();
 
         user.setRoles(Collections.singletonList(
@@ -30,10 +29,9 @@ public class UserFactory {
 
         User user = User.builder()
                 .id(식별자)
-                .accountName(계정)
+                .phoneNumber(핸드폰_번호)
                 .password(암호화_비밀번호)
                 .nickname(닉네임)
-                .phoneNumber(핸드폰번호)
                 .build();
 
         user.setRoles(Collections.singletonList(

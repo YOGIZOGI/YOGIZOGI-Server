@@ -30,7 +30,7 @@ public class VerificationService {
     @Transactional(readOnly = true)
     public SendVerificationCodeOutDto sendVerificationCodeForSignUp(String phoneNumber) {
 
-        if (userService.isUsePhoneNumber(phoneNumber)) {
+        if (userService.isUsedPhoneNumber(phoneNumber)) {
             throw new AlreadyUsePhoneNumberException(ErrorCode.ALREADY_USE_PHONE_NUMBER);
         }
 

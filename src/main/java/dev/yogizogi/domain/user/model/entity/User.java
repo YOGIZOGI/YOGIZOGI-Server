@@ -25,16 +25,13 @@ public class User extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String accountName;
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String nickname;
-
-    @Column(nullable = false, unique = true)
-    private String phoneNumber;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();
@@ -49,12 +46,11 @@ public class User extends BaseEntity {
     }
 
     @Builder
-    public User(UUID id, String accountName, String password, String nickname, String phoneNumber) {
+    public User(UUID id, String phoneNumber, String password, String nickname) {
         this.id = id;
-        this.accountName = accountName;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
-        this.phoneNumber = phoneNumber;
     }
 
 }

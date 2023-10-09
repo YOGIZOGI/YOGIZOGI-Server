@@ -16,9 +16,8 @@ public enum ErrorCode {
     FAIL_TO_TEST(HttpStatus.BAD_REQUEST, "요청 실패"),
     FAIL_TO_VALIDATE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     FAIL_TO_SEND_MESSAGE(HttpStatus.BAD_REQUEST, "인증번호 전송 실패"),
-    ALREADY_USE_ACCOUNT_NAME(HttpStatus.BAD_REQUEST, "이미 사용중인 계정입니다."),
+    ALREADY_USE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 사용중인 핸드폰 번호입니다."),
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
-    ALREADY_USE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 사용중인 전화번호입니다."),
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
     /**
@@ -32,14 +31,14 @@ public enum ErrorCode {
      * Code : 403
      * - Forbidden (요청한 자원에 대해 권한 없음)
      */
-    FAIL_TO_LOGIN(HttpStatus.FORBIDDEN, "아이디 또는 비밀번호를 잘못 입력했습니다."),
+    FAIL_TO_LOGIN(HttpStatus.FORBIDDEN, "핸드폰 번호 또는 비밀번호를 잘못 입력했습니다."),
 
 
     /**
      * Code : 404
      * - Not Found (존재하지 않는 자원임)
      */
-    NOT_EXIST_ACCOUNT(HttpStatus.NOT_FOUND, "존재하지 않는 계정입니다."),
+    NOT_EXIST_PHONE_NUMBER(HttpStatus.NOT_FOUND, "존재하지 않는 핸드폰 번호입니다."),
 
 
     /**

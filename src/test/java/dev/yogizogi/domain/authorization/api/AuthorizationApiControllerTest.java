@@ -3,9 +3,9 @@ package dev.yogizogi.domain.authorization.api;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.발행한_어세스_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
-import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_계정;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_핸드포_번호;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_식별자;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -97,7 +97,7 @@ class AuthorizationApiControllerTest {
                         jsonPath("$.data.id").value(식별자.toString())
                 )
                 .andExpect(
-                        jsonPath("$.data.accountName").value(계정)
+                        jsonPath("$.data.phoneNumber").value(핸드폰_번호)
                 )
                 .andExpect(
                         jsonPath("$.data.accessToken").value(어세스_토큰)
@@ -113,7 +113,7 @@ class AuthorizationApiControllerTest {
 
         // given
         // mocking
-        given(jwtService.reissueAccessToken(식별자, 계정))
+        given(jwtService.reissueAccessToken(식별자, 핸드폰_번호))
                 .willReturn(ReissueAccessTokenFactory.reissueAccessTokenOutDto());
 
         // when
@@ -121,7 +121,7 @@ class AuthorizationApiControllerTest {
         mockMvc.perform(
                         get("/api/auth/reissue-access-token")
                                 .param("id", String.valueOf(토큰에_포함된_식별자))
-                                .param("accountName", 토큰에_포함된_계정)
+                                .param("phoneNumber", 토큰에_포함된_핸드포_번호)
                 )
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -5,10 +5,10 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class AlreadyUseAccountException extends BaseException {
+public class NotExistPhoneNumberException extends BaseException {
 
-    public AlreadyUseAccountException(ErrorCode error) {
-        super(error);
+    public NotExistPhoneNumberException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
 }
