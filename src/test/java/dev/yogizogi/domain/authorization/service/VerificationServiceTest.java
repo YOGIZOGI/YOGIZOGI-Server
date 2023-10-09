@@ -49,12 +49,12 @@ class VerificationServiceTest {
         given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
-        given(coolSmsService.sendOne(eq(받은_핸드폰_번호), anyString()))
+        given(coolSmsService.sendOne(eq(받은_핸드폰_번호)))
                 .willReturn(VerificationFactory.successSingleMessageSentResponse());
 
         // then
         Assertions.assertThat
-                        (verificationService.sendVerificationCode(받은_핸드폰_번호).getStatus())
+                        (verificationService.sendVerificationCodeForSignUp(받은_핸드폰_번호).getStatus())
                 .isEqualTo(MessageStatus.SUCCESS);
 
     }
@@ -68,12 +68,12 @@ class VerificationServiceTest {
         given(userService.isUsePhoneNumber(eq(받은_핸드폰_번호)))
                 .willReturn(false);
 
-        given(coolSmsService.sendOne(eq(받은_핸드폰_번호), anyString()))
+        given(coolSmsService.sendOne(eq(받은_핸드폰_번호)))
                 .willReturn(VerificationFactory.failSingleMessageSentResponse());
 
         // then
         Assertions.assertThat
-                        (verificationService.sendVerificationCode(받은_핸드폰_번호).getStatus())
+                        (verificationService.sendVerificationCodeForSignUp(받은_핸드폰_번호).getStatus())
                 .isEqualTo(MessageStatus.FAIL);
 
     }
@@ -89,7 +89,7 @@ class VerificationServiceTest {
 
         // then
         Assertions.assertThatThrownBy
-                        (() -> verificationService.sendVerificationCode(받은_핸드폰_번호))
+                        (() -> verificationService.sendVerificationCodeForSignUp(받은_핸드폰_번호))
                 .isInstanceOf(AlreadyUsePhoneNumberException.class);
 
     }

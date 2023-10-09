@@ -3,7 +3,7 @@ package dev.yogizogi.domain.authorization.factory.dto;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
 
 import dev.yogizogi.domain.authorization.model.dto.request.LoginInDto;

@@ -2,10 +2,14 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.계정;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
+import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import dev.yogizogi.domain.authorization.factory.dto.VerificationFactory;
+import dev.yogizogi.domain.authorization.service.VerificationService;
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
 import dev.yogizogi.domain.user.exception.NotExistAccountException;
 import dev.yogizogi.domain.user.exception.UserException;
@@ -16,6 +20,8 @@ import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.common.status.BaseStatus;
+import dev.yogizogi.global.common.status.MessageStatus;
+import dev.yogizogi.infra.coolsms.CoolSmsService;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +40,13 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
+    @Mock
+    private VerificationService verificationService;
+
+    @Mock
+    private CoolSmsService coolSmsService;
+
 
     @Mock
     private UserRepository userRepository;
@@ -121,16 +134,21 @@ class UserServiceTest {
     void 비밀번호_찾기() {
 
         // given
-        String 찾을_계정 = 계정;
+        String 찾을_계정_핸드폰번호 = 핸드폰번호;
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(찾을_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(찾을_계정_핸드폰번호), eq(BaseStatus.ACTIVE)))
+                .willReturn(Optional.of(UserFactory.createUser()));
+
+        given(coolSmsService.sendOne(eq(찾을_계정_핸드폰번호)))
+                .willReturn(VerificationFactory.successSingleMessageSentResponse());
 
         // when
-        FindPasswordOutDto req = userService.findPassword(찾을_계정);
+        FindPasswordOutDto req = userService.findPassword(찾을_계정_핸드폰번호);
 
         // then
-        Assertions.assertThat(req.getAccountName()).isEqualTo(찾을_계정);
+        Assertions.assertThat(req.getPhoneNumber()).isNotNull();
+        Assertions.assertThat(req.getStatus()).isEqualTo(MessageStatus.SUCCESS);
 
     }
 
@@ -138,15 +156,15 @@ class UserServiceTest {
     void 비밀번호_찾기_실패_존재하지_않는_계정() {
 
         // given
-        String 찾을_계정 = 계정;
+        String 찾을_계정_핸드폰번호 = 핸드폰번호;
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(찾을_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+        given(userRepository.findByPhoneNumberAndStatus(eq(찾을_계정_핸드폰번호), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
 
         // when
         // then
         Assertions.assertThatThrownBy(
-                () -> userService.findPassword(찾을_계정))
+                () -> userService.findPassword(찾을_계정_핸드폰번호))
                 .isInstanceOf(NotExistAccountException.class);
 
     }
@@ -156,18 +174,18 @@ class UserServiceTest {
     void 비밀번호_변경() {
 
         // given
-        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_계정 = 핸드폰번호;
         String 변경할_비밀번호 = "update124!!";
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
         // when
-        String result = userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호);
+        String result = userService.updatePassword(변경할_계정, 변경할_비밀번호);
 
         // then
-        Assertions.assertThat(result).isEqualTo("변경 완료");
+        Assertions.assertThat(result).isEqualTo(DONE);
 
     }
 
@@ -175,16 +193,17 @@ class UserServiceTest {
     void 비밀번호_변경_실패_존재하지_않는_회원() {
 
         // given
-        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_계정 = 핸드폰번호;
         String 변경할_비밀번호 = "update124!!";
 
+
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
+        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
 
         // when
         // then
         Assertions.assertThatThrownBy(
-                () -> userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호)).isInstanceOf(
+                () -> userService.updatePassword(변경할_계정, 변경할_비밀번호)).isInstanceOf(
                 NotExistAccountException.class);
 
     }
@@ -193,17 +212,17 @@ class UserServiceTest {
     void 비밀번호_변경_실패_이미_사용중인_비밀번호() {
 
         // given
-        User 변경할_계정 = UserFactory.createUserPasswordEncrypt();
+        String 변경할_계정 = 핸드폰번호;
         String 변경할_비밀번호 = "update124!!";
 
         // mocking
-        given(userRepository.findByAccountNameAndStatus(eq(변경할_계정.getAccountName()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
         // when
         // then
         Assertions.assertThatThrownBy(
-                () -> userService.updatePassword(변경할_계정.getAccountName(), 변경할_비밀번호)).isInstanceOf(
+                () -> userService.updatePassword(변경할_계정, 변경할_비밀번호)).isInstanceOf(
                 AlreadyUsePasswordException.class);
 
     }

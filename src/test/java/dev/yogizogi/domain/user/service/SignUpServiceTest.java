@@ -1,7 +1,7 @@
 package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
 import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.user.exception.AlreadyUseAccountException;

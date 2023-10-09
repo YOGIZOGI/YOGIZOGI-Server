@@ -57,7 +57,7 @@ class VerificationApiControllerTest {
         String 받은_핸드폰_번호 = 핸드폰번호;
 
         // mocking
-        given(verificationService.sendVerificationCode(eq(받은_핸드폰_번호)))
+        given(verificationService.sendVerificationCodeForSignUp(eq(받은_핸드폰_번호)))
                 .willReturn(VerificationFactory.sendVerificationCodeOutDto());
 
         // when
@@ -73,7 +73,7 @@ class VerificationApiControllerTest {
                                 .value(MessageStatus.SUCCESS.getDescription())
                 )
                 .andExpect(
-                        jsonPath("$.data.message").value(상태_메시지)
+                        jsonPath("$.data.description").value(상태_메시지)
                 );
 
     }

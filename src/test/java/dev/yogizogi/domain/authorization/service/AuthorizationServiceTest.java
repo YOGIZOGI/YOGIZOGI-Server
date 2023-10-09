@@ -2,7 +2,7 @@ package dev.yogizogi.domain.authorization.service;
 
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.암호화_비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
