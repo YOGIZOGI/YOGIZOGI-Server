@@ -3,13 +3,13 @@ package dev.yogizogi.domain.authorization.api;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.발행한_어세스_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
-import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_핸드포_번호;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_식별자;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
+import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.토큰에_포함된_핸드포_번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
-import static org.mockito.ArgumentMatchers.any;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -77,7 +77,7 @@ class AuthorizationApiControllerTest {
         LoginOutDto res = LoginFactory.LoginOutDto();
 
         // mocking
-        given(authorizationService.login(any())).willReturn(res);
+        given(authorizationService.login(req.getPhoneNumber(), req.getPassword())).willReturn(res);
 
         // when
         // then
@@ -97,7 +97,7 @@ class AuthorizationApiControllerTest {
                         jsonPath("$.data.id").value(식별자.toString())
                 )
                 .andExpect(
-                        jsonPath("$.data.phoneNumber").value(핸드폰_번호)
+                        jsonPath("$.data.firstLogin").isNotEmpty()
                 )
                 .andExpect(
                         jsonPath("$.data.accessToken").value(어세스_토큰)

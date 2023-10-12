@@ -1,7 +1,7 @@
 package dev.yogizogi.domain.authorization.service;
 
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.받은_핸드폰_번호;
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.인증코드;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.받은_핸드폰_번호;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.인증코드;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;

@@ -55,20 +55,6 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void 닉네임_중복() throws UserException {
-
-        // given
-        CreateUserInDto req = createUserInDto();
-
-        // mocking
-        given(userRepository.findByNicknameAndStatus(eq(req.getNickname()), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
-
-        // then
-        Assertions.assertThat(userService.isUsedNickname(req.getNickname())).isEqualTo(true);
-
-    }
-
-    @Test
     void 핸드폰_번호_중복() throws UserException {
 
         // given

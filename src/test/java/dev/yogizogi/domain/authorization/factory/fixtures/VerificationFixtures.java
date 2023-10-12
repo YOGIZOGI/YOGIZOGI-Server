@@ -3,7 +3,7 @@ package dev.yogizogi.domain.authorization.factory.fixtures;
 import dev.yogizogi.global.util.UuidUtils;
 import net.nurigo.sdk.message.model.MessageType;
 
-public class VerificationCodeFixtures {
+public class VerificationFixtures {
 
     public static String 받을_핸드폰_번호 = "01012345678";
     public static String 받은_핸드폰_번호 = "01012345678";

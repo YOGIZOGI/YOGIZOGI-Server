@@ -1,12 +1,8 @@
 package dev.yogizogi.domain.user.service;
 
-import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
-import static org.mockito.BDDMockito.given;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 
-import dev.yogizogi.domain.user.exception.AlreadyUseNicknameException;
-import dev.yogizogi.domain.user.exception.UserException;
-import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -40,28 +36,15 @@ class SignUpServiceTest {
     void 회원_가입() {
 
         // given
-        CreateUserInDto request = createUserInDto();
+        String 받은_핸드폰_번호 = 핸드폰_번호;
+        String 받은_비밀번호 = 비밀번호;
 
         // mocking
         // when
-        CreateUserOutDto response = signUpService.signUp(request);
+        CreateUserOutDto response = signUpService.signUp(받은_핸드폰_번호, 받은_비밀번호);
 
         // then
-        Assertions.assertThat(request.getPhoneNumber()).isEqualTo(response.getPhoneNumber());
-
-    }
-
-    @Test
-    void 닉네임_중복() throws UserException {
-
-        // given
-        CreateUserInDto request = createUserInDto();
-
-        // mocking
-        given(userService.isUsedNickname(request.getNickname())).willReturn(true);
-
-        // then
-        Assertions.assertThatThrownBy(() -> signUpService.signUp(request)).isInstanceOf(AlreadyUseNicknameException.class);
+        Assertions.assertThat(받은_핸드폰_번호).isEqualTo(response.getPhoneNumber());
 
     }
 

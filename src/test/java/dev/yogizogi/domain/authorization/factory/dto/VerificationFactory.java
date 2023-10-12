@@ -1,7 +1,6 @@
 package dev.yogizogi.domain.authorization.factory.dto;
 
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.*;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.*;
 
 import dev.yogizogi.domain.authorization.model.dto.response.SendVerificationCodeOutDto;
 import dev.yogizogi.domain.authorization.model.dto.response.VerifyCodeOutDto;
@@ -44,11 +43,11 @@ public class VerificationFactory {
     }
 
     public static VerifyCodeOutDto pass() {
-        return VerifyCodeOutDto.of(VerificationStatus.PASS, 핸드폰번호);
+        return VerifyCodeOutDto.of(VerificationStatus.PASS, 받은_핸드폰_번호);
     }
 
     public static VerifyCodeOutDto notPass() {
-        return VerifyCodeOutDto.of(VerificationStatus.NOT_PASS, 핸드폰번호);
+        return VerifyCodeOutDto.of(VerificationStatus.NOT_PASS, 받은_핸드폰_번호);
     }
 
 }
