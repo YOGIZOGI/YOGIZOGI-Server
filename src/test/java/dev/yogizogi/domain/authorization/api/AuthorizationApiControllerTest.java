@@ -97,7 +97,7 @@ class AuthorizationApiControllerTest {
                         jsonPath("$.data.id").value(식별자.toString())
                 )
                 .andExpect(
-                        jsonPath("$.data.firstLogin").isNotEmpty()
+                        jsonPath("$.data.firstLoginStatus").isNotEmpty()
                 )
                 .andExpect(
                         jsonPath("$.data.accessToken").value(어세스_토큰)
