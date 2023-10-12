@@ -34,7 +34,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private boolean isFirstLogin;
+    private FirstLoginStatus firstLoginStatus;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();
@@ -44,24 +44,20 @@ public class User extends BaseEntity {
         roles.forEach(role -> role.setUser(this));
     }
 
-    public boolean isFirstLogin() {
-        return isFirstLogin;
-    }
-
-    public void setFirstLogin(boolean firstLogin) {
-        isFirstLogin = firstLogin;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public void setFirstLoginStatus(FirstLoginStatus firstLoginStatus) {
+        this.firstLoginStatus = firstLoginStatus;
+    }
+
     @Builder
-    public User(UUID id, String phoneNumber, String password, boolean isFirstLogin) {
+    public User(UUID id, String phoneNumber, String password, FirstLoginStatus firstLoginStatus) {
         this.id = id;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.isFirstLogin = isFirstLogin;
+        this.firstLoginStatus = FirstLoginStatus.ACTIVE;
     }
 
 }

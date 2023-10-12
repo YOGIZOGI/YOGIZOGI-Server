@@ -3,6 +3,7 @@ package dev.yogizogi.domain.user.service;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.model.entity.Authority;
+import dev.yogizogi.domain.user.model.entity.FirstLoginStatus;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.util.UuidUtils;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SignUpService {
 
-    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -28,7 +28,7 @@ public class SignUpService {
                         UuidUtils.createSequentialUUID(),
                         phoneNumber,
                         passwordEncoder.encode(password),
-                        true
+                        FirstLoginStatus.ACTIVE
                 );
 
         newUser.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));

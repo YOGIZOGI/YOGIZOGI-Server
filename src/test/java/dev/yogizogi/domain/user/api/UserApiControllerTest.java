@@ -3,7 +3,6 @@ package dev.yogizogi.domain.user.api;
 import static dev.yogizogi.domain.user.factory.dto.DeleteUserFactory.deleteUserOutDto;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.변경할_비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -79,7 +78,7 @@ class UserApiControllerTest {
     void 비멀번호_찾기() throws Exception {
 
         // given
-        String 찾을_계정 = 핸드폰번호;
+        String 찾을_계정 = 핸드폰_번호;
 
         // mocking
         given(userService.findPassword(eq(찾을_계정))).willReturn(FindPasswordFactory.findPasswordOutDto());
@@ -108,7 +107,7 @@ class UserApiControllerTest {
     void 비밀번호_수정() throws Exception {
 
         // given
-        String 찾을_계정 = 핸드폰번호;
+        String 찾을_계정 = 핸드폰_번호;
 
         // mocking
         given(userService.updatePassword(eq(찾을_계정), eq(변경할_비밀번호))).willReturn(DONE);

@@ -2,7 +2,6 @@ package dev.yogizogi.domain.authorization.service;
 
 import static dev.yogizogi.domain.authorization.factory.fixtures.LoginFixtures.받은_비밀번호;
 import static dev.yogizogi.domain.authorization.factory.fixtures.LoginFixtures.받은_핸드폰_번호;
-import static dev.yogizogi.domain.authorization.factory.fixtures.LoginFixtures.처음_로그인;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.리프레쉬_토큰;
 import static dev.yogizogi.domain.security.factory.fixtures.TokenFixtures.어세스_토큰;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.암호화_비밀번호;
@@ -15,6 +14,7 @@ import dev.yogizogi.domain.authorization.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
+import dev.yogizogi.domain.user.model.entity.FirstLoginStatus;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.BaseStatus;
@@ -58,7 +58,8 @@ class AuthorizationServiceTest {
 
         // given
         // mocking
-        given(userRepository.findByPhoneNumberAndStatus(eq(받은_핸드폰_번호), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(받은_핸드폰_번호), eq(BaseStatus.ACTIVE)))
+                .willReturn(Optional.of(UserFactory.createUserPasswordEncrypt()));
         given(passwordEncoder.matches(eq(받은_비밀번호), eq(암호화_비밀번호))).willReturn(true);
         given(jwtService.issueAccessToken(any(), eq(받은_핸드폰_번호))).willReturn(어세스_토큰);
         given(jwtService.issueRefreshToken(any(), eq(받은_핸드폰_번호))).willReturn(리프레쉬_토큰);
@@ -67,7 +68,7 @@ class AuthorizationServiceTest {
         LoginOutDto response = authorizationService.login(받은_핸드폰_번호, 받은_비밀번호);
 
         // then
-        Assertions.assertThat(response.isFirstLogin()).isEqualTo(처음_로그인);
+        Assertions.assertThat(response.getFirstLoginStatus()).isEqualTo(FirstLoginStatus.ACTIVE);
         Assertions.assertThat(response.getAccessToken()).isNotEmpty();
         Assertions.assertThat(response.getRefreshToken()).isNotEmpty();
 

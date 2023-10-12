@@ -2,7 +2,6 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.domain.user.factory.dto.CreateUserFactory.createUserInDto;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -106,7 +105,7 @@ class UserServiceTest {
     void 비밀번호_찾기() {
 
         // given
-        String 찾을_계정_핸드폰번호 = 핸드폰번호;
+        String 찾을_계정_핸드폰번호 = 핸드폰_번호;
 
         // mocking
         given(userRepository.findByPhoneNumberAndStatus(eq(찾을_계정_핸드폰번호), eq(BaseStatus.ACTIVE)))
@@ -128,7 +127,7 @@ class UserServiceTest {
     void 비밀번호_찾기_실패_존재하지_않는_계정() {
 
         // given
-        String 찾을_계정_핸드폰번호 = 핸드폰번호;
+        String 찾을_계정_핸드폰번호 = 핸드폰_번호;
 
         // mocking
         given(userRepository.findByPhoneNumberAndStatus(eq(찾을_계정_핸드폰번호), eq(BaseStatus.ACTIVE))).willReturn(Optional.empty());
@@ -146,7 +145,7 @@ class UserServiceTest {
     void 비밀번호_변경() {
 
         // given
-        String 변경할_계정 = 핸드폰번호;
+        String 변경할_계정 = 핸드폰_번호;
         String 변경할_비밀번호 = "update124!!";
 
         // mocking
@@ -165,7 +164,7 @@ class UserServiceTest {
     void 비밀번호_변경_실패_존재하지_않는_회원() {
 
         // given
-        String 변경할_계정 = 핸드폰번호;
+        String 변경할_계정 = 핸드폰_번호;
         String 변경할_비밀번호 = "update124!!";
 
 
@@ -184,7 +183,7 @@ class UserServiceTest {
     void 비밀번호_변경_실패_이미_사용중인_비밀번호() {
 
         // given
-        String 변경할_계정 = 핸드폰번호;
+        String 변경할_계정 = 핸드폰_번호;
         String 변경할_비밀번호 = "update124!!";
 
         // mocking

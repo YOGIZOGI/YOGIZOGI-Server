@@ -39,7 +39,7 @@ public class AuthorizationService {
 
         return LoginOutDto.of(
                 findUser.getId(),
-                findUser.isFirstLogin(),
+                findUser.getFirstLoginStatus(),
                 jwtService.issueAccessToken(findUser.getId(), findUser.getPhoneNumber()),
                 jwtService.issueRefreshToken(findUser.getId(), findUser.getPhoneNumber())
         );

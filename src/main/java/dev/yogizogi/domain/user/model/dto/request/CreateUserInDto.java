@@ -1,5 +1,6 @@
 package dev.yogizogi.domain.user.model.dto.request;
 
+import dev.yogizogi.domain.user.model.entity.FirstLoginStatus;
 import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -22,12 +23,12 @@ public class CreateUserInDto {
     @Schema(description = "비밀번호", example = "yogi1234!")
     private String password;
 
-    public static User toEntity(UUID id, String phoneNumber, String password, boolean isFirstLogin) {
+    public static User toEntity(UUID id, String phoneNumber, String password, FirstLoginStatus firstLoginStatus) {
         return User.builder()
                 .id(id)
                 .phoneNumber(phoneNumber)
                 .password(password)
-                .isFirstLogin(isFirstLogin)
+                .firstLoginStatus(firstLoginStatus)
                 .build();
     }
 
