@@ -2,7 +2,6 @@ package dev.yogizogi.domain.authorization.service;
 
 import dev.yogizogi.domain.authorization.exception.AuthException;
 import dev.yogizogi.domain.authorization.exception.FailLoginException;
-import dev.yogizogi.domain.authorization.model.dto.request.LoginInDto;
 import dev.yogizogi.domain.authorization.model.dto.response.LoginOutDto;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
@@ -27,20 +26,20 @@ public class AuthorizationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public LoginOutDto login(LoginInDto req) throws AuthException {
+    public LoginOutDto login(String phoneNumber, String password) throws AuthException {
 
-        User findUser = userRepository.findByPhoneNumberAndStatus(req.getPhoneNumber(), BaseStatus.ACTIVE)
+        User findUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
 
         if (!passwordEncoder.matches(
-                req.getPassword(), findUser.getPassword()
+                password, findUser.getPassword()
         )) {
             throw new FailLoginException(ErrorCode.FAIL_TO_LOGIN);
         }
 
         return LoginOutDto.of(
                 findUser.getId(),
-                findUser.getPhoneNumber(),
+                findUser.isFirstLogin(),
                 jwtService.issueAccessToken(findUser.getId(), findUser.getPhoneNumber()),
                 jwtService.issueRefreshToken(findUser.getId(), findUser.getPhoneNumber())
         );

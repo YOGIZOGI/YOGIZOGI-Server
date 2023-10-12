@@ -8,7 +8,7 @@ import dev.yogizogi.global.common.status.BaseStatus;
 public class DeleteUserFactory {
 
     public static DeleteUserOutDto deleteUserOutDto() {
-        return new DeleteUserOutDto(핸드폰_번호, BaseStatus.INACTIVE);
+        return DeleteUserOutDto.of(핸드폰_번호, BaseStatus.INACTIVE);
     }
 
 }

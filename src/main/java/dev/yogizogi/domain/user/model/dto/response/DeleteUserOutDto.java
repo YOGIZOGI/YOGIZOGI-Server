@@ -3,14 +3,12 @@ package dev.yogizogi.domain.user.model.dto.response;
 import dev.yogizogi.global.common.status.BaseStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "회원탈퇴 응답 Dto")
 @Getter
-@AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
+@Schema(name = "회원탈퇴 응답 Dto")
 public class DeleteUserOutDto {
 
     @Schema(description = "아이디", example = "yogizogi")
