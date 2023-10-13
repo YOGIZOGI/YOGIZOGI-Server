@@ -38,8 +38,6 @@ class UserRepositoryTest {
         // then
         Assertions.assertThat(user.getPhoneNumber()).isEqualTo(savedUser.getPhoneNumber());
 
-        Assertions.assertThat(user.getNickname()).isEqualTo(savedUser.getNickname());
-
         Assertions.assertThat(user.getPassword()).isEqualTo(savedUser.getPassword());
 
         Assertions.assertThat(user.getPhoneNumber()).isEqualTo(savedUser.getPhoneNumber());

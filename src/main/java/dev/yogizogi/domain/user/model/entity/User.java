@@ -3,7 +3,10 @@ package dev.yogizogi.domain.user.model.entity;
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -30,10 +33,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true)
-    private String nickname;
+    @Embedded
+    private Profile profile;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private FirstLoginStatus firstLoginStatus;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -50,6 +54,16 @@ public class User extends BaseEntity {
 
     public void setFirstLoginStatus(FirstLoginStatus firstLoginStatus) {
         this.firstLoginStatus = firstLoginStatus;
+    }
+
+    public void setProfile(String nickname, String imageUrl, String introduction) {
+
+        this.profile = Profile.builder()
+                .nickname(nickname)
+                .imageUrl(imageUrl)
+                .introduction(introduction)
+                .build();
+
     }
 
     @Builder
