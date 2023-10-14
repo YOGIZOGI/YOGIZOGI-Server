@@ -67,7 +67,7 @@ class UserApiControllerTest {
     void 회원_탈퇴() throws Exception {
 
         // given
-        String accountName = 핸드폰_번호;
+        String phoneNumber = 핸드폰_번호;
 
         // mocking
         given(userService.deleteUser(eq(핸드폰_번호))).willReturn(deleteUserOutDto());
@@ -76,7 +76,7 @@ class UserApiControllerTest {
         // then
         mockMvc.perform(
                 put("/api/users/delete")
-                        .param("accountName", accountName)
+                        .param("phoneNumber", phoneNumber)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -84,7 +84,7 @@ class UserApiControllerTest {
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
-                        jsonPath("$.data.accountName").value(핸드폰_번호)
+                        jsonPath("$.data.phoneNumber").value(핸드폰_번호)
                 )
                 .andExpect(
                         jsonPath("$.data.status").value("INACTIVE")

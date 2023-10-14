@@ -11,15 +11,15 @@ import lombok.Getter;
 @Schema(name = "회원탈퇴 응답 Dto")
 public class DeleteUserOutDto {
 
-    @Schema(description = "아이디", example = "yogizogi")
-    private String accountName;
+    @Schema(description = "아이디", example = "01012345678")
+    private String phoneNumber;
 
     @Schema(description = "상태", example = "INACTIVE", allowableValues = {"ACTIVE", "INACTIVE"})
     private BaseStatus status;
 
     public static DeleteUserOutDto of(String accountName, BaseStatus status) {
         return DeleteUserOutDto.builder()
-                .accountName(accountName)
+                .phoneNumber(accountName)
                 .status(status)
                 .build();
     }
