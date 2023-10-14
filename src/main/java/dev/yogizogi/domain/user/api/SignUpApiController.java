@@ -35,6 +35,7 @@ public class SignUpApiController {
 
     private final SignUpService signUpService;
     private final UserService userService;
+
     @Operation(summary = "회원 가입")
     @ApiResponses({
             @ApiResponse(
@@ -44,12 +45,12 @@ public class SignUpApiController {
             ),
             @ApiResponse(responseCode = "400", description = "중복된 정보(핸드폰번호, 닉네임)")
     })
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity createMember(@RequestBody @Valid CreateUserInDto response) {
 
         return ResponseUtils.created(
                 Success.builder()
-                        .data(signUpService.signUp(response))
+                        .data(signUpService.signUp(response.getPhoneNumber(), response.getPassword()))
                         .build());
 
     }

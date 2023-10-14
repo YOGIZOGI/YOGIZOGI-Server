@@ -2,8 +2,11 @@ package dev.yogizogi.domain.user.api;
 
 import static dev.yogizogi.domain.user.factory.dto.DeleteUserFactory.deleteUserOutDto;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.변경할_비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.등록할_닉네임;
+import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.등록할_소개;
+import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.등록할_유저_식별자;
+import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.프로필_사진;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -14,9 +17,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.security.service.JwtService;
+import dev.yogizogi.domain.user.factory.dto.CreateProfileFactory;
 import dev.yogizogi.domain.user.factory.dto.FindPasswordFactory;
+import dev.yogizogi.domain.user.model.dto.request.CreateUserProfileInDto;
+import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.MessageStatus;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +53,15 @@ class UserApiControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    private UserService userService;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private UserRepository userRepository;
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void 회원_탈퇴() throws Exception {
@@ -79,7 +96,7 @@ class UserApiControllerTest {
     void 비멀번호_찾기() throws Exception {
 
         // given
-        String 찾을_계정 = 핸드폰번호;
+        String 찾을_계정 = 핸드폰_번호;
 
         // mocking
         given(userService.findPassword(eq(찾을_계정))).willReturn(FindPasswordFactory.findPasswordOutDto());
@@ -108,7 +125,7 @@ class UserApiControllerTest {
     void 비밀번호_수정() throws Exception {
 
         // given
-        String 찾을_계정 = 핸드폰번호;
+        String 찾을_계정 = 핸드폰_번호;
 
         // mocking
         given(userService.updatePassword(eq(찾을_계정), eq(변경할_비밀번호))).willReturn(DONE);
@@ -129,6 +146,42 @@ class UserApiControllerTest {
                         jsonPath("$.data").value(DONE)
                 );
 
+
+    }
+
+    @Test
+    void 프로필_생성() throws Exception {
+
+        // given
+        CreateUserProfileInDto req = CreateProfileFactory.createUserProfileInDto();
+
+        // mocking
+        given(jwtService.getUserId()).willReturn(등록할_유저_식별자);
+        given(userService.createProfile(eq(등록할_유저_식별자), eq(req.getNickname()), eq(req.getImageUrl()), eq(req.getIntroduction())))
+                .willReturn(CreateProfileFactory.createUserProfileOutDto());
+
+        // when
+        // then
+        mockMvc.perform(
+                        put("/api/users/create-profile")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .content(objectMapper.writeValueAsString(req))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.data.nickname").value(등록할_닉네임)
+                )
+                .andExpect(
+                        jsonPath("$.data.imageUrl").value(프로필_사진)
+                )
+                .andExpect(
+                        jsonPath("$.data.introduction").value(등록할_소개)
+                );
 
     }
 

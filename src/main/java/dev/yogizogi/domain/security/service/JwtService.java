@@ -10,17 +10,18 @@ import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
-import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
-import dev.yogizogi.domain.user.repository.UserRepository;
+import dev.yogizogi.domain.security.exception.EmptyTokenException;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.exception.FailToSetClaimsException;
-import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.security.exception.InvalidTokenException;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
-import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.domain.security.model.Subject;
 import dev.yogizogi.domain.security.model.TokenType;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
+import dev.yogizogi.domain.user.model.entity.User;
+import dev.yogizogi.domain.user.repository.UserRepository;
+import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.util.RedisUtils;
 import io.jsonwebtoken.Claims;
@@ -44,6 +45,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Getter
@@ -200,6 +203,25 @@ public class JwtService {
     public Authentication getAuthentication(String token) {
         CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getPhoneNumber());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    /**
+     * 토큰에서 유저 식별자 추출
+     */
+    public UUID getUserId() {
+
+        HttpServletRequest req = getRequest();
+        String accessToken = extractToken(req)
+                .orElseThrow(() -> new EmptyTokenException(ErrorCode.EMPTY_TOKEN));
+
+        Subject subject = extractSubject(accessToken);
+
+        return subject.getId();
+
+    }
+
+    private HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 
 

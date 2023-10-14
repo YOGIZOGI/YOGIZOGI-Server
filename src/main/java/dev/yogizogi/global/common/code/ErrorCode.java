@@ -39,6 +39,7 @@ public enum ErrorCode {
      * - Not Found (존재하지 않는 자원임)
      */
     NOT_EXIST_PHONE_NUMBER(HttpStatus.NOT_FOUND, "존재하지 않는 핸드폰 번호입니다."),
+    NOT_EXIST_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
 
 
     /**

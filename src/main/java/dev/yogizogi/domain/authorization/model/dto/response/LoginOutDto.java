@@ -1,5 +1,6 @@
 package dev.yogizogi.domain.authorization.model.dto.response;
 
+import dev.yogizogi.domain.user.model.entity.FirstLoginStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -14,8 +15,8 @@ public class LoginOutDto {
     @Schema(description = "유저 식별자")
     private UUID id;
 
-    @Schema(description = "핸드폰 번호")
-    private String phoneNumber;
+    @Schema(description = "최초 로그인 여부")
+    private FirstLoginStatus firstLoginStatus;
 
     @Schema(description = "어세스 토큰")
     private String accessToken;
@@ -23,10 +24,10 @@ public class LoginOutDto {
     @Schema(description = "리프레쉬 토큰")
     private String refreshToken;
 
-    public static LoginOutDto of(UUID id, String phoneNumber, String accessToken, String refreshToken) {
+    public static LoginOutDto of(UUID id, FirstLoginStatus firstLoginStatus, String accessToken, String refreshToken) {
         return LoginOutDto.builder()
                 .id(id)
-                .phoneNumber(phoneNumber)
+                .firstLoginStatus(firstLoginStatus)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

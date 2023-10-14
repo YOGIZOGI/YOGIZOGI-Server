@@ -3,7 +3,10 @@ package dev.yogizogi.domain.user.model.entity;
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -30,8 +33,12 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
-    private String nickname;
+    @Embedded
+    private Profile profile;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FirstLoginStatus firstLoginStatus;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();
@@ -45,12 +52,26 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
+    public void setFirstLoginStatus(FirstLoginStatus firstLoginStatus) {
+        this.firstLoginStatus = firstLoginStatus;
+    }
+
+    public void setProfile(String nickname, String imageUrl, String introduction) {
+
+        this.profile = Profile.builder()
+                .nickname(nickname)
+                .imageUrl(imageUrl)
+                .introduction(introduction)
+                .build();
+
+    }
+
     @Builder
-    public User(UUID id, String phoneNumber, String password, String nickname) {
+    public User(UUID id, String phoneNumber, String password, FirstLoginStatus firstLoginStatus) {
         this.id = id;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.nickname = nickname;
+        this.firstLoginStatus = FirstLoginStatus.ACTIVE;
     }
 
 }

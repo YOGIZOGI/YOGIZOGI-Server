@@ -3,14 +3,12 @@ package dev.yogizogi.domain.user.model.dto.response;
 import dev.yogizogi.global.common.status.MessageStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "비밀번호 찾기 응답 Dto")
 @Getter
-@AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
+@Schema(name = "비밀번호 찾기 응답 Dto")
 public class FindPasswordOutDto {
 
     @Schema(description = "전송 결과", example = "SUCCESS", allowableValues = {"SUCCESS", "FAIL"})

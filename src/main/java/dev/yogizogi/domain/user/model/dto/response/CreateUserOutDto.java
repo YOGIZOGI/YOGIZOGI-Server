@@ -6,9 +6,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "회원가입 응답 Dto")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
+@Schema(name = "회원가입 응답 Dto")
 public class CreateUserOutDto {
 
     @Schema(description = "식별자")

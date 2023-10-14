@@ -49,10 +49,10 @@ public class AuthorizationApiController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 핸드폰번호")
     })
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginInDto res) {
+    public ResponseEntity login(@RequestBody @Valid LoginInDto req) {
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(authorizationService.login(res))
+                        .data(authorizationService.login(req.getPhoneNumber(), req.getPassword()))
                         .build());
     }
 

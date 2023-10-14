@@ -1,5 +1,8 @@
 package dev.yogizogi.domain.user.api;
 
+import dev.yogizogi.domain.security.service.JwtService;
+import dev.yogizogi.domain.user.model.dto.request.CreateUserProfileInDto;
+import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.service.UserService;
@@ -13,11 +16,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApiController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @Operation(summary = "회원 탈퇴")
     @ApiResponses({
@@ -108,6 +114,30 @@ public class UserApiController {
         return ResponseUtils.ok(
                 Success.builder()
                         .data(userService.updatePassword(phoneNumber, password))
+                        .build());
+
+    }
+
+    @Operation(summary = "프로필 설정")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로필 설정 완료",
+                    content = @Content(schema = @Schema(implementation = CreateUserProfileOutDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 유저"
+            )
+    })
+    @PutMapping("/create-profile")
+    public ResponseEntity createProfile(@RequestBody @Valid CreateUserProfileInDto response) {
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(userService.createProfile(
+                                jwtService.getUserId(), response.getNickname(), response.getImageUrl(), response.getIntroduction())
+                        )
                         .build());
 
     }

@@ -1,11 +1,11 @@
 package dev.yogizogi.domain.authorization.api;
 
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.받은_인증코드;
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.받은_핸드폰_번호;
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.상태_메시지;
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.인증코드;
-import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationCodeFixtures.저장된_인증코드;
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰번호;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.받은_인증코드;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.받은_핸드폰_번호;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.상태_메시지;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.인증코드;
+import static dev.yogizogi.domain.authorization.factory.fixtures.VerificationFixtures.저장된_인증코드;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,8 +53,8 @@ class VerificationApiControllerTest {
     void 인증번호_요청() throws Exception {
 
         // given
-        String 받을_핸드폰_번호 = 핸드폰번호;
-        String 받은_핸드폰_번호 = 핸드폰번호;
+        String 받을_핸드폰_번호 = 핸드폰_번호;
+        String 받은_핸드폰_번호 = 핸드폰_번호;
 
         // mocking
         given(verificationService.sendVerificationCodeForSignUp(eq(받은_핸드폰_번호)))
@@ -82,7 +82,7 @@ class VerificationApiControllerTest {
     void 인증번호_확인() throws Exception {
 
         // given
-        String 받을_핸드폰_번호 = 핸드폰번호;
+        String 받을_핸드폰_번호 = 핸드폰_번호;
         String 받을_인증코드 = 인증코드;
 
 

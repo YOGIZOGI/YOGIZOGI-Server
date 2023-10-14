@@ -1,7 +1,11 @@
 package dev.yogizogi.domain.user.factory.entity;
 
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.*;
-import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.*;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.암호화_비밀번호;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.역할;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.처음_로그인;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 
 import dev.yogizogi.domain.user.model.entity.Authority;
 import dev.yogizogi.domain.user.model.entity.User;
@@ -15,7 +19,7 @@ public class UserFactory {
                 .id(식별자)
                 .phoneNumber(핸드폰_번호)
                 .password(비밀번호)
-                .nickname(닉네임)
+                .firstLoginStatus(처음_로그인)
                 .build();
 
         user.setRoles(Collections.singletonList(
@@ -31,7 +35,7 @@ public class UserFactory {
                 .id(식별자)
                 .phoneNumber(핸드폰_번호)
                 .password(암호화_비밀번호)
-                .nickname(닉네임)
+                .firstLoginStatus(처음_로그인)
                 .build();
 
         user.setRoles(Collections.singletonList(

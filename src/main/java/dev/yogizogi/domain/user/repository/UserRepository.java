@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    Optional<User> findByIdAndStatus(UUID  id, BaseStatus status);
+
     Optional<User> findByIdAndPhoneNumberAndStatus(UUID  id, String phoneNumber, BaseStatus status);
 
-    Optional<User> findByNicknameAndStatus(String nickname,  BaseStatus status);
+    Optional<User> findByProfileNicknameAndStatus(String nickname, BaseStatus status);
 
     Optional<User> findByPhoneNumberAndStatus(String phoneNumber, BaseStatus status);
 

@@ -1,9 +1,8 @@
 package dev.yogizogi.domain.user.api;
 
-import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.닉네임;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.식별자;
-import static org.mockito.ArgumentMatchers.any;
+import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,11 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.factory.dto.CreateUserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
-import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
+import dev.yogizogi.domain.user.service.SignUpService;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.DuplicationStatus;
 import java.nio.charset.StandardCharsets;
@@ -64,15 +62,14 @@ class SignUpApiControllerTest {
 
         // given
         CreateUserInDto req = CreateUserFactory.createUserInDto();
-        CreateUserOutDto res = CreateUserFactory.createUserOutDto();
 
         // mocking
-        given(signUpService.signUp(any())).willReturn(res);
+        given(signUpService.signUp(eq(req.getPhoneNumber()), eq(req.getPassword()))).willReturn(CreateUserFactory.createUserOutDto());
 
         // when
         // then
         mockMvc.perform(
-                        post("/api/sign-up/")
+                        post("/api/sign-up")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .content(objectMapper.writeValueAsString(req))
