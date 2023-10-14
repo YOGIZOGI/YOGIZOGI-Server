@@ -49,24 +49,13 @@ public class CreateMeokProfileInDto {
 
     @Builder
     public static MeokProfile toEntity(
-            User user,
-            long spicyPreference, long spicyIntensity,
-            long saltyPreference, long saltyIntensity,
-            long sweetnessPreference, long sweetnessIntensity
+            User user, Preference preference, Intensity intensity
     ) {
 
         return MeokProfile.builder()
                 .user(user)
-                .preference(Preference.builder()
-                        .spicyPreference(spicyPreference)
-                        .saltyPreference(saltyPreference)
-                        .sweetnessPreference(sweetnessPreference)
-                        .build())
-                .intensity(Intensity.builder()
-                        .spicyIntensity(spicyIntensity)
-                        .saltyIntensity(saltyIntensity)
-                        .sweetnessIntensity(sweetnessIntensity)
-                        .build())
+                .preference(preference)
+                .intensity(intensity)
                 .build();
 
     }

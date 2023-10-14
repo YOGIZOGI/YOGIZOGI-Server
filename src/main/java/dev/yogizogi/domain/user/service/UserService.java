@@ -4,6 +4,7 @@ import static dev.yogizogi.global.common.model.constant.Format.DONE;
 
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
 import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
+import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
 import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
@@ -43,7 +44,7 @@ public class UserService {
     public FindPasswordOutDto findPassword(String phoneNumber) {
 
         User findUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
+                .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         coolSmsService.sendOne(phoneNumber);
 
@@ -56,7 +57,7 @@ public class UserService {
     public String updatePassword(String phoneNumber, String password) {
 
         User findUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
+                .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         if (passwordEncoder.matches(password, findUser.getPassword())) {
             throw new AlreadyUsePasswordException(ErrorCode.ALREADY_USE_PASSWORD);
