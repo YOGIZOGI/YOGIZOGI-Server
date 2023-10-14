@@ -72,7 +72,7 @@ public class UserService {
     public CreateUserProfileOutDto createProfile(UUID id, String nickname, String imageUrl, String introduction) {
 
         User findUser = userRepository.findByIdAndStatus(id, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
+                .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         findUser.setProfile(nickname, imageUrl, introduction);
 
@@ -87,7 +87,7 @@ public class UserService {
     public DeleteUserOutDto deleteUser(String phoneNumber) throws NotExistPhoneNumberException {
 
         User deleteUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistPhoneNumberException(ErrorCode.NOT_EXIST_PHONE_NUMBER));
+                .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         deleteUser.inactive();
 

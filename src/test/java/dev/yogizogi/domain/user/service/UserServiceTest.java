@@ -14,7 +14,7 @@ import static org.mockito.BDDMockito.given;
 import dev.yogizogi.domain.authorization.factory.dto.VerificationFactory;
 import dev.yogizogi.domain.authorization.service.VerificationService;
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
-import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
+import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
@@ -115,7 +115,7 @@ class UserServiceTest {
         // when
         // then
         Assertions.assertThatThrownBy(() -> userService.deleteUser(핸드폰_번호))
-                .isInstanceOf(NotExistPhoneNumberException.class);
+                .isInstanceOf(NotExistUserException.class);
 
     }
 
@@ -154,7 +154,7 @@ class UserServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> userService.findPassword(찾을_계정_핸드폰번호))
-                .isInstanceOf(NotExistPhoneNumberException.class);
+                .isInstanceOf(NotExistUserException.class);
 
     }
 
@@ -193,7 +193,7 @@ class UserServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> userService.updatePassword(변경할_계정, 변경할_비밀번호))
-                .isInstanceOf(NotExistPhoneNumberException.class);
+                .isInstanceOf(NotExistUserException.class);
 
     }
 
@@ -248,7 +248,7 @@ class UserServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> userService.createProfile(등록할_유저_식별자, 등록할_닉네임, 프로필_사진, 등록할_소개))
-                .isInstanceOf(NotExistPhoneNumberException.class);
+                .isInstanceOf(NotExistUserException.class);
 
     }
 
