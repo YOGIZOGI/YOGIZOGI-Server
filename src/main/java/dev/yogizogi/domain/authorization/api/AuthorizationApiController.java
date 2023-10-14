@@ -46,7 +46,7 @@ public class AuthorizationApiController {
                     content = @Content(schema = @Schema(implementation = LoginOutDto.class))
             ),
             @ApiResponse(responseCode = "403", description = "아이디 or 비밀번호 불일치"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 핸드폰번호")
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 계정")
     })
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginInDto req) {
@@ -64,11 +64,11 @@ public class AuthorizationApiController {
                     content = @Content(schema = @Schema(implementation = ReissueAccessTokenOutDto.class))
             ),
             @ApiResponse(responseCode = "403", description = "만료된 리프레쉬 토큰"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 핸드폰번호")
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 계정")
     })
     @Parameters({
             @Parameter(name = "id", description = "식별자"),
-            @Parameter(name = "phoneNumber", description = "핸드폰번호"),
+            @Parameter(name = "phoneNumber", description = "계정"),
 
     })
     @GetMapping("/reissue-access-token")

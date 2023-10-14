@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -49,12 +50,14 @@ public class UserApiController {
                     description = "존재하지 않는 유저"
             )
     })
-    @Parameter(name = "accountName", description = "삭제할 계정")
+    @Parameter(name = "phoneNumber", description = "삭제할 계정")
     @PutMapping("/delete")
-    public ResponseEntity deleteUser(@RequestParam String accountName) {
+    public ResponseEntity deleteUser(
+            @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber
+    ) {
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(userService.deleteUser(accountName))
+                        .data(userService.deleteUser(phoneNumber))
                         .build()
         );
     }
@@ -77,7 +80,9 @@ public class UserApiController {
     })
     @Parameter(name = "phoneNumber", description = "찾고 싶은 계정", example = "01012345678")
     @GetMapping("/find-password")
-    public ResponseEntity findPassword(@RequestParam String phoneNumber) {
+    public ResponseEntity findPassword(
+            @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber
+    ) {
 
         return ResponseUtils.ok(
                 Success.builder()
@@ -107,9 +112,8 @@ public class UserApiController {
     })
     @PutMapping("/update-password")
     public ResponseEntity updatePassword(
-            @RequestParam String phoneNumber,
-            @RequestParam String password
-    ) {
+            @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber,
+            @RequestParam String password) {
 
         return ResponseUtils.ok(
                 Success.builder()

@@ -40,7 +40,7 @@ public class VerificationApiController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "중복된 핸드폰 번호"
+                    description = "이미 존재하는 핸드폰 번호"
             )
     })
     @Parameter(name = "phoneNumber", description = "인증하고 싶은 핸드폰 번호", example = "01032527971")
@@ -56,7 +56,7 @@ public class VerificationApiController {
 
     }
 
-    @Operation(summary = "인증번호 확인(회원 가입)")
+    @Operation(summary = "인증번호 확인")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
