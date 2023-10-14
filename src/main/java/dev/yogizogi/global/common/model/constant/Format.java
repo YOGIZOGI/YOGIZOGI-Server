@@ -9,4 +9,5 @@ public class Format {
     public static final String REISSUE_ACCESS_TOKEN_URL = "/api/auth/reissue-access-token";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String DONE = "수행 완료";
+    public static final String S3_OBJECT_PATH = "%s/%s/";
 }

@@ -111,7 +111,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**")
                 .requestMatchers(
                         "/api/auth/**", "/api/sign-up/**", "/api/verification/**",
-                        "/api/users/find-password", "/api/users/update-password");
+                        "/api/users/find-password", "/api/users/update-password", "/api/s3/**");
     }
 
     @Bean
