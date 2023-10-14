@@ -3,24 +3,25 @@ package dev.yogizogi.domain.security.service;
 import static dev.yogizogi.domain.security.model.TokenType.ACCESS_TOKEN;
 import static dev.yogizogi.domain.security.model.TokenType.REFRESH_TOKEN;
 import static dev.yogizogi.global.common.code.ErrorCode.EXPIRED_TOKEN;
-import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_ACCOUNT;
+import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_PHONE_NUMBER;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_HEADER_NAME;
 import static dev.yogizogi.global.common.model.constant.Format.TOKEN_PREFIX;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.auth.model.dto.response.ReissueAccessTokenOutDto;
-import dev.yogizogi.domain.member.exception.NotExistAccountException;
-import dev.yogizogi.domain.member.repository.UserRepository;
+import dev.yogizogi.domain.authorization.model.dto.response.ReissueAccessTokenOutDto;
+import dev.yogizogi.domain.security.exception.EmptyTokenException;
 import dev.yogizogi.domain.security.exception.ExpiredTokenException;
 import dev.yogizogi.domain.security.exception.FailToExtractSubjectException;
 import dev.yogizogi.domain.security.exception.FailToSetClaimsException;
-import dev.yogizogi.domain.member.model.entity.User;
 import dev.yogizogi.domain.security.exception.InvalidTokenException;
 import dev.yogizogi.domain.security.model.CustomUserDetails;
-import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.domain.security.model.Subject;
 import dev.yogizogi.domain.security.model.TokenType;
+import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
+import dev.yogizogi.domain.user.model.entity.User;
+import dev.yogizogi.domain.user.repository.UserRepository;
+import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.util.RedisUtils;
 import io.jsonwebtoken.Claims;
@@ -44,6 +45,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Getter
@@ -63,36 +66,45 @@ public class JwtService {
     /**
      * ACCESS 토큰 생성
      */
-    public String createAccessToken(User user) {
-        return TOKEN_PREFIX.concat(issueToken(user.getId(), user.getAccountName(), ACCESS_TOKEN));
+    public String issueAccessToken(UUID id, String phoneNumber) {
+        return TOKEN_PREFIX.concat(createToken(id, phoneNumber, ACCESS_TOKEN));
     }
 
     /**
      *  REFRESH 토큰 생성
      */
-    public String createRefreshToken(User user) {
-        String refreshToken = issueToken(user.getId(), user.getAccountName(), REFRESH_TOKEN);
-        redisUtils.saveWithExpirationTime(user.getAccountName(), refreshToken, REFRESH_TOKEN.getExpirationTime());
+    public String issueRefreshToken(UUID id, String phoneNumber) {
+        String refreshToken = createToken(id, phoneNumber, REFRESH_TOKEN);
+        redisUtils.saveWithExpirationTime(phoneNumber, refreshToken, REFRESH_TOKEN.getExpirationTime());
         return TOKEN_PREFIX.concat(refreshToken);
     }
 
     /**
      * ACCESS 토큰 재발급
      */
-    public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String accountName) {
+    public ReissueAccessTokenOutDto reissueAccessToken(UUID id, String phoneNumber) {
 
-        User findUser = userRepository.findByIdAndAccountNameAndStatus(id, accountName, BaseStatus.ACTIVE)
-                .orElseThrow(() -> new NotExistAccountException(NOT_EXIST_ACCOUNT));
+        User findUser = userRepository.findByIdAndPhoneNumberAndStatus(id, phoneNumber, BaseStatus.ACTIVE)
+                .orElseThrow(() -> new NotExistPhoneNumberException(NOT_EXIST_PHONE_NUMBER));
 
-        String refreshToken = redisUtils.findByKey(findUser.getAccountName());
+        checkRefreshToken(findUser.getPhoneNumber());
+
+        return ReissueAccessTokenOutDto.of(
+                findUser.getId(),
+                issueAccessToken(findUser.getId(), findUser.getPhoneNumber())
+        );
+
+    }
+
+    private String checkRefreshToken(String phoneNumber) {
+
+        String refreshToken = redisUtils.findByKey(phoneNumber);
+
         if (Objects.isNull(refreshToken)) {
             throw new ExpiredTokenException(EXPIRED_TOKEN);
         }
 
-        return ReissueAccessTokenOutDto.of(
-                findUser.getId(),
-                issueToken(findUser.getId(), findUser.getAccountName(), ACCESS_TOKEN)
-        );
+        return refreshToken;
 
     }
 
@@ -111,7 +123,7 @@ public class JwtService {
 
     }
 
-    private String issueToken(UUID id, String email, TokenType type) {
+    private String createToken(UUID id, String email, TokenType type) {
 
         Date now = new Date();
         Claims claims = setClaims(id, email, type);
@@ -129,11 +141,11 @@ public class JwtService {
 
     }
 
-    private Claims setClaims(UUID id, String accountName, TokenType type) {
+    private Claims setClaims(UUID id, String phoneNumber, TokenType type) {
 
         Subject subject = Subject.builder()
                 .id(id)
-                .accountName(accountName)
+                .phoneNumber(phoneNumber)
                 .type(type).build();
 
         Claims claims;
@@ -167,7 +179,7 @@ public class JwtService {
      * 토큰 추출
      */
     public Optional<String> extractToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(TOKEN_HEADER_NAME).replace("Bearer ", ""));
+        return Optional.ofNullable(request.getHeader(TOKEN_HEADER_NAME).replace(TOKEN_PREFIX, ""));
     }
 
     /**
@@ -189,8 +201,27 @@ public class JwtService {
      * 인증 등록
      */
     public Authentication getAuthentication(String token) {
-        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getAccountName());
+        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(extractSubject(token).getPhoneNumber());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    /**
+     * 토큰에서 유저 식별자 추출
+     */
+    public UUID getUserId() {
+
+        HttpServletRequest req = getRequest();
+        String accessToken = extractToken(req)
+                .orElseThrow(() -> new EmptyTokenException(ErrorCode.EMPTY_TOKEN));
+
+        Subject subject = extractSubject(accessToken);
+
+        return subject.getId();
+
+    }
+
+    private HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 
 

@@ -39,7 +39,14 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 필요 API")
-                .pathsToExclude( "/api/auth/**")
+                .pathsToExclude(
+                        "/api/auth/**",
+                        "/api/sign-up/**",
+                        "/api/verification/**",
+                        "/api/users/find-password",
+                        "/api/users/update-password",
+                        "/api/s3/**"
+                )
                 .addOpenApiCustomizer(buildSecurityOpenApi())
                 .build();
     }
@@ -49,7 +56,14 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 불필요 API")
-                .pathsToMatch("/api/auth/**")
+                .pathsToMatch(
+                        "/api/auth/**",
+                        "/api/sign-up/**",
+                        "/api/verification/**",
+                        "/api/users/find-password",
+                        "/api/users/update-password",
+                        "/api/s3/**"
+                )
                 .build();
     }
 

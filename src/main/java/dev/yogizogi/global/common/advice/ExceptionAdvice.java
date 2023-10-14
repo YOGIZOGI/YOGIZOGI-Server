@@ -1,16 +1,20 @@
 package dev.yogizogi.global.common.advice;
 
-import static dev.yogizogi.global.common.model.constant.Format.VALIDATION_RESULT;
+import static dev.yogizogi.global.common.model.constant.Format.VALIDATED_ERROR_RESULT;
+import static dev.yogizogi.global.common.model.constant.Format.VALID_ERROR_RESULT;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
 import dev.yogizogi.global.common.model.response.Failure;
+import dev.yogizogi.global.common.status.MessageStatus;
 import dev.yogizogi.global.util.ResponseUtils;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.util.ArrayList;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.message.exception.NurigoApiKeyException;
 import net.nurigo.sdk.message.exception.NurigoBadRequestException;
-import net.nurigo.sdk.message.exception.NurigoException;
 import net.nurigo.sdk.message.exception.NurigoUnknownException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -46,9 +50,12 @@ public class ExceptionAdvice {
     })
     protected ResponseEntity handleCoolSmsException(NurigoUnknownException exception) {
 
+        StringBuilder message = new StringBuilder();
+        message.append(MessageStatus.FAIL).append(" = {").append(exception.getMessage()).append("}");
+
         return ResponseUtils.error(
                 Failure.builder()
-                        .message(exception.getMessage())
+                        .message(message)
                         .build(),
                 ErrorCode.FAIL_TO_SEND_MESSAGE
         );
@@ -66,7 +73,7 @@ public class ExceptionAdvice {
             errors.add
                     (String
                             .format(
-                                    VALIDATION_RESULT,
+                                    VALID_ERROR_RESULT,
                                     fieldError.getDefaultMessage(),
                                     fieldError.getField(),
                                     fieldError.getRejectedValue()
@@ -82,5 +89,32 @@ public class ExceptionAdvice {
         );
 
     }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    protected ResponseEntity handleValidatedException(ConstraintViolationException e) {
+
+        ArrayList<String> errors = new ArrayList<>();
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        constraintViolations.stream()
+                .forEach(constraintViolation -> {
+                    errors.add(
+                            String
+                                    .format(VALIDATED_ERROR_RESULT,
+                                            constraintViolation.getMessage(),
+                                            constraintViolation.getInvalidValue())
+
+                    );
+                });
+
+
+        return ResponseUtils.error(
+                Failure.builder()
+                        .message(errors)
+                        .build(),
+                ErrorCode.FAIL_TO_VALIDATE
+        );
+
+    }
+
 
 }
