@@ -45,7 +45,8 @@ public class OpenApiConfig {
                         "/api/verification/**",
                         "/api/users/find-password",
                         "/api/users/update-password",
-                        "/api/s3/**"
+                        "/api/s3/**",
+                        "/api/test/**"
                 )
                 .addOpenApiCustomizer(buildSecurityOpenApi())
                 .build();
@@ -62,7 +63,8 @@ public class OpenApiConfig {
                         "/api/verification/**",
                         "/api/users/find-password",
                         "/api/users/update-password",
-                        "/api/s3/**"
+                        "/api/s3/**",
+                        "/api/test/**"
                 )
                 .build();
     }
