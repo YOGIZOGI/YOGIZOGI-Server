@@ -1,5 +1,6 @@
 package dev.yogizogi.domain.meokprofile.model.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -14,12 +15,15 @@ import lombok.NoArgsConstructor;
 public class Intensity {
 
     @Min(value = 1) @Max(value = 5)
+    @Schema(description = "매운맛 강도", example = "3")
     private Long spicyIntensity;
 
     @Min(value = 1) @Max(value = 5)
+    @Schema(description = "짠맛 강도", example = "2")
     private Long saltyIntensity;
 
     @Min(value = 1) @Max(value = 5)
+    @Schema(description = "단맛 강도", example = "3")
     private Long sweetnessIntensity;
 
     @Builder

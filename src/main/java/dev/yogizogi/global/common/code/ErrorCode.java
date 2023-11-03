@@ -42,7 +42,7 @@ public enum ErrorCode {
      */
     NOT_EXIST_PHONE_NUMBER(HttpStatus.NOT_FOUND, "존재하지 않는 핸드폰 번호입니다."),
     NOT_EXIST_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
-
+    NOT_EXIST_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 음식점입니다."),
 
     /**
      * Code : 500

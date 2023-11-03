@@ -17,40 +17,32 @@ import lombok.Getter;
 @Schema(name = "먹프로필 등록 요청 Dto")
 public class CreateMeokProfileInDto {
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "매운맛 선호도", example = "4")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "4")
     private Long spicyPreference;
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "매운맛 강도", example = "3")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "3")
     private Long spicyIntensity;
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "짠맛 선호도", example = "2")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "3")
     private Long saltyPreference;
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "짠맛 강도", example = "2")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "2")
     private Long saltyIntensity;
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "단맛 선호도", example = "3")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "2")
     private Long sweetnessPreference;
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @Schema(description = "단맛 강도", example = "3")
+    @Min(value = 1) @Max(value = 5)
+    @Schema(example = "3")
     private Long sweetnessIntensity;
 
     @Builder
-    public static MeokProfile toEntity(
-            User user, Preference preference, Intensity intensity
-    ) {
+    public static MeokProfile toEntity(User user, Preference preference, Intensity intensity) {
 
         return MeokProfile.builder()
                 .user(user)

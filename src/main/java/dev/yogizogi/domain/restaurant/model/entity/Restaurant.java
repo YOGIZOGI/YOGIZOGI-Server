@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.restaurant.model.entity;
 
-import jakarta.persistence.Column;
+import dev.yogizogi.global.common.model.entity.BaseEntity;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Restaurant {
+public class Restaurant extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +23,9 @@ public class Restaurant {
     @Embedded
     private Information information;
 
-    @Column(columnDefinition = "TEXT")
-    private String imageUrl;
-
     @Builder
     public Restaurant(Information information, String imageUrl) {
         this.information = information;
-        this.imageUrl = imageUrl;
     }
 
 }
