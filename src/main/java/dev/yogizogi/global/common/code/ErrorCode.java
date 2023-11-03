@@ -20,8 +20,10 @@ public enum ErrorCode {
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
+    FAIL_TO_GET_COORDINATE(HttpStatus.BAD_REQUEST, "좌표 조회 실패"),
+
     /**
-     * Code : 401인
+     * Code : 401
      */
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 없습니다."),

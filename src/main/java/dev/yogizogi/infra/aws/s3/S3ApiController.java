@@ -1,8 +1,8 @@
-package dev.yogizogi.infra.s3;
+package dev.yogizogi.infra.aws.s3;
 
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
-import dev.yogizogi.infra.s3.model.request.IssuePreSignedInDto;
+import dev.yogizogi.infra.aws.s3.model.request.IssuePreSignedInDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
