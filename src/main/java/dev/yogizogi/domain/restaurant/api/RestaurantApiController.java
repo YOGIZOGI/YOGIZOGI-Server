@@ -54,7 +54,7 @@ public class RestaurantApiController {
 
     }
 
-    @Operation(summary = "특정 식당 조회")
+    @Operation(summary = "특정 음식점 조회")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
