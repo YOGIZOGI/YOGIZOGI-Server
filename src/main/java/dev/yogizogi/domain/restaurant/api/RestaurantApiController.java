@@ -8,6 +8,7 @@ import dev.yogizogi.domain.restaurant.service.RestaurantService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,10 +19,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "식당 관련 API")
@@ -63,12 +64,13 @@ public class RestaurantApiController {
             ),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 음식점")
     })
-    @GetMapping("/{restaurantId}")
-    public ResponseEntity getRestaurant(@PathVariable Long restaurantId) {
+    @Parameter(name = "name", example = "요비")
+    @GetMapping("")
+    public ResponseEntity getRestaurant(@RequestParam String name) {
 
         return ResponseUtils.created(
                 Success.builder()
-                        .data(restaurantService.getRestaurant(restaurantId))
+                        .data(restaurantService.getRestaurant(name))
                         .build());
 
     }

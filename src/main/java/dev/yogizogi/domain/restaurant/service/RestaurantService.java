@@ -37,17 +37,17 @@ public class RestaurantService {
     }
 
     @Transactional(readOnly = true)
-    public GetRestaurantOutDto getRestaurant(Long restaurantId) {
+    public GetRestaurantOutDto getRestaurant(String name) {
 
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
-                () -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT)
+        Restaurant restaurant = restaurantRepository.findRestaurantByRestaurantDetails_Name(name)
+                .orElseThrow(() -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT)
         );
 
         List<GetMenusByRestaurantOutDto> menus = restaurant.getMenus().stream()
                 .map(menu -> GetMenusByRestaurantOutDto.of(menu.getId(), menu.getDetails()))
                 .collect(Collectors.toList());
 
-        return GetRestaurantOutDto.of(restaurant.getId(), restaurant.getDetails(), menus);
+        return GetRestaurantOutDto.of(restaurant.getId(), restaurant.getRestaurantDetails(), menus);
 
     }
 

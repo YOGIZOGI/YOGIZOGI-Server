@@ -26,14 +26,19 @@ public class Restaurant extends BaseEntity {
     private Long id;
 
     @Embedded
-    private RestaurantDetails details;
+    private RestaurantDetails restaurantDetails;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
     @Builder
-    public Restaurant(RestaurantDetails details, String imageUrl) {
-        this.details = details;
+    public Restaurant(RestaurantDetails restaurantDetails) {
+        this.restaurantDetails = restaurantDetails;
+    }
+
+    public void addMenu(Menu menu) {
+        menus.add(menu);
+        menu.setRestaurant(this);
     }
 
 }

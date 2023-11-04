@@ -28,7 +28,7 @@ public class CreateRestaurantInDto {
     @Builder
     public static Restaurant toEntity(CreateRestaurantInDto req, Coordinate coordinate) {
         return Restaurant.builder()
-                .details(
+                .restaurantDetails(
                         RestaurantDetails.builder()
                                 .name(req.getName())
                                 .address(req.getAddress())
@@ -37,7 +37,6 @@ public class CreateRestaurantInDto {
                                 .coordinate(coordinate)
                                 .build()
                 )
-                .imageUrl(req.getImageUrl())
                 .build();
     }
 

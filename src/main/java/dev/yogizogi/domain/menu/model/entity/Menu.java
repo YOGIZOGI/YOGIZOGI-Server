@@ -29,9 +29,12 @@ public class Menu {
     private MenuDetails details;
 
     @Builder
-    public Menu(Restaurant restaurant, MenuDetails details) {
-        this.restaurant = restaurant;
+    public Menu(MenuDetails details) {
         this.details = details;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
 }

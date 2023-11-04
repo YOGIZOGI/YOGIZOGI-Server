@@ -2,7 +2,6 @@ package dev.yogizogi.domain.menu.model.dto.request;
 
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.model.entity.MenuDetails;
-import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,9 +28,8 @@ public class CreateMenuInDto {
     private String imageUrl;
 
     @Builder
-    public static Menu toEntity(Restaurant restaurant, CreateMenuInDto req) {
+    public static Menu toEntity(CreateMenuInDto req) {
         return Menu.builder()
-                .restaurant(restaurant)
                 .details(MenuDetails.builder()
                         .name(req.getName())
                         .price(req.getPrice())
