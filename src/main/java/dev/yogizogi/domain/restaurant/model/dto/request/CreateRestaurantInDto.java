@@ -33,6 +33,7 @@ public class CreateRestaurantInDto {
                                 .name(req.getName())
                                 .address(req.getAddress())
                                 .tel(req.getAddress())
+                                .imageUrl(req.getImageUrl())
                                 .coordinate(coordinate)
                                 .build()
                 )

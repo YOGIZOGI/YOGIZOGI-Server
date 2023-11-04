@@ -31,10 +31,11 @@ public class RestaurantDetails {
     private Coordinate coordinate;
 
     @Builder
-    public RestaurantDetails(String name, String tel, String address, Coordinate coordinate) {
+    public RestaurantDetails(String name, String tel, String address, String imageUrl, Coordinate coordinate) {
         this.name = name;
         this.tel = tel;
         this.address = address;
+        this.imageUrl = imageUrl;
         this.coordinate = coordinate;
     }
 
