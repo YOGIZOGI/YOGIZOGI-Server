@@ -46,12 +46,8 @@ public class RestaurantApiController {
         return ResponseUtils.created(
                 Success.builder()
                         .data(restaurantService
-                                .createRestaurant(
-                                        req.getName(),
-                                        req.getAddress(),
-                                        req.getTel(),
-                                        req.getImageUrl()
-                                ))
+                                .createRestaurant(req)
+                        )
                         .build());
 
     }

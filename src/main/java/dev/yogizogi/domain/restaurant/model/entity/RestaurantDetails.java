@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Information {
+public class RestaurantDetails {
 
     @Schema(description = "상호명", example = "요비")
     private String name;
@@ -31,7 +31,7 @@ public class Information {
     private Coordinate coordinate;
 
     @Builder
-    public Information(String name, String tel, String address, Coordinate coordinate) {
+    public RestaurantDetails(String name, String tel, String address, Coordinate coordinate) {
         this.name = name;
         this.tel = tel;
         this.address = address;

@@ -21,11 +21,11 @@ public class Restaurant extends BaseEntity {
     private Long id;
 
     @Embedded
-    private Information information;
+    private RestaurantDetails details;
 
     @Builder
-    public Restaurant(Information information, String imageUrl) {
-        this.information = information;
+    public Restaurant(RestaurantDetails details, String imageUrl) {
+        this.details = details;
     }
 
 }

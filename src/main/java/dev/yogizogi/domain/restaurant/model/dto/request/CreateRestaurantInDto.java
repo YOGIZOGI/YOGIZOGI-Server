@@ -1,7 +1,8 @@
 package dev.yogizogi.domain.restaurant.model.dto.request;
 
-import dev.yogizogi.domain.restaurant.model.entity.Information;
+import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
+import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,10 +26,17 @@ public class CreateRestaurantInDto {
     private String imageUrl;
 
     @Builder
-    public static Restaurant toEntity(Information information, String imageUrl) {
+    public static Restaurant toEntity(CreateRestaurantInDto req, Coordinate coordinate) {
         return Restaurant.builder()
-                .information(information)
-                .imageUrl(imageUrl)
+                .details(
+                        RestaurantDetails.builder()
+                                .name(req.getName())
+                                .address(req.getAddress())
+                                .tel(req.getAddress())
+                                .coordinate(coordinate)
+                                .build()
+                )
+                .imageUrl(req.getImageUrl())
                 .build();
     }
 

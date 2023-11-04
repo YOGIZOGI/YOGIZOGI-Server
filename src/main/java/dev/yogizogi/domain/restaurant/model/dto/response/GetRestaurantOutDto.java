@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.restaurant.model.dto.response;
 
-import dev.yogizogi.domain.restaurant.model.entity.Information;
+import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,12 +15,12 @@ public class GetRestaurantOutDto {
     private Long id;
 
     @Schema(description = "음식점에 대한 정보(이름, 주소, 좌표 등등)")
-    private Information information;
+    private RestaurantDetails details;
 
-    public static GetRestaurantOutDto of(Long id, Information information) {
+    public static GetRestaurantOutDto of(Long id, RestaurantDetails details) {
         return GetRestaurantOutDto.builder()
                 .id(id)
-                .information(information)
+                .details(details)
                 .build();
     }
 
