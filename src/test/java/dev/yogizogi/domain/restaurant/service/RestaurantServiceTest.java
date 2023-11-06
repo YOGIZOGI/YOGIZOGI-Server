@@ -49,7 +49,8 @@ class RestaurantServiceTest {
         given(coordinateService.recieveCoordinate(eq(요청.getAddress()))).willReturn(좌표);
 
         // when
-        CreateRestaurantOutDto 응답 = restaurantService.createRestaurant(요청);
+        CreateRestaurantOutDto 응답 = restaurantService
+                .createRestaurant(요청.getName(), 요청.getTel(), 요청.getAddress(), 요청.getImageUrl());
 
         // then
         Assertions.assertThat(응답).isNotNull();

@@ -6,11 +6,16 @@ import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.주소;
 
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
+import dev.yogizogi.domain.restaurant.model.dto.response.CreateRestaurantOutDto;
 
 public class CreateRestaurantFactory {
 
     public static CreateRestaurantInDto createRestaurantInDto() {
         return new CreateRestaurantInDto(상호명, 전화번호, 주소, 음식점_사진);
+    }
+
+    public static CreateRestaurantOutDto createRestaurantOutDto() {
+        return CreateRestaurantOutDto.of(상호명);
     }
 
 }
