@@ -49,7 +49,7 @@ public class RestaurantApiController {
         return ResponseUtils.created(
                 Success.builder()
                         .data(restaurantService
-                                .createRestaurant(req)
+                                .createRestaurant(req.getName(), req.getTel(), req.getAddress(), req.getImageUrl())
                         )
                         .build());
 
@@ -68,7 +68,7 @@ public class RestaurantApiController {
     @GetMapping("")
     public ResponseEntity getRestaurant(@RequestParam String name) {
 
-        return ResponseUtils.created(
+        return ResponseUtils.ok(
                 Success.builder()
                         .data(restaurantService.getRestaurant(name))
                         .build());

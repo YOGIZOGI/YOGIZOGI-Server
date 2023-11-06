@@ -25,14 +25,14 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final CoordinateService coordinateService;
 
-    public CreateRestaurantOutDto createRestaurant(CreateRestaurantInDto req)
+    public CreateRestaurantOutDto createRestaurant(String name, String tel, String address, String imageUrl)
             throws JsonProcessingException {
 
-        Coordinate coordinate = coordinateService.recieveCoordinate(req.getAddress());
-        Restaurant restaurant = CreateRestaurantInDto.toEntity(req, coordinate);
+        Coordinate coordinate = coordinateService.recieveCoordinate(address);
+        Restaurant restaurant = CreateRestaurantInDto.toEntity(name, tel, address, imageUrl, coordinate);
         restaurantRepository.save(restaurant);
 
-        return CreateRestaurantOutDto.of(restaurant.getId());
+        return CreateRestaurantOutDto.of(restaurant.getRestaurantDetails().getName());
 
     }
 

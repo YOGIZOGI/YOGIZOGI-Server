@@ -10,12 +10,12 @@ import lombok.Getter;
 @Schema(name = "식당 등록 응답 Dto")
 public class CreateRestaurantOutDto {
 
-    @Schema(description = "생성한 음식점 식별자", example = "1")
-    private Long id;
+    @Schema(description = "생성한 음식점 상호명", example = "요비")
+    private String name;
 
-    public static CreateRestaurantOutDto of(Long id) {
+    public static CreateRestaurantOutDto of(String name) {
         return CreateRestaurantOutDto.builder()
-                .id(id)
+                .name(name)
                 .build();
     }
 
