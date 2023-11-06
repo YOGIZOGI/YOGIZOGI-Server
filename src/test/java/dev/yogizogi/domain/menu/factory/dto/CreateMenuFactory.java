@@ -15,7 +15,7 @@ public class CreateMenuFactory {
     }
 
     public static CreateMenuOutDto createMenuOutDto() {
-        return CreateMenuOutDto.of(음식명);
+        return CreateMenuOutDto.of(1L, 음식명);
     }
 
 }

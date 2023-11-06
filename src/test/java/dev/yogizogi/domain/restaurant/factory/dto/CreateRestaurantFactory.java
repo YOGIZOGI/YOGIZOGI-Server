@@ -15,7 +15,7 @@ public class CreateRestaurantFactory {
     }
 
     public static CreateRestaurantOutDto createRestaurantOutDto() {
-        return CreateRestaurantOutDto.of(상호명);
+        return CreateRestaurantOutDto.of(1L, 상호명);
     }
 
 }
