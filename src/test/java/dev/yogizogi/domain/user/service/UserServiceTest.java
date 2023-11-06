@@ -12,7 +12,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.authorization.factory.dto.VerificationFactory;
-import dev.yogizogi.domain.authorization.service.VerificationService;
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
 import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.exception.UserException;
@@ -45,11 +44,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
-    private VerificationService verificationService;
-
-    @Mock
     private CoolSmsService coolSmsService;
-
 
     @Mock
     private UserRepository userRepository;

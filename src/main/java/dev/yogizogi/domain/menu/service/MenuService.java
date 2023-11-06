@@ -20,17 +20,17 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public CreateMenuOutDto createMenu(CreateMenuInDto req) {
+    public CreateMenuOutDto createMenu(Long restaurantId, String name, String price, String description, String imageUrl) {
 
-        Restaurant restaurant = restaurantRepository.findById(req.getRestaurantId())
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT));
 
-        Menu menu = CreateMenuInDto.toEntity(req);
+        Menu menu = CreateMenuInDto.toEntity(name, price, description, imageUrl);
         restaurant.addMenu(menu);
 
         menuRepository.save(menu);
 
-        return CreateMenuOutDto.of(menu.getId());
+        return CreateMenuOutDto.of(menu.getDetails().getName());
 
     }
 

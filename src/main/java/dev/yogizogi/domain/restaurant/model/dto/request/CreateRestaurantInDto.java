@@ -26,14 +26,14 @@ public class CreateRestaurantInDto {
     private String imageUrl;
 
     @Builder
-    public static Restaurant toEntity(CreateRestaurantInDto req, Coordinate coordinate) {
+    public static Restaurant toEntity(String name,  String tel, String address, String imageUrl, Coordinate coordinate) {
         return Restaurant.builder()
                 .restaurantDetails(
                         RestaurantDetails.builder()
-                                .name(req.getName())
-                                .address(req.getAddress())
-                                .tel(req.getAddress())
-                                .imageUrl(req.getImageUrl())
+                                .name(name)
+                                .tel(tel)
+                                .address(address)
+                                .imageUrl(imageUrl)
                                 .coordinate(coordinate)
                                 .build()
                 )

@@ -28,13 +28,13 @@ public class CreateMenuInDto {
     private String imageUrl;
 
     @Builder
-    public static Menu toEntity(CreateMenuInDto req) {
+    public static Menu toEntity(String name, String price, String description, String imageUrl) {
         return Menu.builder()
                 .details(MenuDetails.builder()
-                        .name(req.getName())
-                        .price(req.getPrice())
-                        .description(req.getDescription())
-                        .imageUrl(req.getImageUrl())
+                        .name(name)
+                        .price(price)
+                        .description(description)
+                        .imageUrl(imageUrl)
                         .build())
                 .build();
     }
