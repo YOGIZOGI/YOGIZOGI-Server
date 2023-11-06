@@ -30,7 +30,7 @@ public class MenuService {
 
         menuRepository.save(menu);
 
-        return CreateMenuOutDto.of(menu.getDetails().getName());
+        return CreateMenuOutDto.of(menu.getId(), menu.getDetails().getName());
 
     }
 

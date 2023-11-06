@@ -32,7 +32,7 @@ public class RestaurantService {
         Restaurant restaurant = CreateRestaurantInDto.toEntity(name, tel, address, imageUrl, coordinate);
         restaurantRepository.save(restaurant);
 
-        return CreateRestaurantOutDto.of(restaurant.getRestaurantDetails().getName());
+        return CreateRestaurantOutDto.of(restaurant.getId(), restaurant.getRestaurantDetails().getName());
 
     }
 
