@@ -20,8 +20,10 @@ public enum ErrorCode {
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
+    FAIL_TO_GET_COORDINATE(HttpStatus.BAD_REQUEST, "좌표 조회 실패"),
+
     /**
-     * Code : 401인
+     * Code : 401
      */
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 없습니다."),
@@ -40,7 +42,7 @@ public enum ErrorCode {
      */
     NOT_EXIST_PHONE_NUMBER(HttpStatus.NOT_FOUND, "존재하지 않는 핸드폰 번호입니다."),
     NOT_EXIST_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
-
+    NOT_EXIST_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 음식점입니다."),
 
     /**
      * Code : 500

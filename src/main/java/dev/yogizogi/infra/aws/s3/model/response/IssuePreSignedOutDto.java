@@ -1,4 +1,4 @@
-package dev.yogizogi.infra.s3.model.response;
+package dev.yogizogi.infra.aws.s3.model.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;

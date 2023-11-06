@@ -10,4 +10,7 @@ public class Format {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String DONE = "수행 완료";
     public static final String S3_OBJECT_PATH = "%s/%s/";
+    public static final String KAKAO_MAP_API_BASE_URL = "https://dapi.kakao.com";
+    public static final String KAKAO_MAP_API_URI = "/v2/local/search/address.json";
+
 }

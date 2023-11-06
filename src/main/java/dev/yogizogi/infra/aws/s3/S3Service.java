@@ -1,4 +1,4 @@
-package dev.yogizogi.infra.s3;
+package dev.yogizogi.infra.aws.s3;
 
 import static dev.yogizogi.global.common.model.constant.Format.S3_OBJECT_PATH;
 import static dev.yogizogi.global.common.model.constant.Number.PRE_SIGNED_URL_EXPIRATION_TIME;
@@ -8,7 +8,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import dev.yogizogi.infra.s3.model.response.IssuePreSignedOutDto;
+import dev.yogizogi.infra.aws.s3.model.response.IssuePreSignedOutDto;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
