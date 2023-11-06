@@ -44,7 +44,8 @@ public class MenuApiController {
 
         return ResponseUtils.created(
                         Success.builder()
-                                .data(menuService.createMenu(req))
+                                .data(menuService
+                                        .createMenu(req.getRestaurantId(), req.getName(), req.getPrice(), req.getDescription(), req.getImageUrl()))
                                 .build()
         );
 
