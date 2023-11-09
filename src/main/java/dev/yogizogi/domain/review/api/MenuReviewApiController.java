@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reviews")
+@RequestMapping("/api/menu-reviews")
 public class MenuReviewApiController {
 
     private final MenuReviewService menuReviewService;
@@ -39,7 +39,7 @@ public class MenuReviewApiController {
             @ApiResponse(responseCode = "403", description = "권한 없는 음식점"),
             @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저, 음식점)")
     })
-    @PostMapping("/menu")
+    @PostMapping("/create")
     public ResponseEntity createMenuReview(@RequestBody @Valid CreateMenuReviewInDto req) {
 
         return ResponseUtils.created(

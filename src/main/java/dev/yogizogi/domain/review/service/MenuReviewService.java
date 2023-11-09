@@ -48,7 +48,7 @@ public class MenuReviewService {
         }
 
         MenuReview menuReview = CreateMenuReviewInDto.toEntity(review, menu, content, recommend);
-        menuReviewRepository.save(menuReview);
+        menuReviewRepository.save(CreateMenuReviewInDto.toEntity(review, menu, content, recommend));
 
         List<ReviewImage> reviewImage = imageUrl.stream()
                 .map(url -> ReviewImage.builder()
@@ -59,7 +59,7 @@ public class MenuReviewService {
 
         reviewImageRepository.saveAll(reviewImage);
 
-        return CreateMenuReviewOutDto.of(menuReview.getId());
+        return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(), menuReview.getMenu().getId());
 
     }
 
