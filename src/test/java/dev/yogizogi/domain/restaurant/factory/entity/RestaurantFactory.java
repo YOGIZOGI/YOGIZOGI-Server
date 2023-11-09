@@ -8,8 +8,6 @@ import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.전화번호;
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.주소;
 
-import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
-import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
@@ -31,9 +29,6 @@ public class RestaurantFactory {
                                 .build())
                         .build())
                 .build();
-
-        Menu menu = MenuFactory.createMenu();
-        restaurant.addMenu(menu);
 
         return restaurant;
 

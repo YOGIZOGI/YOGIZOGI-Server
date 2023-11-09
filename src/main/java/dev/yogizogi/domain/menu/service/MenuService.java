@@ -26,9 +26,7 @@ public class MenuService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT));
 
-        Menu menu = CreateMenuInDto.toEntity(name, price, description, imageUrl);
-        restaurant.addMenu(menu);
-
+        Menu menu = CreateMenuInDto.toEntity(restaurant, name, price, description, imageUrl);
         menuRepository.save(menu);
 
         return CreateMenuOutDto.of(menu.getId(), menu.getDetails().getName());

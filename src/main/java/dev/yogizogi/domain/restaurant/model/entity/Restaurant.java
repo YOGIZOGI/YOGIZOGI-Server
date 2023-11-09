@@ -37,9 +37,4 @@ public class Restaurant extends BaseEntity {
         this.restaurantDetails = restaurantDetails;
     }
 
-    public void addMenu(Menu menu) {
-        menus.add(menu);
-        menu.setRestaurant(this);
-    }
-
 }

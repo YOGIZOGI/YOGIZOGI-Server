@@ -29,7 +29,8 @@ public class Menu {
     private MenuDetails details;
 
     @Builder
-    public Menu(MenuDetails details) {
+    public Menu(Restaurant restaurant, MenuDetails details) {
+        this.restaurant = restaurant;
         this.details = details;
     }
 

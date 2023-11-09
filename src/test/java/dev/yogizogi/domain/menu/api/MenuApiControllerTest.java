@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.menu.api;
 
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.음식명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -70,7 +70,7 @@ class MenuApiControllerTest {
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
-                        jsonPath("$.data.name").value(음식명)
+                        jsonPath("$.data.name").value(메뉴1_음식명)
                 );
 
     }
