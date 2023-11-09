@@ -8,6 +8,7 @@ import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public CreateMenuOutDto createMenu(Long restaurantId, String name, String price, String description, String imageUrl) {
+    public CreateMenuOutDto createMenu(UUID restaurantId, String name, String price, String description, String imageUrl) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT));

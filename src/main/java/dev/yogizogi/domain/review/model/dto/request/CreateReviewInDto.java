@@ -18,7 +18,7 @@ public class CreateReviewInDto {
     private UUID userId;
 
     @Schema(description = "리뷰를 작성할 음식점 식별자", example = "1")
-    private Long restaurantId;
+    private UUID restaurantId;
 
     @Builder
     public static Review toEntity(UUID id, User user, Restaurant restaurant) {
