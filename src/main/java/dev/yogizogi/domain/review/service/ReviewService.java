@@ -11,6 +11,7 @@ import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.common.status.BaseStatus;
 import dev.yogizogi.global.util.UuidUtils;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class ReviewService {
     private final RestaurantRepository restaurantRepository;
     private final ReviewRepository reviewRepository;
 
-    public CreateReviewOutDto createReview(UUID userId, Long restaurantId) {
+    public CreateReviewOutDto createReview(UUID userId, UUID restaurantId) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdAndStatus(userId, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -38,7 +39,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        return CreateReviewOutDto.of(review.getId());
+        return CreateReviewOutDto.of(review.getId(), review.getUser().getId(), review.getRestaurant().getId());
 
     }
 
