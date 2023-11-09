@@ -28,7 +28,10 @@ public class CreateMenuReviewInDto {
     @Schema(description = "추천 여부", example = "RECOMMEND", allowableValues = {"RECOMMEND", "NOT_RECOMMEND"})
     private String recommend;
 
-    @Schema(description = "메뉴 리뷰 사진", example = "https://yogizogi-multimedia-bucket.s3.ap-northeast-2.amazonaws.com/menu-review/2/1d5f7feb-2c2b-446a-8340-9f3dbd5629a9")
+    @Schema(
+            description = "메뉴 리뷰 사진",
+            example = "[\"https://yogizogi-multimedia-bucket.s3.ap-northeast-2.amazonaws.com/menu-review/2/bf940c3e-cc45-4c42-9640-47fa11d73b25\","
+                    + " \"https://yogizogi-multimedia-bucket.s3.ap-northeast-2.amazonaws.com/menu-review/2/1d5f7feb-2c2b-446a-8340-9f3dbd5629a9\"]")
     private List<String> imageUrl;
 
     @Builder

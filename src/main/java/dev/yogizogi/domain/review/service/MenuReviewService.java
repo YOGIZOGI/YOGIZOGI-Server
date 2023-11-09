@@ -11,6 +11,7 @@ import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.model.entity.ReviewImage;
@@ -47,8 +48,9 @@ public class MenuReviewService {
             throw new NoPermissionRestaurantException(FAIL_TO_REVIEW_NO_PERMISSION_RESTAURANT);
         }
 
+
         MenuReview menuReview = CreateMenuReviewInDto.toEntity(review, menu, content, recommend);
-        menuReviewRepository.save(CreateMenuReviewInDto.toEntity(review, menu, content, recommend));
+        menuReviewRepository.save(menuReview);
 
         List<ReviewImage> reviewImage = imageUrl.stream()
                 .map(url -> ReviewImage.builder()
@@ -60,6 +62,25 @@ public class MenuReviewService {
         reviewImageRepository.saveAll(reviewImage);
 
         return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(), menuReview.getMenu().getId());
+
+    }
+
+    public List<GetMenuReviewsOutDto> getMenuReviews(Long menuId) {
+
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NotExistMenuException(NOT_EXIST_MENU));
+
+        List<MenuReview> menuReviews = menuReviewRepository.findByMenu(menu)
+                .orElseGet(null);
+
+        return menuReviews.stream()
+                .map(menuReview ->
+                    GetMenuReviewsOutDto.of(
+                            menuReview.getId(),
+                            menuReview.getReviewImages().stream().map(ReviewImage::getUrl).collect(Collectors.toList()),
+                            menuReview.getRecommendationStatus())
+                )
+                .collect(Collectors.toList());
 
     }
 
