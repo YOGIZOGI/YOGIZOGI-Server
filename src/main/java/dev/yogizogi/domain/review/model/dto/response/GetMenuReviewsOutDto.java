@@ -1,6 +1,5 @@
 package dev.yogizogi.domain.review.model.dto.response;
 
-import dev.yogizogi.global.common.status.RecommendationStatus;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,15 +9,18 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 public class GetMenuReviewsOutDto {
 
-    private Long id;
+    private Long menuId;
+
+    private Long menuReviewId;
 
     private List<String> imageUrl;
 
-    private RecommendationStatus recommendationStatus;
+    private String recommendationStatus;
 
-    public static GetMenuReviewsOutDto of(Long id, List<String> imageUrl, RecommendationStatus recommendationStatus) {
+    public static GetMenuReviewsOutDto of(Long menuId, Long menuReviewId, List<String> imageUrl, String recommendationStatus) {
         return GetMenuReviewsOutDto.builder()
-                .id(id)
+                .menuId(menuId)
+                .menuReviewId(menuReviewId)
                 .imageUrl(imageUrl)
                 .recommendationStatus(recommendationStatus)
                 .build();

@@ -45,7 +45,7 @@ public class MenuReview {
     private RecommendationStatus recommendationStatus;
 
     @OneToMany(mappedBy = "menuReview", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewImage> reviewImages = new ArrayList<>();
+    private List<MenuReviewImage> menuReviewImages = new ArrayList<>();
 
     @Builder
     public MenuReview(Menu menu, Review review, String content, RecommendationStatus recommendationStatus) {

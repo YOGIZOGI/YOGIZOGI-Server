@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewImage {
+public class MenuReviewImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class ReviewImage {
     private String url;
 
     @Builder
-    public ReviewImage(MenuReview menuReview, String url) {
+    public MenuReviewImage(MenuReview menuReview, String url) {
         this.menuReview = menuReview;
         this.url = url;
     }

@@ -2,6 +2,7 @@ package dev.yogizogi.domain.review.api;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -9,7 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
+import dev.yogizogi.domain.review.factory.dto.GetMenuReviewsFactory;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import java.nio.charset.StandardCharsets;
@@ -75,6 +78,57 @@ class MenuReviewApiControllerTest {
                         jsonPath("$.data.menuId").value(요청.getMenuId())
                 );
 
+    }
+
+    @Test
+    void 특정_메뉴에_대한_리뷰_조회() throws Exception {
+
+        // given
+        Long 조회할_메뉴 = MenuFixtures.메뉴1_식별자;
+
+        // mocking
+        given(menuReviewService.getMenuReviews(eq(조회할_메뉴)))
+                .willReturn(GetMenuReviewsFactory.createMenuReviewOutDto());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/menu-reviews/menus/" + 조회할_메뉴)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.data[0].menuId").value(조회할_메뉴)
+                )
+                .andExpect(
+                        jsonPath("$.data[1].menuId").value(조회할_메뉴)
+                );
+
+    }
+
+    @Test
+    void 특정_메뉴에_대한_리뷰_조회_데이터가_없는_경우() throws Exception {
+
+        // given
+        Long 조회할_메뉴 = MenuFixtures.메뉴1_식별자;
+
+        // mocking
+        given(menuReviewService.getMenuReviews(eq(조회할_메뉴)))
+                .willReturn(GetMenuReviewsFactory.createMenuReviewOutDtoNoContent());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/menu-reviews/menus/" + 조회할_메뉴)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                );
     }
 
 }

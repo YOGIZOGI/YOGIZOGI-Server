@@ -34,4 +34,24 @@ public class RestaurantFactory {
 
     }
 
+    public static Restaurant createDiffrentRestaurant() {
+
+        Restaurant restaurant = Restaurant.builder()
+                .id(식별자)
+                .restaurantDetails(RestaurantDetails.builder()
+                        .name(상호명)
+                        .tel(전화번호)
+                        .address(주소)
+                        .imageUrl(음식점_사진)
+                        .coordinate(Coordinate.builder()
+                                .latitude(위도)
+                                .longitude(경도)
+                                .build())
+                        .build())
+                .build();
+
+        return restaurant;
+
+    }
+
 }

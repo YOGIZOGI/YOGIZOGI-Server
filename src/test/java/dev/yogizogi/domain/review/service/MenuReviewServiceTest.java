@@ -5,17 +5,25 @@ import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.menu.exception.NotExistMenuException;
 import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
+import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
+import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
+import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
+import dev.yogizogi.domain.review.factory.entity.MenuReviewFactory;
 import dev.yogizogi.domain.review.factory.entity.ReviewFactory;
 import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
+import dev.yogizogi.domain.review.model.entity.MenuReview;
+import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
 import dev.yogizogi.domain.review.repository.ReviewImageRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
+import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +62,6 @@ class MenuReviewServiceTest {
         // given
         CreateMenuReviewInDto 요청 = CreateMenuReviewFactory.createMenuReviewInDto();
         Menu 작성할_메뉴 = MenuFactory.createMenu();
-
 
         // mocking
         given(reviewRepository.findById(eq(요청.getReviewId())))
@@ -116,6 +123,78 @@ class MenuReviewServiceTest {
                 () -> menuReviewService.createMenuReview(요청.getReviewId(), 요청.getMenuId(), 요청.getContent(), 요청.getRecommend(), 요청.getImageUrl())
         ).isInstanceOf(NotExistMenuException.class);
 
+    }
+
+    @Test
+    void 메뉴_리뷰_생성_실퍠_권한_없는_음식점() {
+
+
+        // given
+        CreateMenuReviewInDto 요청 = CreateMenuReviewFactory.createMenuReviewInDto();
+        Menu 작성할_메뉴 = MenuFactory.createMenu();
+        Review 작성할_리뷰 = ReviewFactory.createReview();
+
+        // mocking
+        ReflectionTestUtils.setField(작성할_리뷰, "restaurant", RestaurantFactory.createDiffrentRestaurant());
+        given(reviewRepository.findById(eq(요청.getReviewId())))
+                .willReturn(Optional.of(작성할_리뷰));
+
+        ReflectionTestUtils.setField(작성할_메뉴, "id", MenuReviewFixtures.작성할_메뉴);
+        given(menuRepository.findById(eq(요청.getMenuId())))
+                .willReturn(Optional.of(작성할_메뉴));
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> menuReviewService.createMenuReview(요청.getReviewId(), 요청.getMenuId(), 요청.getContent(), 요청.getRecommend(), 요청.getImageUrl())
+        ).isInstanceOf(NoPermissionRestaurantException.class);
+
+    }
+
+    @Test
+    void 특정_메뉴에_대한_리뷰_조회() {
+
+        // given
+        Long 조회할_메뉴_식별자 = 1L;
+        Menu 조회할_메뉴 = MenuFactory.createMenu();
+        List<MenuReview> 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReviews();
+
+        // mocking
+        ReflectionTestUtils.setField(조회할_메뉴, "id", 조회할_메뉴_식별자);
+
+        given(menuRepository.findById(eq(조회할_메뉴_식별자)))
+                .willReturn(Optional.of(조회할_메뉴));
+
+        given(menuReviewRepository.findByMenu(eq(조회할_메뉴)))
+                .willReturn(Optional.of(조회할_메뉴_리뷰));
+
+        // when
+        List<GetMenuReviewsOutDto> 응답 = menuReviewService.getMenuReviews(조회할_메뉴_식별자);
+
+        // then
+        Assertions.assertThat(응답.size()).isEqualTo(조회할_메뉴_리뷰.size());
+        for (int i = 0 ; i < 응답.size() ; i++) {
+            Assertions.assertThat(응답.get(i).getMenuReviewId())
+                    .isEqualTo(조회할_메뉴_리뷰.get(i).getId());
+        }
+
+    }
+
+    @Test
+    void 특정_메뉴에_대한_리뷰_조회_실패_존재하지_않는_메뉴() {
+
+        // given
+        Long 조회할_메뉴_식별자 = MenuFixtures.메뉴1_식별자;
+
+        // mocking
+        given(menuRepository.findById(eq(조회할_메뉴_식별자)))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> menuReviewService.getMenuReviews(조회할_메뉴_식별자)
+        ).isInstanceOf(NotExistMenuException.class);
     }
 
 }
