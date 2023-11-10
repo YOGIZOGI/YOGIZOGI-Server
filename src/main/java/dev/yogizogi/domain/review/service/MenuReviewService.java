@@ -8,13 +8,15 @@ import dev.yogizogi.domain.menu.exception.NotExistMenuException;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
 import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
+import dev.yogizogi.domain.review.execption.NotExistMenuReviewException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
-import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
+import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
 import dev.yogizogi.domain.review.repository.ReviewImageRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
@@ -82,6 +84,15 @@ public class MenuReviewService {
                             menuReview.getRecommendationStatus().getDescription())
                 )
                 .collect(Collectors.toList());
+
+    }
+
+    public GetMenuReviewOutDto getMenuReview(Long menuReviewId) {
+
+        MenuReview menuReview = menuReviewRepository.findById(menuReviewId)
+                .orElseThrow(() -> new NotExistMenuReviewException(NOT_EXIST_REVIEW));
+
+        return GetMenuReviewOutDto.of(menuReview.getId(), menuReview.getContent());
 
     }
 
