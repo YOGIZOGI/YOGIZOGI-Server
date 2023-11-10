@@ -1,11 +1,21 @@
 package dev.yogizogi.domain.menu.factory.entity;
 
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.*;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_가격;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_설명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_식별자;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식_사진;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_가격;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_설명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_식별자;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_음식_사진;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_음식명;
 
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.model.entity.MenuDetails;
 import dev.yogizogi.domain.review.factory.fixtures.ReviewFixtures;
 import java.util.List;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class MenuFactory {
 
@@ -20,6 +30,8 @@ public class MenuFactory {
                         .imageUrl(메뉴1_음식_사진)
                         .build())
                 .build();
+
+        ReflectionTestUtils.setField(menu, "id", 메뉴1_식별자);
 
         return menu;
 
@@ -37,7 +49,9 @@ public class MenuFactory {
                         .build())
                 .build();
 
-        Menu 몌뉴2 = Menu.builder()
+        ReflectionTestUtils.setField(메뉴1, "id", 메뉴1_식별자);
+
+        Menu 메뉴2 = Menu.builder()
                 .restaurant(ReviewFixtures.작성할_음식점)
                 .details(MenuDetails.builder()
                         .name(메뉴2_음식명)
@@ -47,7 +61,9 @@ public class MenuFactory {
                         .build())
                 .build();
 
-        return List.of(메뉴1, 몌뉴2);
+        ReflectionTestUtils.setField(메뉴2, "id", 메뉴2_식별자);
+
+        return List.of(메뉴1, 메뉴2);
 
     }
 

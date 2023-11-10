@@ -1,5 +1,7 @@
 package dev.yogizogi.global.common.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.yogizogi.global.common.status.response.ResponseStatus;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@JsonInclude(Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Success<T>  implements Result {
 
@@ -22,9 +25,17 @@ public class Success<T>  implements Result {
 
         this.timestamp = LocalDateTime.now().toString();
         this.trackingId = UUID.randomUUID().toString();
-        this.status = ResponseStatus.SUCCESS;
+        this.status = getStatus(data);
         this.data = data;
 
+    }
+
+    private ResponseStatus getStatus(T data) {
+        if (data == null) {
+            return ResponseStatus.NO_CONTENT;
+        }
+
+        return ResponseStatus.SUCCESS;
     }
 
 }

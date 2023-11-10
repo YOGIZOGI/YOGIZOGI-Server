@@ -11,9 +11,10 @@ import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.Review;
-import dev.yogizogi.domain.review.model.entity.ReviewImage;
+import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
 import dev.yogizogi.domain.review.repository.ReviewImageRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
@@ -47,19 +48,40 @@ public class MenuReviewService {
             throw new NoPermissionRestaurantException(FAIL_TO_REVIEW_NO_PERMISSION_RESTAURANT);
         }
 
-        MenuReview menuReview = CreateMenuReviewInDto.toEntity(review, menu, content, recommend);
-        menuReviewRepository.save(CreateMenuReviewInDto.toEntity(review, menu, content, recommend));
 
-        List<ReviewImage> reviewImage = imageUrl.stream()
-                .map(url -> ReviewImage.builder()
+        MenuReview menuReview = CreateMenuReviewInDto.toEntity(review, menu, content, recommend);
+        menuReviewRepository.save(menuReview);
+
+        List<MenuReviewImage> menuReviewImage = imageUrl.stream()
+                .map(url -> MenuReviewImage.builder()
                         .menuReview(menuReview)
                         .url(url)
                         .build())
                 .collect(Collectors.toList());
 
-        reviewImageRepository.saveAll(reviewImage);
+        reviewImageRepository.saveAll(menuReviewImage);
 
         return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(), menuReview.getMenu().getId());
+
+    }
+
+    public List<GetMenuReviewsOutDto> getMenuReviews(Long menuId) {
+
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NotExistMenuException(NOT_EXIST_MENU));
+
+        List<MenuReview> menuReviews = menuReviewRepository.findByMenu(menu)
+                .orElseGet(null);
+
+        return menuReviews.stream()
+                .map(menuReview ->
+                    GetMenuReviewsOutDto.of(
+                            menu.getId(),
+                            menuReview.getId(),
+                            menuReview.getMenuReviewImages().stream().map(MenuReviewImage::getUrl).collect(Collectors.toList()),
+                            menuReview.getRecommendationStatus().getDescription())
+                )
+                .collect(Collectors.toList());
 
     }
 

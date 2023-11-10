@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -35,7 +36,7 @@ public class Review {
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MenuReview> menuReviews;
+    private List<MenuReview> menuReviews = new ArrayList<>();
 
     @Builder
     public Review(UUID id, User user, Restaurant restaurant) {

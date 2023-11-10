@@ -2,6 +2,6 @@ package dev.yogizogi.global.common.status.response;
 
 public enum ResponseStatus {
 
-    SUCCESS, FAILURE;
+    SUCCESS, NO_CONTENT, FAILURE;
 
 }
