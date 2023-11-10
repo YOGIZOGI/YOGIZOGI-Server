@@ -2,7 +2,9 @@ package dev.yogizogi.domain.menu.model.dto.request;
 
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.model.entity.MenuDetails;
+import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +15,7 @@ import lombok.Getter;
 public class CreateMenuInDto {
 
     @Schema(description = "음식점", example = "3")
-    private Long restaurantId;
+    private UUID restaurantId;
 
     @Schema(description = "이름", example = "2인 사시미")
     private String name;
@@ -28,8 +30,9 @@ public class CreateMenuInDto {
     private String imageUrl;
 
     @Builder
-    public static Menu toEntity(String name, String price, String description, String imageUrl) {
+    public static Menu toEntity(Restaurant restaurant, String name, String price, String description, String imageUrl) {
         return Menu.builder()
+                .restaurant(restaurant)
                 .details(MenuDetails.builder()
                         .name(name)
                         .price(price)

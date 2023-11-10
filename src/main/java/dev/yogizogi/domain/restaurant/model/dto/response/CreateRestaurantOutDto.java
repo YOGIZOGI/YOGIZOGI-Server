@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.restaurant.model.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,14 +12,14 @@ import lombok.Getter;
 public class CreateRestaurantOutDto {
 
     @Schema(description = "생성한 음식점 식별자")
-    private Long id;
+    private UUID id;
 
     @Schema(description = "생성한 음식점 상호명", example = "요비")
     private String name;
 
-    public static CreateRestaurantOutDto of(Long restaurantId, String name) {
+    public static CreateRestaurantOutDto of(UUID id, String name) {
         return CreateRestaurantOutDto.builder()
-                .id(restaurantId)
+                .id(id)
                 .name(name)
                 .build();
     }

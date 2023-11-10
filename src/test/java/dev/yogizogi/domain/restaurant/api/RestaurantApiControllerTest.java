@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.restaurant.api;
 
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.음식명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
+import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_음식명;
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.상호명;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
 import dev.yogizogi.domain.restaurant.factory.dto.CreateRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.dto.GetRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
@@ -30,6 +32,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
@@ -83,11 +86,11 @@ class RestaurantApiControllerTest {
     void 특정_음식점_조회() throws Exception {
 
         // given
-        Restaurant restaurant = RestaurantFactory.createRestaurant();
+        Restaurant 조회할_음식점 = RestaurantFactory.createRestaurant();
+        ReflectionTestUtils.setField(조회할_음식점, "menus", MenuFactory.createMenus());
 
         // mocking
-        given(restaurantService.getRestaurant(eq(상호명)))
-                .willReturn(GetRestaurantFactory.getRestaurantOutDto(restaurant));
+        given(restaurantService.getRestaurant(eq(상호명))).willReturn(GetRestaurantFactory.getRestaurantOutDto());
 
         // when
         // then
@@ -104,7 +107,10 @@ class RestaurantApiControllerTest {
                         jsonPath("$.data.restaurantDetails.name").value(상호명)
                 )
                 .andExpect(
-                        jsonPath("$.data.menus[0].menuDetails.name").value(음식명)
+                        jsonPath("$.data.menus[0].menuDetails.name").value(메뉴1_음식명)
+                )
+                .andExpect(
+                        jsonPath("$.data.menus[1].menuDetails.name").value(메뉴2_음식명)
                 );
 
     }

@@ -5,12 +5,14 @@ import static org.mockito.BDDMockito.given;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.yogizogi.domain.coordinate.factory.entity.CoordinateFactory;
+import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
 import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
 import dev.yogizogi.domain.restaurant.factory.dto.CreateRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.CreateRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.GetRestaurantOutDto;
+import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.infra.kakao.maps.CoordinateService;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
@@ -23,6 +25,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +49,8 @@ class RestaurantServiceTest {
         Coordinate 좌표 = CoordinateFactory.createCoordinate();
 
         // mocking
-        given(coordinateService.recieveCoordinate(eq(요청.getAddress()))).willReturn(좌표);
+        given(coordinateService.recieveCoordinate(eq(요청.getAddress())))
+                .willReturn(좌표);
 
         // when
         CreateRestaurantOutDto 응답 = restaurantService
@@ -62,16 +66,19 @@ class RestaurantServiceTest {
 
         // given
         String 조회할_음식점_상호명 = "요비";
+        Restaurant 조회할_음식점 = RestaurantFactory.createRestaurant();
         
         // mocking
-        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명))).willReturn(Optional.of(RestaurantFactory.createRestaurant()));
+        ReflectionTestUtils.setField(조회할_음식점, "menus", MenuFactory.createMenus());
+        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명)))
+                .willReturn(Optional.of(조회할_음식점));
 
         // when
         GetRestaurantOutDto 응답 = restaurantService.getRestaurant(조회할_음식점_상호명);
 
         // then
         Assertions.assertThat(응답.getRestaurantDetails().getName()).isEqualTo(조회할_음식점_상호명);
-        Assertions.assertThat(응답.getMenus().size()).isEqualTo(1);
+        Assertions.assertThat(응답.getMenus().size()).isEqualTo(2);
 
     }
 
@@ -82,7 +89,8 @@ class RestaurantServiceTest {
         String 조회할_음식점_상호명 = "요비";
 
         // mocking
-        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명))).willReturn(Optional.empty());
+        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명)))
+                .willReturn(Optional.empty());
 
         // when
         // then

@@ -9,6 +9,7 @@ import dev.yogizogi.domain.restaurant.model.dto.response.GetRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
+import dev.yogizogi.global.util.UuidUtils;
 import dev.yogizogi.infra.kakao.maps.CoordinateService;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
 import java.util.List;
@@ -29,7 +30,7 @@ public class RestaurantService {
             throws JsonProcessingException {
 
         Coordinate coordinate = coordinateService.recieveCoordinate(address);
-        Restaurant restaurant = CreateRestaurantInDto.toEntity(name, tel, address, imageUrl, coordinate);
+        Restaurant restaurant = CreateRestaurantInDto.toEntity(UuidUtils.createSequentialUUID(), name, tel, address, imageUrl, coordinate);
         restaurantRepository.save(restaurant);
 
         return CreateRestaurantOutDto.of(restaurant.getId(), restaurant.getRestaurantDetails().getName());

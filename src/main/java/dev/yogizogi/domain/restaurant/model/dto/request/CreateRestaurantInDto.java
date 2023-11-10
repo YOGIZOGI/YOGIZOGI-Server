@@ -4,6 +4,7 @@ import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,8 +27,11 @@ public class CreateRestaurantInDto {
     private String imageUrl;
 
     @Builder
-    public static Restaurant toEntity(String name,  String tel, String address, String imageUrl, Coordinate coordinate) {
+    public static Restaurant toEntity(
+            UUID id, String name, String tel, String address, String imageUrl, Coordinate coordinate
+    ) {
         return Restaurant.builder()
+                .id(id)
                 .restaurantDetails(
                         RestaurantDetails.builder()
                                 .name(name)

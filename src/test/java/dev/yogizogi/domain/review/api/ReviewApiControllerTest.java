@@ -1,6 +1,5 @@
-package dev.yogizogi.domain.menu.api;
+package dev.yogizogi.domain.review.api;
 
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,9 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.yogizogi.domain.menu.factory.dto.CreateMenuFactory;
-import dev.yogizogi.domain.menu.model.dto.request.CreateMenuInDto;
-import dev.yogizogi.domain.menu.service.MenuService;
+import dev.yogizogi.domain.review.factory.dto.CreateReviewFactory;
+import dev.yogizogi.domain.review.model.dto.request.CreateReviewInDto;
+import dev.yogizogi.domain.review.service.ReviewService;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,41 +27,40 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
-@WebMvcTest(value = {MenuApiController.class},
+@WebMvcTest(value = {ReviewApiController.class},
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         }
 )
 @AutoConfigureMockMvc(addFilters = false)
-@DisplayName("MenuApiController 동작 테스트")
-class MenuApiControllerTest {
+@DisplayName("ReviewApiController 동작 테스트")
+class ReviewApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private MenuService menuService;
+    private ReviewService reviewService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void 메뉴_생성() throws Exception {
+    void 리뷰_생성() throws Exception {
 
         // given
-        CreateMenuInDto req = CreateMenuFactory.createMenuInDto();
+        CreateReviewInDto 요청 = CreateReviewFactory.createReviewInDto();
 
         // mocking
-        given(menuService.createMenu(
-                eq(req.getRestaurantId()), eq(req.getName()), eq(req.getPrice()), eq(req.getDescription()), eq(req.getImageUrl())))
-                .willReturn(CreateMenuFactory.createMenuOutDto());
+        given(reviewService.createReview(eq(요청.getUserId()), eq(요청.getRestaurantId())))
+                .willReturn(CreateReviewFactory.createReviewOutDto());
 
         // when
         // then
         mockMvc.perform(
-                        post("/api/menus/create")
+                        post("/api/reviews/create")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding(StandardCharsets.UTF_8)
-                                .content(objectMapper.writeValueAsString(req))
+                                .content(objectMapper.writeValueAsString(요청))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -70,9 +68,14 @@ class MenuApiControllerTest {
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
-                        jsonPath("$.data.name").value(메뉴1_음식명)
+                        jsonPath("$.data.userId").value(요청.getUserId().toString())
+                )
+                .andExpect(
+                        jsonPath("$.data.restaurantId").value(요청.getRestaurantId().toString())
                 );
 
     }
+
+
 
 }
