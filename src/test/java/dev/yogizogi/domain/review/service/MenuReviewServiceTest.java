@@ -10,6 +10,7 @@ import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
+import dev.yogizogi.domain.review.execption.NotExistMenuReviewException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.entity.MenuReviewFactory;
@@ -17,6 +18,7 @@ import dev.yogizogi.domain.review.factory.entity.ReviewFactory;
 import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.Review;
@@ -106,7 +108,6 @@ class MenuReviewServiceTest {
     @Test
     void 메뉴_리뷰_생성_실퍠_존재하지_않는_메뉴() {
 
-
         // given
         CreateMenuReviewInDto 요청 = CreateMenuReviewFactory.createMenuReviewInDto();
 
@@ -127,7 +128,6 @@ class MenuReviewServiceTest {
 
     @Test
     void 메뉴_리뷰_생성_실퍠_권한_없는_음식점() {
-
 
         // given
         CreateMenuReviewInDto 요청 = CreateMenuReviewFactory.createMenuReviewInDto();
@@ -152,7 +152,7 @@ class MenuReviewServiceTest {
     }
 
     @Test
-    void 특정_메뉴에_대한_리뷰_조회() {
+    void 특정_메뉴에_대한_모든_리뷰_조회() {
 
         // given
         Long 조회할_메뉴_식별자 = 1L;
@@ -181,7 +181,7 @@ class MenuReviewServiceTest {
     }
 
     @Test
-    void 특정_메뉴에_대한_리뷰_조회_실패_존재하지_않는_메뉴() {
+    void 특정_메뉴에_대한_모든_리뷰_조회_실패_존재하지_않는_메뉴() {
 
         // given
         Long 조회할_메뉴_식별자 = MenuFixtures.메뉴1_식별자;
@@ -195,6 +195,44 @@ class MenuReviewServiceTest {
         Assertions.assertThatThrownBy(
                 () -> menuReviewService.getMenuReviews(조회할_메뉴_식별자)
         ).isInstanceOf(NotExistMenuException.class);
+
     }
+
+    @Test
+    void 메뉴_단일_리뷰_조회() {
+
+        // given
+        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
+
+        // mocking
+        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
+                .willReturn(Optional.of(MenuReviewFactory.creatMenuReview(조회할_메뉴_리뷰)));
+
+        // when
+        GetMenuReviewOutDto 응답 = menuReviewService.getMenuReview(조회할_메뉴_리뷰);
+
+        // then
+        Assertions.assertThat(응답.getMenuReviewId()).isEqualTo(조회할_메뉴_리뷰);
+
+    }
+
+    @Test
+    void 메뉴_단일_리뷰_조회_존재하지_않는_메뉴_리뷰() {
+
+        // given
+        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
+
+        // mocking
+        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> menuReviewService.getMenuReview(조회할_메뉴_리뷰)
+        ).isInstanceOf(NotExistMenuReviewException.class);
+
+    }
+
 
 }

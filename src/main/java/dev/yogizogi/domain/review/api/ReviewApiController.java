@@ -29,7 +29,10 @@ public class ReviewApiController {
 
     private final ReviewService reviewService;
 
-    @Operation(summary = "리뷰 생성")
+    @Operation(
+            summary = "리뷰 생성",
+            description = "메뉴 리뷰와 서비스 리뷰를 관리하는 리뷰 객체를 생성한다."
+    )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
