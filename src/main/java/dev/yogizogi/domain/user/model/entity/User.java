@@ -1,5 +1,6 @@
 package dev.yogizogi.domain.user.model.entity;
 
+import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +41,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FirstLoginStatus firstLoginStatus;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MeokProfile meokProfile;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> roles = new ArrayList<>();

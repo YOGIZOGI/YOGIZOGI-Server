@@ -10,7 +10,6 @@ import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
-import dev.yogizogi.domain.review.execption.NotExistMenuReviewException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.entity.MenuReviewFactory;
@@ -18,7 +17,6 @@ import dev.yogizogi.domain.review.factory.entity.ReviewFactory;
 import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
-import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.Review;
@@ -161,7 +159,6 @@ class MenuReviewServiceTest {
 
         // mocking
         ReflectionTestUtils.setField(조회할_메뉴, "id", 조회할_메뉴_식별자);
-
         given(menuRepository.findById(eq(조회할_메뉴_식별자)))
                 .willReturn(Optional.of(조회할_메뉴));
 
@@ -169,12 +166,12 @@ class MenuReviewServiceTest {
                 .willReturn(Optional.of(조회할_메뉴_리뷰));
 
         // when
-        List<GetMenuReviewsOutDto> 응답 = menuReviewService.getMenuReviews(조회할_메뉴_식별자);
+        GetMenuReviewsOutDto 응답 = menuReviewService.getMenuReviews(조회할_메뉴_식별자);
 
         // then
-        Assertions.assertThat(응답.size()).isEqualTo(조회할_메뉴_리뷰.size());
-        for (int i = 0 ; i < 응답.size() ; i++) {
-            Assertions.assertThat(응답.get(i).getMenuReviewId())
+        Assertions.assertThat(응답.getMenuReviews().size()).isEqualTo(조회할_메뉴_리뷰.size());
+        for (int i = 0 ; i < 응답.getMenuReviews().size() ; i++) {
+            Assertions.assertThat(응답.getMenuReviews().get(i).getMenuReviewId())
                     .isEqualTo(조회할_메뉴_리뷰.get(i).getId());
         }
 
@@ -197,42 +194,42 @@ class MenuReviewServiceTest {
         ).isInstanceOf(NotExistMenuException.class);
 
     }
-
-    @Test
-    void 메뉴_단일_리뷰_조회() {
-
-        // given
-        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
-
-        // mocking
-        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
-                .willReturn(Optional.of(MenuReviewFactory.creatMenuReview(조회할_메뉴_리뷰)));
-
-        // when
-        GetMenuReviewOutDto 응답 = menuReviewService.getMenuReview(조회할_메뉴_리뷰);
-
-        // then
-        Assertions.assertThat(응답.getMenuReviewId()).isEqualTo(조회할_메뉴_리뷰);
-
-    }
-
-    @Test
-    void 메뉴_단일_리뷰_조회_존재하지_않는_메뉴_리뷰() {
-
-        // given
-        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
-
-        // mocking
-        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
-                .willReturn(Optional.empty());
-
-        // when
-        // then
-        Assertions.assertThatThrownBy(
-                () -> menuReviewService.getMenuReview(조회할_메뉴_리뷰)
-        ).isInstanceOf(NotExistMenuReviewException.class);
-
-    }
-
+//
+//    @Test
+//    void 메뉴_단일_리뷰_조회() {
+//
+//        // given
+//        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
+//
+//        // mocking
+//        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
+//                .willReturn(Optional.of(MenuReviewFactory.creatMenuReview(조회할_메뉴_리뷰)));
+//
+//        // when
+//        GetMenuReviewOutDto 응답 = menuReviewService.getMenuReview(조회할_메뉴_리뷰);
+//
+//        // then
+//        Assertions.assertThat(응답.getMenuReviewId()).isEqualTo(조회할_메뉴_리뷰);
+//
+//    }
+//
+//    @Test
+//    void 메뉴_단일_리뷰_조회_존재하지_않는_메뉴_리뷰() {
+//
+//        // given
+//        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
+//
+//        // mocking
+//        given(menuReviewRepository.findById(eq(조회할_메뉴_리뷰)))
+//                .willReturn(Optional.empty());
+//
+//        // when
+//        // then
+//        Assertions.assertThatThrownBy(
+//                () -> menuReviewService.getMenuReview(조회할_메뉴_리뷰)
+//        ).isInstanceOf(NotExistMenuReviewException.class);
+//
+//    }
+//
 
 }

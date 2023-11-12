@@ -7,8 +7,8 @@ import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_REVIEW;
 import dev.yogizogi.domain.menu.exception.NotExistMenuException;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
+import dev.yogizogi.domain.meokprofile.model.entity.MeokProfileVO;
 import dev.yogizogi.domain.review.execption.NoPermissionRestaurantException;
-import dev.yogizogi.domain.review.execption.NotExistMenuReviewException;
 import dev.yogizogi.domain.review.execption.NotExistReviewException;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
@@ -16,6 +16,7 @@ import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
+import dev.yogizogi.domain.review.model.entity.MenuReviewVO;
 import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
 import dev.yogizogi.domain.review.repository.ReviewImageRepository;
@@ -50,7 +51,6 @@ public class MenuReviewService {
             throw new NoPermissionRestaurantException(FAIL_TO_REVIEW_NO_PERMISSION_RESTAURANT);
         }
 
-
         MenuReview menuReview = CreateMenuReviewInDto.toEntity(review, menu, content, recommend);
         menuReviewRepository.save(menuReview);
 
@@ -63,36 +63,36 @@ public class MenuReviewService {
 
         reviewImageRepository.saveAll(menuReviewImage);
 
-        return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(), menuReview.getMenu().getId());
+        return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(),
+                menuReview.getMenu().getId());
 
     }
 
-    public List<GetMenuReviewsOutDto> getMenuReviews(Long menuId) {
+    public GetMenuReviewsOutDto getMenuReviews(Long menuId) {
 
-        Menu menu = menuRepository.findById(menuId)
+        Menu findMenu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new NotExistMenuException(NOT_EXIST_MENU));
 
-        List<MenuReview> menuReviews = menuReviewRepository.findByMenu(menu)
+        List<MenuReview> findMenuReviews = menuReviewRepository.findByMenu(findMenu)
                 .orElseGet(null);
 
-        return menuReviews.stream()
-                .map(menuReview ->
-                    GetMenuReviewsOutDto.of(
-                            menu.getId(),
-                            menuReview.getId(),
-                            menuReview.getMenuReviewImages().stream().map(MenuReviewImage::getUrl).collect(Collectors.toList()),
-                            menuReview.getRecommendationStatus().getDescription())
-                )
+        List<GetMenuReviewOutDto> menuReview = findMenuReviews.stream()
+                .map(r -> GetMenuReviewOutDto.of(
+                        r.getId(),
+                        r.getReview().getUser().getProfile().getNickname(),
+                        MeokProfileVO.builder()
+                                .preference(r.getReview().getUser().getMeokProfile().getPreference())
+                                .intensity(r.getReview().getUser().getMeokProfile().getIntensity())
+                                .build(),
+                        MenuReviewVO.builder()
+                                .content(r.getContent())
+                                .recommendationStatus(r.getRecommendationStatus())
+                                .images(r.getMenuReviewImages().stream().map(MenuReviewImage::getUrl).collect(Collectors.toList()))
+                                .build()
+                ))
                 .collect(Collectors.toList());
 
-    }
-
-    public GetMenuReviewOutDto getMenuReview(Long menuReviewId) {
-
-        MenuReview menuReview = menuReviewRepository.findById(menuReviewId)
-                .orElseThrow(() -> new NotExistMenuReviewException(NOT_EXIST_REVIEW));
-
-        return GetMenuReviewOutDto.of(menuReview.getId(), menuReview.getContent());
+        return GetMenuReviewsOutDto.of(findMenu.getId(), menuReview);
 
     }
 

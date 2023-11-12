@@ -2,7 +2,6 @@ package dev.yogizogi.domain.review.api;
 
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateReviewOutDto;
-import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import dev.yogizogi.global.common.model.response.Success;
@@ -15,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -83,9 +81,9 @@ public class MenuReviewApiController {
     @GetMapping("/menus/{menuId}")
     public ResponseEntity getMenuReviews(@PathVariable Long menuId) {
 
-        List<GetMenuReviewsOutDto> res = menuReviewService.getMenuReviews(menuId);
+        GetMenuReviewsOutDto res = menuReviewService.getMenuReviews(menuId);
 
-        if (res.size() == 0) {
+        if (res.getMenuReviews().size() == 0) {
             res = null;
         }
 
@@ -97,31 +95,31 @@ public class MenuReviewApiController {
 
     }
 
-    @Operation(
-            summary = "메뉴 단일 리뷰 조회",
-            description = "메뉴에 대한 하나의 메뉴 리뷰를 조회"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "메뉴 단일 리뷰 조회 완료",
-                    content = @Content(schema = @Schema(implementation = GetMenuReviewOutDto.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 정보(메뉴 리뷰)")
-    })
-    @Parameter(name = "menuReviewId", description = "조회할 메뉴 리뷰의 식별자")
-    @GetMapping("/{menuReviewId}")
-    public ResponseEntity getMenuReview(@PathVariable Long menuReviewId) {
-
-        GetMenuReviewOutDto res = menuReviewService.getMenuReview(menuReviewId);
-
-        return ResponseUtils.ok(
-                Success.builder()
-                        .data(res)
-                        .build()
-        );
-
-    }
+//    @Operation(
+//            summary = "메뉴 단일 리뷰 조회",
+//            description = "메뉴에 대한 하나의 메뉴 리뷰를 조회"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "메뉴 단일 리뷰 조회 완료",
+//                    content = @Content(schema = @Schema(implementation = GetMenuReviewOutDto.class))
+//            ),
+//            @ApiResponse(responseCode = "404", description = "존재하지 않는 정보(메뉴 리뷰)")
+//    })
+//    @Parameter(name = "menuReviewId", description = "조회할 메뉴 리뷰의 식별자")
+//    @GetMapping("/{menuReviewId}")
+//    public ResponseEntity getMenuReview(@PathVariable Long menuReviewId) {
+//
+//        GetMenuReviewOutDto res = menuReviewService.getMenuReview(menuReviewId);
+//
+//        return ResponseUtils.ok(
+//                Success.builder()
+//                        .data(res)
+//                        .build()
+//        );
+//
+//    }
 
 
 }
