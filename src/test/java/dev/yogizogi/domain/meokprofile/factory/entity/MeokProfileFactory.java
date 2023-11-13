@@ -10,33 +10,12 @@ import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtur
 import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
 import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
-import dev.yogizogi.domain.user.factory.entity.UserFactory;
-import dev.yogizogi.domain.user.model.entity.User;
 
 public class MeokProfileFactory {
 
     public static MeokProfile createMeokProfile() {
 
         return MeokProfile.builder()
-                .user(UserFactory.createUser())
-                .preference(Preference.builder()
-                        .spicyPreference(매운맛_선호도)
-                        .saltyPreference(짠맛_선호도)
-                        .sweetnessPreference(단맛_선호도)
-                        .build())
-                .intensity(Intensity.builder()
-                        .spicyIntensity(매운맛_강도)
-                        .saltyIntensity(짠맛_강도)
-                        .sweetnessIntensity(단맛_강도)
-                        .build())
-                .build();
-
-    }
-
-    public static MeokProfile createMeokProfileWithUser(User user) {
-
-        return MeokProfile.builder()
-                .user(user)
                 .preference(Preference.builder()
                         .spicyPreference(매운맛_선호도)
                         .saltyPreference(짠맛_선호도)

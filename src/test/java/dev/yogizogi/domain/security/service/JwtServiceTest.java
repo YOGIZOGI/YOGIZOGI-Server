@@ -80,7 +80,7 @@ class JwtServiceTest {
     void 어세스_토큰_재발급() {
 
         // given
-        User 받은_정보와_일치하는_계정 = UserFactory.createUser();
+        User 받은_정보와_일치하는_계정 = UserFactory.createUserWithProfile();
 
         // mocking
         given(userRepository
@@ -125,7 +125,7 @@ class JwtServiceTest {
     void 어세스_토큰_재발급_실패_리프레쉬_토큰_없음() {
 
         // given
-        User 받은_정보와_일치하는_계정 = UserFactory.createUser();
+        User 받은_정보와_일치하는_계정 = UserFactory.createUserWithProfile();
 
         // mocking
         given(userRepository

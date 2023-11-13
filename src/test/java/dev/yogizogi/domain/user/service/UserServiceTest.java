@@ -58,7 +58,7 @@ class UserServiceTest {
         // given
 
         // mocking
-        given(userRepository.findByProfileNicknameAndStatus(eq(닉네임), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByProfileNicknameAndStatus(eq(닉네임), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         //when
 
@@ -73,7 +73,7 @@ class UserServiceTest {
         // given
 
         // mocking
-        given(userRepository.findByPhoneNumberAndStatus(eq(핸드폰_번호), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(핸드폰_번호), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // then
         Assertions.assertThat(userService.isUsedPhoneNumber(핸드폰_번호)).isEqualTo(true);
@@ -84,11 +84,11 @@ class UserServiceTest {
     void 회원_탈퇴() {
 
         // given
-        User removeUser = UserFactory.createUser();
+        User removeUser = UserFactory.createUserWithProfile();
 
         // mocking
         given(userRepository.findByPhoneNumberAndStatus(eq(removeUser.getPhoneNumber()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // when
         DeleteUserOutDto response = userService.deleteUser(removeUser.getPhoneNumber());
@@ -122,7 +122,7 @@ class UserServiceTest {
 
         // mocking
         given(userRepository.findByPhoneNumberAndStatus(eq(찾을_계정_핸드폰번호), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         given(coolSmsService.sendOne(eq(찾을_계정_핸드폰번호)))
                 .willReturn(VerificationFactory.successSingleMessageSentResponse());
@@ -162,7 +162,7 @@ class UserServiceTest {
         String 변경할_비밀번호 = "update124!!";
 
         // mocking
-        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserWithProfile()));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
         // when
@@ -200,7 +200,7 @@ class UserServiceTest {
         String 변경할_비밀번호 = "update124!!";
 
         // mocking
-        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUser()));
+        given(userRepository.findByPhoneNumberAndStatus(eq(변경할_계정), eq(BaseStatus.ACTIVE))).willReturn(Optional.of(UserFactory.createUserWithProfile()));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
         // when
@@ -217,7 +217,7 @@ class UserServiceTest {
         // given
         // mocking
         given(userRepository.findByIdAndStatus(eq(등록할_유저_식별자), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // when
         CreateUserProfileOutDto res = userService.createProfile(등록할_유저_식별자, 등록할_닉네임, 프로필_사진, 등록할_소개);
@@ -233,7 +233,7 @@ class UserServiceTest {
     void 프로필_생성_실패_존재하지_않는_회원() {
 
         // given
-        User user = UserFactory.createUser();
+        User user = UserFactory.createUserWithProfile();
 
         // mocking
         given(userRepository.findByIdAndStatus(eq(등록할_유저_식별자), eq(BaseStatus.ACTIVE)))

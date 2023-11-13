@@ -33,15 +33,15 @@ public class MeokProfileService {
         User findUser = userRepository.findByIdAndStatus(userId, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
-        findUser.setFirstLoginStatus(FirstLoginStatus.INACTIVE);
-
         MeokProfile meokProfile = CreateMeokProfileInDto.toEntity(
-                findUser,
                 createPreference(spicyPreference, saltyPreference, sweetnessPreference),
                 createIntensity(spicyIntensity, saltyIntensity, sweetnessIntensity)
         );
 
         meokProfileRepository.save(meokProfile);
+
+        findUser.updateFirstLoginStatus(FirstLoginStatus.INACTIVE);
+        findUser.setMeokProfile(meokProfile);
 
         return CreateMeokProfileOutDto.of(
                 meokProfile.getPreference(), meokProfile.getIntensity()
