@@ -22,10 +22,7 @@ public class UserFactory {
                 .phoneNumber(핸드폰_번호)
                 .password(비밀번호)
                 .firstLoginStatus(처음_로그인)
-                .build();
-
-        ReflectionTestUtils.setField(user, "profile", ProfileFactory.createProfile());
-        ReflectionTestUtils.setField(user, "meokProfile", MeokProfileFactory.createMeokProfileWithUser(user));
+                .build();;
 
         user.setRoles(Collections.singletonList(
                 Authority.builder().name(역할).build()
