@@ -24,6 +24,9 @@ public class UserFactory {
                 .firstLoginStatus(처음_로그인)
                 .build();
 
+        ReflectionTestUtils.setField(user, "profile", ProfileFactory.createProfile());
+        ReflectionTestUtils.setField(user, "meokProfile", MeokProfileFactory.createMeokProfileWithUser(user));
+
         user.setRoles(Collections.singletonList(
                 Authority.builder().name(역할).build()
         ));
