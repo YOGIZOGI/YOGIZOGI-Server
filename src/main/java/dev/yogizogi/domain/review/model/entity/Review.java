@@ -38,6 +38,9 @@ public class Review {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenuReview> menuReviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceReview> serviceReviews = new ArrayList<>();
+
     @Builder
     public Review(UUID id, User user, Restaurant restaurant) {
         this.id = id;

@@ -19,7 +19,7 @@ import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
 import dev.yogizogi.domain.review.model.vo.MenuReviewVO;
 import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
-import dev.yogizogi.domain.review.repository.ReviewImageRepository;
+import dev.yogizogi.domain.review.repository.MenuReviewImageRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class MenuReviewService {
     private final ReviewRepository reviewRepository;
     private final MenuRepository menuRepository;
     private final MenuReviewRepository menuReviewRepository;
-    private final ReviewImageRepository reviewImageRepository;
+    private final MenuReviewImageRepository menuReviewImageRepository;
 
     public CreateMenuReviewOutDto createMenuReview
             (UUID reviewId, Long menuId, String content, String recommend, List<String> imageUrl) {
@@ -61,7 +61,7 @@ public class MenuReviewService {
                         .build())
                 .collect(Collectors.toList());
 
-        reviewImageRepository.saveAll(menuReviewImage);
+        menuReviewImageRepository.saveAll(menuReviewImage);
 
         return CreateMenuReviewOutDto.of(menuReview.getId(), menuReview.getReview().getId(),
                 menuReview.getMenu().getId());
