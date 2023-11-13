@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.review.execption;
+package dev.yogizogi.domain.review.exception;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;

@@ -1,13 +1,13 @@
-package dev.yogizogi.domain.review.execption;
+package dev.yogizogi.domain.review.exception;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class NotExistMenuReviewException extends BaseException {
+public class NotExistReviewException extends BaseException {
 
-    public NotExistMenuReviewException(ErrorCode errorCode) {
+    public NotExistReviewException(ErrorCode errorCode) {
         super(errorCode);
     }
 }
