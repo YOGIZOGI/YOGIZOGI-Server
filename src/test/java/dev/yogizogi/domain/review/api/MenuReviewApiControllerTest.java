@@ -61,7 +61,7 @@ class MenuReviewApiControllerTest {
         // when
         // then
         mockMvc.perform(
-                        post("/api/menu-reviews/create")
+                        post("/api/reviews/menu-reviews/create")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .content(objectMapper.writeValueAsString(요청))
@@ -93,7 +93,7 @@ class MenuReviewApiControllerTest {
         // when
         // then
         mockMvc.perform(
-                        get("/api/menu-reviews/menus/" + 조회할_메뉴)
+                        get("/api/reviews/menu-reviews/menus/" + 조회할_메뉴)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -119,7 +119,7 @@ class MenuReviewApiControllerTest {
         // when
         // then
         mockMvc.perform(
-                        get("/api/menu-reviews/menus/" + 조회할_메뉴)
+                        get("/api/reviews/menu-reviews/menus/" + 조회할_메뉴)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

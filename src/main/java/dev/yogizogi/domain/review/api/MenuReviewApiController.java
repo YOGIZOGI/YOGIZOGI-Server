@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/menu-reviews")
+@RequestMapping("/api/reviews/menu-reviews")
 public class MenuReviewApiController {
 
     private final MenuReviewService menuReviewService;
