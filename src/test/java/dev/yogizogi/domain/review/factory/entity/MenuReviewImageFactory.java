@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 
 public class MenuReviewImageFactory {
 
-    public static List<MenuReviewImage> creatMenuReviewImage(Long menuReviewId) {
+    public static List<MenuReviewImage> creatMenuReviewImage() {
 
         List<MenuReviewImage> 조회할_메뉴_리뷰_사진 = MenuReviewFixtures.이미지_목록.stream()
                 .map(url -> MenuReviewImage.builder()
-                        .menuReview(MenuReviewFactory.creatMenuReview(menuReviewId))
-                        .url(url).build()
+                        .menuReview(MenuReviewFactory.creatMenuReview())
+                        .url(url)
+                        .build()
                 )
                 .collect(Collectors.toList());
 

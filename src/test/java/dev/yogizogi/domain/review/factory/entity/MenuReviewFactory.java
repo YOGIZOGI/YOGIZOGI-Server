@@ -9,7 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class MenuReviewFactory {
 
-    public static MenuReview creatMenuReview(Long id) {
+    public static MenuReview creatMenuReview() {
 
         MenuReview 메뉴_리뷰 = MenuReview.builder()
                 .menu(MenuFactory.createMenu())
@@ -19,7 +19,7 @@ public class MenuReviewFactory {
                 .recommendationStatus(RecommendationStatus.valueOf(MenuReviewFixtures.메뉴_리뷰1_추천))
                 .build();
 
-        ReflectionTestUtils.setField(메뉴_리뷰, "id", id);;
+        ReflectionTestUtils.setField(메뉴_리뷰, "id", MenuReviewFixtures.메뉴_리뷰1_식별자);;
 
         return 메뉴_리뷰;
 
@@ -27,9 +27,12 @@ public class MenuReviewFactory {
 
     public static List<MenuReview> creatMenuReviews() {
 
-        List<MenuReview> 조회할_메뉴_리뷰 = List.of(creatMenuReview(MenuReviewFixtures.메뉴_리뷰1_식별자), creatMenuReview(MenuReviewFixtures.메뉴_리뷰2_식별자));
+        List<MenuReview> 조회할_메뉴_리뷰 = List.of(
+                creatMenuReview()
+        );
+
         for (MenuReview menuReview : 조회할_메뉴_리뷰) {
-            MenuReviewImageFactory.creatMenuReviewImage(menuReview.getId());
+            MenuReviewImageFactory.creatMenuReviewImage();
         }
 
         return 조회할_메뉴_리뷰;

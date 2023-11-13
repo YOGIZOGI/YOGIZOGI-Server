@@ -7,9 +7,11 @@ import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.역할;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.처음_로그인;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 
+import dev.yogizogi.domain.meokprofile.factory.entity.MeokProfileFactory;
 import dev.yogizogi.domain.user.model.entity.Authority;
 import dev.yogizogi.domain.user.model.entity.User;
 import java.util.Collections;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class UserFactory {
 
@@ -21,6 +23,9 @@ public class UserFactory {
                 .password(비밀번호)
                 .firstLoginStatus(처음_로그인)
                 .build();
+
+        ReflectionTestUtils.setField(user, "profile", ProfileFactory.createProfile());
+        ReflectionTestUtils.setField(user, "meokProfile", MeokProfileFactory.createMeokProfileWithUser(user));
 
         user.setRoles(Collections.singletonList(
                 Authority.builder().name(역할).build()

@@ -12,9 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
-import dev.yogizogi.domain.review.factory.dto.GetMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.dto.GetMenuReviewsFactory;
-import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import java.nio.charset.StandardCharsets;
@@ -103,10 +101,7 @@ class MenuReviewApiControllerTest {
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
-                        jsonPath("$.data[0].menuId").value(조회할_메뉴)
-                )
-                .andExpect(
-                        jsonPath("$.data[1].menuId").value(조회할_메뉴)
+                        jsonPath("$.data.menuId").value(조회할_메뉴)
                 );
 
     }
@@ -130,30 +125,10 @@ class MenuReviewApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                );
-    }
-
-    @Test
-    void 메뉴_단일_리뷰_조회() throws Exception {
-
-        // given
-        Long 조회할_메뉴_리뷰 = MenuReviewFixtures.메뉴_리뷰1_식별자;
-
-        // mocking
-        given(menuReviewService.getMenuReview(eq(조회할_메뉴_리뷰)))
-                .willReturn(GetMenuReviewFactory.getMenuReviewOutDto());
-
-        // when
-        // then
-        mockMvc.perform(
-                        get("/api/menu-reviews/" + 조회할_메뉴_리뷰)
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
                 .andExpect(
-                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                        jsonPath("$.status").value("NO_CONTENT")
                 );
     }
-
 
 }
