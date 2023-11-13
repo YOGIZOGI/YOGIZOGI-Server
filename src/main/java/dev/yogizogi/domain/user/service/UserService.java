@@ -63,7 +63,7 @@ public class UserService {
             throw new AlreadyUsePasswordException(ErrorCode.ALREADY_USE_PASSWORD);
         }
 
-        findUser.setPassword(passwordEncoder.encode(password));
+        findUser.updatePassword(passwordEncoder.encode(password));
 
         return DONE;
 

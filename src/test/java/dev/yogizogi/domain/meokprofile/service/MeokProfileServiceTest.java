@@ -46,7 +46,7 @@ class MeokProfileServiceTest {
         // given
         // mocking
         given(userRepository.findByIdAndStatus(eq(등록할_식별자), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // when
         CreateMeokProfileOutDto req = meokProfileService

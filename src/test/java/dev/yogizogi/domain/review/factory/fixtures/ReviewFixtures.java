@@ -10,7 +10,7 @@ import java.util.UUID;
 public class ReviewFixtures {
 
     public static UUID 식별자 = UuidUtils.createSequentialUUID();
-    public static User 작성할_유저 = UserFactory.createUser();
+    public static User 작성할_유저 = UserFactory.createUserWithProfile();
     public static Restaurant 작성할_음식점 = RestaurantFactory.createRestaurant();
     public static Restaurant 작성할_다른_음식점 = RestaurantFactory.createRestaurant();
 

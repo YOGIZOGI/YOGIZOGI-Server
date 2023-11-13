@@ -38,7 +38,7 @@ class CustomUserDetailsServiceTest {
         // mocking
         given(userRepository
                 .findByPhoneNumberAndStatus(eq(핸드폰_번호), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // when
         // then

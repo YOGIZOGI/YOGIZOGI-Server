@@ -49,7 +49,7 @@ class ReviewServiceTest {
 
         // mocking
         given(userRepository.findByIdAndStatus(eq(요청.getUserId()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         given(restaurantRepository.findById(eq(요청.getRestaurantId())))
                 .willReturn(Optional.of(RestaurantFactory.createRestaurant()));
@@ -91,7 +91,7 @@ class ReviewServiceTest {
 
         // mocking
         given(userRepository.findByIdAndStatus(eq(요청.getUserId()), eq(BaseStatus.ACTIVE)))
-                .willReturn(Optional.of(UserFactory.createUser()));
+                .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         given(restaurantRepository.findById(eq(요청.getRestaurantId())))
                 .willReturn(Optional.empty());

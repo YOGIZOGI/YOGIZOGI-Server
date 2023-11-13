@@ -3,7 +3,6 @@ package dev.yogizogi.domain.meokprofile.model.dto.request;
 import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
 import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
-import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -42,10 +41,9 @@ public class CreateMeokProfileInDto {
     private Long sweetnessIntensity;
 
     @Builder
-    public static MeokProfile toEntity(User user, Preference preference, Intensity intensity) {
+    public static MeokProfile toEntity(Preference preference, Intensity intensity) {
 
         return MeokProfile.builder()
-                .user(user)
                 .preference(preference)
                 .intensity(intensity)
                 .build();
