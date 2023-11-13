@@ -2,7 +2,7 @@ package dev.yogizogi.domain.review.factory.entity;
 
 import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
-import dev.yogizogi.domain.review.model.entity.MenuReviewVO;
+import dev.yogizogi.domain.review.model.vo.MenuReviewVO;
 import dev.yogizogi.global.common.status.RecommendationStatus;
 import java.util.stream.Collectors;
 

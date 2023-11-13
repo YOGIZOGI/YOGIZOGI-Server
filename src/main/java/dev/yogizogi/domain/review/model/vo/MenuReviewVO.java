@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.review.model.entity;
+package dev.yogizogi.domain.review.model.vo;
 
 import dev.yogizogi.global.common.status.RecommendationStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,13 +40,12 @@ public class MenuReviewVO {
         if (!(o instanceof MenuReviewVO that)) {
             return false;
         }
-        return Objects.equals(getContent(), that.getContent()) && getRecommendationStatus() == that.getRecommendationStatus()
-                && Objects.equals(getImages(), that.getImages());
+        return content.equals(that.content) && recommendationStatus == that.recommendationStatus && images.equals(that.images);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getContent(), getRecommendationStatus(), getImages());
+        return Objects.hash(content, recommendationStatus, images);
     }
 
 }

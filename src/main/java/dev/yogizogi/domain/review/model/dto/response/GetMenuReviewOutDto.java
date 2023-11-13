@@ -1,7 +1,7 @@
 package dev.yogizogi.domain.review.model.dto.response;
 
-import dev.yogizogi.domain.meokprofile.model.entity.MeokProfileVO;
-import dev.yogizogi.domain.review.model.entity.MenuReviewVO;
+import dev.yogizogi.domain.meokprofile.model.vo.MeokProfileVO;
+import dev.yogizogi.domain.review.model.vo.MenuReviewVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;

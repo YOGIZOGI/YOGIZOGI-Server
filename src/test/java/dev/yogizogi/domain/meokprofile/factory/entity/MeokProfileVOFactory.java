@@ -8,7 +8,7 @@ import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtur
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.짠맛_선호도;
 
 import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
-import dev.yogizogi.domain.meokprofile.model.entity.MeokProfileVO;
+import dev.yogizogi.domain.meokprofile.model.vo.MeokProfileVO;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
 
 public class MeokProfileVOFactory {
