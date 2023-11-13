@@ -21,7 +21,7 @@ import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
-import dev.yogizogi.domain.review.repository.ReviewImageRepository;
+import dev.yogizogi.domain.review.repository.MenuReviewImageRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +53,7 @@ class MenuReviewServiceTest {
     private MenuReviewRepository menuReviewRepository;
 
     @Mock
-    private ReviewImageRepository reviewImageRepository;
+    private MenuReviewImageRepository menuReviewImageRepository;
 
 
     @Test
