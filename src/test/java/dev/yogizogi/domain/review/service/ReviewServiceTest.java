@@ -3,7 +3,7 @@ package dev.yogizogi.domain.review.service;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
+import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.domain.review.factory.dto.CreateReviewFactory;
@@ -100,7 +100,7 @@ class ReviewServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> reviewService.createReview(요청.getUserId(), 요청.getRestaurantId())
-        ).isInstanceOf(NotExistRestaurantException.class);
+        ).isInstanceOf(InvalidRestaurantTypeException.class);
 
     }
 

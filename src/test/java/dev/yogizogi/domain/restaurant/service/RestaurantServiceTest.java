@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.yogizogi.domain.coordinate.factory.entity.CoordinateFactory;
 import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
-import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
+import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.factory.dto.CreateRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
@@ -49,15 +49,34 @@ class RestaurantServiceTest {
         Coordinate 좌표 = CoordinateFactory.createCoordinate();
 
         // mocking
-        given(coordinateService.recieveCoordinate(eq(요청.getAddress())))
-                .willReturn(좌표);
+        given(coordinateService.recieveCoordinate(eq(요청.getAddress()))).willReturn(좌표);
 
         // when
         CreateRestaurantOutDto 응답 = restaurantService
-                .createRestaurant(요청.getName(), 요청.getTel(), 요청.getAddress(), 요청.getImageUrl());
+                .createRestaurant(요청.getName(), 요청.getTel(), 요청.getAddress(), 요청.getImageUrl(), 요청.getTypes());
 
         // then
-        Assertions.assertThat(응답).isNotNull();
+        Assertions.assertThat(응답.getName()).isEqualTo(요청.getName());
+        Assertions.assertThat(응답.getTypes().get(0)).isEqualTo(요청.getTypes().get(0));
+
+    }
+
+    @Test
+    void 음식점_생성_실패_유효하지_않은_음식점_종류() throws JsonProcessingException {
+
+        // given
+        CreateRestaurantInDto 요청 = CreateRestaurantFactory.createRestaurantInDtoInvalidRestaurantType();
+        Coordinate 좌표 = CoordinateFactory.createCoordinate();
+
+        // mocking
+        given(coordinateService.recieveCoordinate(eq(요청.getAddress()))).willReturn(좌표);
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () -> restaurantService
+                        .createRestaurant(요청.getName(), 요청.getTel(), 요청.getAddress(), 요청.getImageUrl(), 요청.getTypes())
+        ).isInstanceOf(InvalidRestaurantTypeException.class);
 
     }
 
@@ -96,7 +115,7 @@ class RestaurantServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> restaurantService.getRestaurant(조회할_음식점_상호명))
-                .isInstanceOf(NotExistRestaurantException.class);
+                .isInstanceOf(InvalidRestaurantTypeException.class);
     }
 
 

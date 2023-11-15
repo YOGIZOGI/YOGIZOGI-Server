@@ -3,6 +3,7 @@ package dev.yogizogi.domain.restaurant.api;
 import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
 import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_음식명;
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.상호명;
+import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.음식점_종류;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -60,7 +61,8 @@ class RestaurantApiControllerTest {
         CreateRestaurantInDto req = CreateRestaurantFactory.createRestaurantInDto();
 
         // mocking
-        given(restaurantService.createRestaurant(eq(req.getName()), eq(req.getTel()), eq(req.getAddress()), eq(req.getImageUrl())))
+        given(restaurantService.createRestaurant(
+                eq(req.getName()), eq(req.getTel()), eq(req.getAddress()), eq(req.getImageUrl()), eq(req.getTypes())))
                 .willReturn(CreateRestaurantFactory.createRestaurantOutDto());
 
         // when
@@ -78,6 +80,12 @@ class RestaurantApiControllerTest {
                 )
                 .andExpect(
                         jsonPath("$.data.name").value(상호명)
+                )
+                .andExpect(
+                        jsonPath("$.data.types[0]").value(음식점_종류.get(0))
+                )
+                .andExpect(
+                        jsonPath("$.data.types[1]").value(음식점_종류.get(1))
                 );
 
     }
