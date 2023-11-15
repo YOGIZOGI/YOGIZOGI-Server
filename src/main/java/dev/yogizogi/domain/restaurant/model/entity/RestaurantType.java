@@ -1,8 +1,8 @@
 package dev.yogizogi.domain.restaurant.model.entity;
 
-import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_CUISINE;
+import static dev.yogizogi.global.common.code.ErrorCode.INVALID_RESTAURANT_TYPE;
 
-import dev.yogizogi.domain.restaurant.exception.NotExistCuisineException;
+import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -29,7 +29,7 @@ public enum RestaurantType {
             }
         }
 
-        throw new NotExistCuisineException(NOT_EXIST_CUISINE);
+        throw new InvalidRestaurantTypeException(INVALID_RESTAURANT_TYPE);
 
     }
 
