@@ -87,7 +87,7 @@ class RestaurantApiControllerTest {
         결과.andExpect(jsonPath("$.data.name").value(상호명));
 
         for (int i = 0; i < 요청.getTypes().size(); i++) {
-             결과.andExpect(jsonPath("$.data.types[%d]", i).value(음식점_종류.get(i)));
+            결과.andExpect(jsonPath("$.data.types[%d]", i).value(음식점_종류.get(i)));
         }
 
     }
