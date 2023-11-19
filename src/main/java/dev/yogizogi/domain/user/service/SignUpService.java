@@ -32,8 +32,8 @@ public class SignUpService {
                 );
 
         newUser.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
-
         userRepository.save(newUser);
+
         return CreateUserOutDto.of(newUser.getId(), newUser.getPhoneNumber());
 
     }
