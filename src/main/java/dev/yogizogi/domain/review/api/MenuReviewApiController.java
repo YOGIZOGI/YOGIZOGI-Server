@@ -1,7 +1,7 @@
 package dev.yogizogi.domain.review.api;
 
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
-import dev.yogizogi.domain.review.model.dto.response.CreateReviewOutDto;
+import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
 import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewsOutDto;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import dev.yogizogi.global.common.model.response.Success;
@@ -41,7 +41,7 @@ public class MenuReviewApiController {
             @ApiResponse(
                     responseCode = "201",
                     description = "메뉴 리뷰 생성 완료",
-                    content = @Content(schema = @Schema(implementation = CreateReviewOutDto.class))
+                    content = @Content(schema = @Schema(implementation = CreateMenuReviewOutDto.class))
             ),
             @ApiResponse(responseCode = "403", description = "권한 없는 음식점"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 정보(사용자, 음식점)")

@@ -43,7 +43,7 @@ public class ServiceReviewApiController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 정보(사용자, 음식점)")
     })
     @PostMapping("/create")
-    public ResponseEntity createMenuReview(@RequestBody @Valid CreateServiceReviewInDto req) {
+    public ResponseEntity createServiceReview(@RequestBody @Valid CreateServiceReviewInDto req) {
 
         return ResponseUtils.created(
                 Success.builder()
