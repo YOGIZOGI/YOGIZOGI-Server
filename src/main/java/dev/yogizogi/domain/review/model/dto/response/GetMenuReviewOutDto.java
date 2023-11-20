@@ -9,6 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
+@Schema(name = "특정 메뉴 단일 리뷰 응답 Dto")
 public class GetMenuReviewOutDto {
 
     @Schema(description = "조회한 메뉴 리뷰 식별자")
