@@ -1,5 +1,8 @@
 package dev.yogizogi.domain.user.service;
 
+import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
+import dev.yogizogi.domain.meokmap.repository.MeokMapRepository;
+import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.model.entity.Authority;
@@ -18,8 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SignUpService {
 
+    private final MeokMapService meokMapService;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MeokMapRepository meokMapRepository;
 
     public CreateUserOutDto signUp(String phoneNumber, String password) {
 
@@ -33,6 +39,12 @@ public class SignUpService {
 
         newUser.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
         userRepository.save(newUser);
+
+        MeokMap meokMap = MeokMap.builder()
+                .user(newUser)
+                .build();
+
+        meokMapRepository.save(meokMap);
 
         return CreateUserOutDto.of(newUser.getId(), newUser.getPhoneNumber());
 
