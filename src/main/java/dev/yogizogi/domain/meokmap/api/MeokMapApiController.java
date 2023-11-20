@@ -35,29 +35,6 @@ public class MeokMapApiController {
     private final JwtService jwtService;
 
     @Operation(
-            summary = "먹지도 조회",
-            description = "먹지도에 등록한 모든 음식점을 조회"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "먹지도 조회 완료",
-                    content = @Content(schema = @Schema(implementation = GetMeokMapOutDto.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저)")
-    })
-    @GetMapping("")
-    public ResponseEntity getMeokMap() {
-
-        return ResponseUtils.ok(
-                Success.builder()
-                        .data(meokMapService.getMeokMap(jwtService.getUserId()))
-                        .build()
-        );
-
-    }
-
-    @Operation(
             summary = "먹지도 음식점 추가",
             description = "먹지도에 하나의 음식점을 추가"
     )
@@ -101,6 +78,29 @@ public class MeokMapApiController {
                 Success.builder()
                         .data(meokMapService
                                 .removeRestaurantFromMeokMap(req.getUserId(), req.getRestaurantId()))
+                        .build()
+        );
+
+    }
+
+    @Operation(
+            summary = "먹지도 조회",
+            description = "먹지도에 등록한 모든 음식점을 조회"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "먹지도 조회 완료",
+                    content = @Content(schema = @Schema(implementation = GetMeokMapOutDto.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저)")
+    })
+    @GetMapping("")
+    public ResponseEntity getMeokMap() {
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(meokMapService.getMeokMap(jwtService.getUserId()))
                         .build()
         );
 

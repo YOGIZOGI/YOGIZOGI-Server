@@ -48,6 +48,7 @@ public enum ErrorCode {
     NOT_EXIST_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 음식점입입다."),
     NOT_EXIST_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
     NOT_EXIST_MENU(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴입니다."),
+    NOT_EXIST_MEOK_MAP(HttpStatus.NOT_FOUND, "존재하지 먹지도입니다."),
 
     /**
      * Code : 500

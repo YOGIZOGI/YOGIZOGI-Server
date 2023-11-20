@@ -2,12 +2,11 @@ package dev.yogizogi.domain.meokmap.model.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Schema(name = "지도에 음식점 삭제 요청 Dto")
 public class RemoveRestaurantOnMeokMapInDto {
 
