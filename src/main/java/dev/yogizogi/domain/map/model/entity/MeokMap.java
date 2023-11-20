@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Map {
+public class MeokMap {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Map {
     private Restaurant restaurant;
 
     @Builder
-    public Map(User user, Restaurant restaurant) {
+    public MeokMap(User user, Restaurant restaurant) {
         this.user = user;
         this.restaurant = restaurant;
     }
