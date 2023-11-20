@@ -1,15 +1,15 @@
-package dev.yogizogi.domain.map.service;
+package dev.yogizogi.domain.meokmap.service;
 
 import static dev.yogizogi.global.common.code.ErrorCode.FAIL_TO_REMOVE_RESTAURANT_ON_MEOK_MAP;
 import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_USER;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 
-import dev.yogizogi.domain.map.exception.FailToRemoveRestaurantOnMeokMapException;
-import dev.yogizogi.domain.map.model.dto.request.AddRestaurantOnMeokMapInDto;
-import dev.yogizogi.domain.map.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.map.model.dto.response.GetMeokMapOutDto;
-import dev.yogizogi.domain.map.model.entity.MeokMap;
-import dev.yogizogi.domain.map.repository.MeokMapRepository;
+import dev.yogizogi.domain.meokmap.exception.FailToRemoveRestaurantOnMeokMapException;
+import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
+import dev.yogizogi.domain.meokmap.repository.MeokMapRepository;
 import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;

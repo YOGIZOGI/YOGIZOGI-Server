@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.map.model.dto.request;
+package dev.yogizogi.domain.meokmap.model.dto.request;
 
-import dev.yogizogi.domain.map.model.entity.MeokMap;
+import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;

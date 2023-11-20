@@ -1,6 +1,6 @@
-package dev.yogizogi.domain.map.repository;
+package dev.yogizogi.domain.meokmap.repository;
 
-import dev.yogizogi.domain.map.model.entity.MeokMap;
+import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.user.model.entity.User;
 import java.util.List;

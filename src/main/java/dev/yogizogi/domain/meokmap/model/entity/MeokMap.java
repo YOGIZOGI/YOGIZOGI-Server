@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.map.model.entity;
+package dev.yogizogi.domain.meokmap.model.entity;
 
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.user.model.entity.User;

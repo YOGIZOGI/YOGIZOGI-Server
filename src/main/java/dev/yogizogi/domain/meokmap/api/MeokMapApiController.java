@@ -1,10 +1,10 @@
-package dev.yogizogi.domain.map.api;
+package dev.yogizogi.domain.meokmap.api;
 
-import dev.yogizogi.domain.map.model.dto.request.AddRestaurantOnMeokMapInDto;
-import dev.yogizogi.domain.map.model.dto.request.RemoveRestaurantOnMeokMapInDto;
-import dev.yogizogi.domain.map.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.map.model.dto.response.GetMeokMapOutDto;
-import dev.yogizogi.domain.map.service.MeokMapService;
+import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
+import dev.yogizogi.domain.meokmap.model.dto.request.RemoveRestaurantOnMeokMapInDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
 import dev.yogizogi.global.util.ResponseUtils;

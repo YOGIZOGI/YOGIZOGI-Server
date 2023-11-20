@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.map.model.dto.request;
+package dev.yogizogi.domain.meokmap.model.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;

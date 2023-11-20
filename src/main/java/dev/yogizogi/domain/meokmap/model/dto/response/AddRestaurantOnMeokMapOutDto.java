@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.map.model.dto.response;
+package dev.yogizogi.domain.meokmap.model.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

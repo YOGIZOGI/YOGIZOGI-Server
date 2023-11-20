@@ -1,4 +1,4 @@
-package dev.yogizogi.domain.map.exception;
+package dev.yogizogi.domain.meokmap.exception;
 
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.common.exception.BaseException;
