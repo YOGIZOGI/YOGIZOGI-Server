@@ -18,4 +18,8 @@ public class MeokMapRestaurantFactory {
         return List.of(createMeokMapRestaurant());
     }
 
+    public static List<MeokMapRestaurant> createMeokMapRestaurantsNoContent() {
+        return List.of();
+    }
+
 }
