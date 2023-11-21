@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import dev.yogizogi.domain.meokmap.exception.FailToRemoveRestaurantOnMeokMapException;
+import dev.yogizogi.domain.meokmap.exception.NotExistMeokMapException;
 import dev.yogizogi.domain.meokmap.exception.NotExistRestaurantOnMeokMapException;
 import dev.yogizogi.domain.meokmap.factory.dto.AddRestaurantOnMapFactory;
 import dev.yogizogi.domain.meokmap.factory.dto.RemoveRestaurantOnMapFactory;
@@ -81,7 +82,7 @@ class MeokMapServiceTest {
     }
 
     @Test
-    void 먹지도_음식점_추가_실패_먹지도_존재하지_않는_음식점() {
+    void 먹지도_음식점_추가_실패_존재하지_않는_먹지도() {
 
         // given
         AddRestaurantOnMeokMapInDto 요청 = AddRestaurantOnMapFactory.addRestaurantOnMeokMapInDto();
@@ -96,7 +97,7 @@ class MeokMapServiceTest {
         // then
         Assertions.assertThatThrownBy(
                         () -> meokMapService.addRestaurantOnMeokMap(요청.getUserId(), 요청.getRestaurantId()))
-                .isInstanceOf(NotExistRestaurantOnMeokMapException.class);
+                .isInstanceOf(NotExistMeokMapException.class);
 
     }
 
@@ -273,7 +274,7 @@ class MeokMapServiceTest {
     }
 
     @Test
-    void 먹지도_조회_실패_등록하지_않은_음식점() {
+    void 먹지도_조회_실패_존재하지_않는_먹지도() {
 
         // given
         User 조회할_유저 = MeokMapFixtures.사용자;
@@ -288,7 +289,7 @@ class MeokMapServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> meokMapService.getMeokMap(조회할_유저.getId())
-        ).isInstanceOf(NotExistRestaurantOnMeokMapException.class);
+        ).isInstanceOf(NotExistMeokMapException.class);
 
     }
 
