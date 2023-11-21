@@ -2,6 +2,7 @@ package dev.yogizogi.domain.meokmap.service;
 
 import static dev.yogizogi.global.common.code.ErrorCode.FAIL_TO_REMOVE_RESTAURANT_ON_MEOK_MAP;
 import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_RESTAURANT_ON_MEOK_MAP;
+import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_MEOK_MAP;
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 
 import dev.yogizogi.domain.meokmap.exception.FailToRemoveRestaurantOnMeokMapException;
@@ -35,7 +36,7 @@ public class MeokMapService {
     public AddRestaurantOnMeokMapOutDto addRestaurantOnMeokMap(UUID userId, UUID restaurantId) {
 
         MeokMap findMeokMap = meokMapRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotExistRestaurantOnMeokMapException(NOT_EXIST_RESTAURANT_ON_MEOK_MAP));
+                .orElseThrow(() -> new NotExistMeokMapException(NOT_EXIST_MEOK_MAP));
 
         Restaurant findRestaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotExistRestaurantException((ErrorCode.NOT_EXIST_RESTAURANT)));
@@ -73,7 +74,7 @@ public class MeokMapService {
     public List<GetMeokMapOutDto> getMeokMap(UUID userId) {
 
         MeokMap meokMap = meokMapRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotExistRestaurantOnMeokMapException(NOT_EXIST_RESTAURANT_ON_MEOK_MAP));
+                .orElseThrow(() -> new NotExistMeokMapException(NOT_EXIST_MEOK_MAP));
 
         List<MeokMapRestaurant> meokMapRestaurants = meokMapRestaurantRepository.findByMeokMap(meokMap).get();
 

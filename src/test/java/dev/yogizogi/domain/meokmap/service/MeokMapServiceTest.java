@@ -97,7 +97,7 @@ class MeokMapServiceTest {
         Assertions.assertThatThrownBy(
                 () -> meokMapService.addRestaurantOnMeokMap(요청.getUserId(), 요청.getRestaurantId()))
                 .isInstanceOf(NotExistRestaurantOnMeokMapException.class);
-
+  
     }
 
     @Test
@@ -289,6 +289,7 @@ class MeokMapServiceTest {
         Assertions.assertThatThrownBy(
                 () -> meokMapService.getMeokMap(조회할_유저.getId())
         ).isInstanceOf(NotExistRestaurantOnMeokMapException.class);
+
     }
 
 }
