@@ -17,6 +17,7 @@ public enum ErrorCode {
     FAIL_TO_VALIDATE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     FAIL_TO_SEND_MESSAGE(HttpStatus.BAD_REQUEST, "인증번호 전송 실패"),
     FAIL_TO_GET_COORDINATE(HttpStatus.BAD_REQUEST, "좌표 조회 실패"),
+    FAIL_TO_REMOVE_RESTAURANT_ON_MEOK_MAP(HttpStatus.BAD_REQUEST, "먹지도에서 음식점 삭제를 실패했습니다."),
 
     ALREADY_USE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 사용중인 핸드폰 번호입니다."),
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
@@ -47,6 +48,7 @@ public enum ErrorCode {
     NOT_EXIST_RESTAURANT(HttpStatus.NOT_FOUND, "존재하지 않는 음식점입입다."),
     NOT_EXIST_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다."),
     NOT_EXIST_MENU(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴입니다."),
+    NOT_EXIST_MEOK_MAP(HttpStatus.NOT_FOUND, "존재하지 먹지도입니다."),
 
     /**
      * Code : 500

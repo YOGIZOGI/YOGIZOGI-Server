@@ -3,6 +3,7 @@ package dev.yogizogi.domain.user.service;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_번호;
 
+import dev.yogizogi.domain.meokmap.repository.MeokMapRepository;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserOutDto;
 import dev.yogizogi.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -28,6 +29,9 @@ class SignUpServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private MeokMapRepository meokMapRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
