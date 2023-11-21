@@ -16,11 +16,13 @@ public enum ErrorCode {
     FAIL_TO_TEST(HttpStatus.BAD_REQUEST, "요청 실패"),
     FAIL_TO_VALIDATE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     FAIL_TO_SEND_MESSAGE(HttpStatus.BAD_REQUEST, "인증번호 전송 실패"),
+    FAIL_TO_GET_COORDINATE(HttpStatus.BAD_REQUEST, "좌표 조회 실패"),
+
     ALREADY_USE_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "이미 사용중인 핸드폰 번호입니다."),
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
-    FAIL_TO_GET_COORDINATE(HttpStatus.BAD_REQUEST, "좌표 조회 실패"),
+    INVALID_RESTAURANT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 음식점 종류입니다."),
 
     /**
      * Code : 401

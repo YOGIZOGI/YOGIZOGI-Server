@@ -6,6 +6,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
@@ -31,10 +33,14 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menus = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private List<RestaurantType> types = new ArrayList<>();
+
     @Builder
-    public Restaurant(UUID id, RestaurantDetails restaurantDetails) {
+    public Restaurant(UUID id, RestaurantDetails restaurantDetails, List<RestaurantType> types) {
         this.id = id;
         this.restaurantDetails = restaurantDetails;
+        this.types = types;
     }
 
 }

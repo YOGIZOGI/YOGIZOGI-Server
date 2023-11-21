@@ -7,7 +7,7 @@ import dev.yogizogi.domain.menu.factory.dto.CreateMenuFactory;
 import dev.yogizogi.domain.menu.model.dto.request.CreateMenuInDto;
 import dev.yogizogi.domain.menu.model.dto.response.CreateMenuOutDto;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
-import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
+import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import java.util.Optional;
@@ -67,7 +67,7 @@ class MenuServiceTest {
         Assertions.assertThatThrownBy(
                 () -> menuService.createMenu(요청.getRestaurantId(), 요청.getName(), 요청.getPrice(), 요청.getDescription(), 요청.getImageUrl())
                 )
-                .isInstanceOf(NotExistRestaurantException.class);
+                .isInstanceOf(InvalidRestaurantTypeException.class);
 
     }
 }

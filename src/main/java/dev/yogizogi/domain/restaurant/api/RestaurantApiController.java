@@ -49,7 +49,7 @@ public class RestaurantApiController {
         return ResponseUtils.created(
                 Success.builder()
                         .data(restaurantService
-                                .createRestaurant(req.getName(), req.getTel(), req.getAddress(), req.getImageUrl())
+                                .createRestaurant(req.getName(), req.getTel(), req.getAddress(), req.getImageUrl(), req.getTypes())
                         )
                         .build());
 

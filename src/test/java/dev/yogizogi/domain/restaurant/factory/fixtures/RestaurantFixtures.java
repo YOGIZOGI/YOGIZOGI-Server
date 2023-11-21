@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.restaurant.factory.fixtures;
 
 import dev.yogizogi.global.util.UuidUtils;
+import java.util.List;
 import java.util.UUID;
 
 public class RestaurantFixtures {
@@ -12,5 +13,7 @@ public class RestaurantFixtures {
     public static String 음식점_사진 = "https://yogizogi-multimedia-bucket.s3.ap-northeast-2.amazonaws.com/restaurant/1/b95c3147-d7a5-4c19-9908-fb6a2cd7bdca";
     public static String 위도 = "37.5422815915509";
     public static String 경도 = "127.068903207917";
+    public static List<String> 음식점_종류 = List.of("한식", "일식", "중식", "양식", "베트남식", "인도식", "태국식", "퓨전");
+    public static List<String> 잘못된_음식점_종류 = List.of("잘못됨");
 
 }

@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.review.service;
 
-import dev.yogizogi.domain.restaurant.exception.NotExistRestaurantException;
+import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.domain.review.model.dto.request.CreateReviewInDto;
@@ -33,7 +33,7 @@ public class ReviewService {
                 .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotExistRestaurantException(ErrorCode.NOT_EXIST_RESTAURANT));
+                .orElseThrow(() -> new InvalidRestaurantTypeException(ErrorCode.NOT_EXIST_RESTAURANT));
 
         Review review = CreateReviewInDto.toEntity(UuidUtils.createSequentialUUID(), user, restaurant);
 
