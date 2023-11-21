@@ -5,9 +5,9 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class NotExistMeokMapException extends BaseException {
+public class NotExistRestaurantOnMeokMapException extends BaseException {
 
-    public NotExistMeokMapException(ErrorCode errorCode) {
+    public NotExistRestaurantOnMeokMapException(ErrorCode errorCode) {
         super(errorCode);
     }
 
