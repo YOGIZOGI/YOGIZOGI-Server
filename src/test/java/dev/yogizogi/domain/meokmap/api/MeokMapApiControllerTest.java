@@ -40,9 +40,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
 @WebMvcTest(value = {MeokMapApiController.class},
-    excludeFilters =  {
-            @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
-    }
+        excludeFilters =  {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        }
 )
 @AutoConfigureMockMvc(addFilters = false)
 @DisplayName("MeokMapApiController 동작 테스트")
