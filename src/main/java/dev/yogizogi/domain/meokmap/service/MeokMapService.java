@@ -81,7 +81,6 @@ public class MeokMapService {
             return null;
         }
 
-
         return meokMapRestaurants.stream()
                 .map(m -> GetMeokMapOutDto.of(m.getRestaurant().getId(), m.getRestaurant().getRestaurantDetails()))
                 .collect(Collectors.toList());

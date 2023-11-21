@@ -49,7 +49,7 @@ public class MeokMapApiController {
     @PostMapping("/add/restaurants")
     public ResponseEntity addRestaurantOnMap(@RequestBody AddRestaurantOnMeokMapInDto req) {
 
-        return ResponseUtils.ok(
+        return ResponseUtils.created(
                 Success.builder()
                         .data(meokMapService
                                 .addRestaurantOnMeokMap(req.getUserId(), req.getRestaurantId()))
