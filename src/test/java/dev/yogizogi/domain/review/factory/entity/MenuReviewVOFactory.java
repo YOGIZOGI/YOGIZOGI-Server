@@ -4,6 +4,7 @@ import dev.yogizogi.domain.review.factory.fixtures.MenuReviewFixtures;
 import dev.yogizogi.domain.review.model.entity.MenuReviewImage;
 import dev.yogizogi.domain.review.model.vo.MenuReviewVO;
 import dev.yogizogi.global.common.status.RecommendationStatus;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MenuReviewVOFactory {
@@ -18,6 +19,12 @@ public class MenuReviewVOFactory {
                 .build();
 
         return 메뉴_리뷰;
+
+    }
+
+    public static List<MenuReviewVO> creatMenuReviewVOs() {
+
+        return List.of(creatMenuReviewVO());
 
     }
 

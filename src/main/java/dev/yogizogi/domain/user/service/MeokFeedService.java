@@ -34,7 +34,7 @@ public class MeokFeedService {
         User findUser = userRepository.findByIdAndStatus(userId, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistUserException(NOT_EXIST_USER));
 
-        List<Review> reviews = reviewRepository.findAllByUserId(userId).get();
+        List<Review> reviews = reviewRepository.findAllByUser(findUser).get();
 
         if (reviews.isEmpty()) {
             return null;
@@ -54,6 +54,7 @@ public class MeokFeedService {
         return reviews.stream()
                 .flatMap(r -> menuReviewRepository.findAllByReview(r).get().stream())
                 .collect(Collectors.toList());
+
     }
 
     private MenuReviewVO convertToMenuReviewVO(MenuReview menuReview) {
