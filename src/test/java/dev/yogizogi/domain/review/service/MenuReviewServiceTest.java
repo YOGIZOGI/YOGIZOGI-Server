@@ -179,6 +179,30 @@ class MenuReviewServiceTest {
     }
 
     @Test
+    void 특정_메뉴에_대한_모든_리뷰_조회_데이터_없음() {
+
+        // given
+        Long 조회할_메뉴_식별자 = 1L;
+        Menu 조회할_메뉴 = MenuFactory.createMenu();
+        List<MenuReview> 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReviewsNoContent();
+
+        // mocking
+        ReflectionTestUtils.setField(조회할_메뉴, "id", 조회할_메뉴_식별자);
+        given(menuRepository.findById(eq(조회할_메뉴_식별자)))
+                .willReturn(Optional.of(조회할_메뉴));
+
+        given(menuReviewRepository.findByMenu(eq(조회할_메뉴)))
+                .willReturn(Optional.of(조회할_메뉴_리뷰));
+
+        // when
+        GetMenuReviewsOutDto 응답 = menuReviewService.getMenuReviews(조회할_메뉴_식별자);
+
+        // then
+        Assertions.assertThat(응답).isNull();
+        
+    }
+
+    @Test
     void 특정_메뉴에_대한_모든_리뷰_조회_실패_존재하지_않는_메뉴() {
 
         // given

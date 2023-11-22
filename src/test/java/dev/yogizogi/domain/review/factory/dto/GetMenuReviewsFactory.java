@@ -8,7 +8,7 @@ public class GetMenuReviewsFactory {
 
         GetMenuReviewsOutDto 응답 = GetMenuReviewsOutDto.of(
                 MenuFixtures.메뉴1_식별자,
-                GetMenuReviewFactory.getMenuReviewOutDto()
+                GetMenuReviewFactory.getMenuReviewOutDtos()
         );
 
         return 응답;

@@ -14,8 +14,11 @@ import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
 import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
+import dev.yogizogi.domain.review.factory.dto.GetMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.dto.GetMenuReviewsFactory;
+import dev.yogizogi.domain.review.factory.entity.MenuReviewFactory;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
+import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
@@ -131,6 +134,58 @@ class MenuReviewApiControllerTest {
                 .andExpect(
                         jsonPath("$.status").value("NO_CONTENT")
                 );
+    }
+
+    @Test
+    void 메뉴_리뷰_단일_조회() throws Exception {
+
+        // given
+        MenuReview 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReview();
+
+        // mocking
+        given(menuReviewService.getMenuReview(eq(조회할_메뉴_리뷰.getId())))
+                .willReturn(GetMenuReviewFactory.getMenuReviewOutDto());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/reviews/menu-reviews/{menuReviewId}", 조회할_메뉴_리뷰.getId())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.data.menuReviewId").value(조회할_메뉴_리뷰.getId())
+                );
+
+    }
+
+    @Test
+    void 메뉴_리뷰_단일_조회_데이터_없음() throws Exception {
+
+        // given
+        MenuReview 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReview();
+
+        // mocking
+        given(menuReviewService.getMenuReview(eq(조회할_메뉴_리뷰.getId())))
+                .willReturn(GetMenuReviewFactory.getMenuReviewOutDtoNoContent());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/reviews/menu-reviews/{menuReviewId}", 조회할_메뉴_리뷰.getId())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.status").value("NO_CONTENT")
+                );
+
     }
 
 }
