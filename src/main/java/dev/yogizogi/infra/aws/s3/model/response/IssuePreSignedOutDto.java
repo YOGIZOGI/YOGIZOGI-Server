@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "객체 업로드 주소 발행 응답 Dto", description = "발행한 주소에 대한 정보")
+@Schema(name = "객체 업로드 주소 발행 응답 DTO", description = "발행한 주소에 대한 정보")
 @Getter
 @Builder(access = AccessLevel.PROTECTED)
 public class IssuePreSignedOutDto {

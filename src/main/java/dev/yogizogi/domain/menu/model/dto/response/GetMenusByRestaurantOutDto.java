@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "특정 음식점 메뉴 응답 Dto")
+@Schema(name = "특정 음식점 메뉴 응답 DTO")
 public class GetMenusByRestaurantOutDto {
 
     @Schema(description = "메뉴 식별자")

@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "회원탈퇴 응답 Dto")
+@Schema(name = "회원탈퇴 응답 DTO")
 public class DeleteUserOutDto {
 
     @Schema(description = "아이디", example = "01012345678")

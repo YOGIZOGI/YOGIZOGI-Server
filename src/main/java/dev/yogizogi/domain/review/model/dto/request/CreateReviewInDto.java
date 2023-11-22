@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "리뷰 생성 요청 Dto")
+@Schema(name = "리뷰 생성 요청 DTO")
 public class CreateReviewInDto {
 
     @Schema(description = "리뷰를 작성할 유저 식별자")

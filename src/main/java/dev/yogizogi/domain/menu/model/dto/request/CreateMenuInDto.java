@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "메뉴 등록 요청 Dto")
+@Schema(name = "메뉴 등록 요청 DTO")
 public class CreateMenuInDto {
 
     @Schema(description = "음식점", example = "3")

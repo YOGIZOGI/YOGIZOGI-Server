@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "인증코드 확인 응답 Dto")
+@Schema(name = "인증코드 확인 응답 DTO")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class VerifyCodeOutDto {

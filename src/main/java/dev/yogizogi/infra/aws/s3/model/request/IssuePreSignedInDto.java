@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-@Schema(name = "객체 업로드 주소 발행 요청 Dto", description = "객체 업로드에 필요한 정보")
+@Schema(name = "객체 업로드 주소 발행 요청 DTO", description = "객체 업로드에 필요한 정보")
 public class IssuePreSignedInDto {
 
     @Schema(description = "객체 주인 식별자(프로필 사진 : 유저 식별자 / 음식점 : 상호명 /메뉴 : 카페 식별자)")

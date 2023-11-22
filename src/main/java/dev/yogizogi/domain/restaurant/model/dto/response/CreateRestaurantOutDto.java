@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "음식점 등록 응답 Dto")
+@Schema(name = "음식점 등록 응답 DTO")
 public class CreateRestaurantOutDto {
 
     @Schema(description = "생성한 음식점 식별자")

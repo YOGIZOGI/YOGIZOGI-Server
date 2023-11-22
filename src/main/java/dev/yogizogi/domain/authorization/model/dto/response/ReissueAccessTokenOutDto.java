@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-@Schema(name = "accessToken 재발급 응답 Dto")
+@Schema(name = "accessToken 재발급 응답 DTO")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class ReissueAccessTokenOutDto {
