@@ -134,4 +134,6 @@ public class MenuReviewService {
         return menuReview.getMenuReviewImages().stream()
                 .map(MenuReviewImage::getUrl)
                 .collect(Collectors.toList());
-    }}
+    }
+
+}
