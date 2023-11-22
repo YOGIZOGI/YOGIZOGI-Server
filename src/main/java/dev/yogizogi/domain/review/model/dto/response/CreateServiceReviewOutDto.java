@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "메뉴 리뷰 생성 응답 Dto")
+@Schema(name = "메뉴 리뷰 생성 응답 DTO")
 public class CreateServiceReviewOutDto {
 
     @Schema(description = "메뉴 리뷰를 생성한 리뷰 식별자")

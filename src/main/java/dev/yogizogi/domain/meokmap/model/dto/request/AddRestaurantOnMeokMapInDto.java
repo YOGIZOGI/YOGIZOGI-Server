@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "지도에 음식점 추가 요청 Dto")
+@Schema(name = "지도에 음식점 추가 요청 DTO")
 public class AddRestaurantOnMeokMapInDto {
 
     @Schema(description = "추가할 유저")

@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "먹프로필 등록 요청 Dto")
+@Schema(name = "먹프로필 등록 요청 DTO")
 public class CreateMeokProfileInDto {
 
     @Min(value = 1) @Max(value = 5)

@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "메뉴 리뷰 생성 요청 Dto")
+@Schema(name = "메뉴 리뷰 생성 요청 DTO")
 public class CreateMenuReviewInDto {
 
     @Schema(description = "리뷰 식별자", example = "신선해요!!")

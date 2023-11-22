@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "먹프로필 등록 응답 Dto")
+@Schema(name = "먹프로필 등록 응답 DTO")
 public class CreateMeokProfileOutDto {
 
     @Schema(description = "선호도")

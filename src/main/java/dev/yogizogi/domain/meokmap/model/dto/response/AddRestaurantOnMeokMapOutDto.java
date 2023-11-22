@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "지도에 음식점 추가 응답 Dto")
+@Schema(name = "지도에 음식점 추가 응답 DTO")
 public class AddRestaurantOnMeokMapOutDto {
 
     @Schema(description = "추가한 음식점 이름")

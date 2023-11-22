@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "내 지도 불러오기 응답 Dto")
+@Schema(name = "내 지도 불러오기 응답 DTO")
 public class GetMeokMapOutDto {
 
     @Schema(description = "음식점 식별자")

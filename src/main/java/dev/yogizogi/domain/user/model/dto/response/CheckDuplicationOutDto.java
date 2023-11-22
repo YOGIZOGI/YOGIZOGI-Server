@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "중복확인 응답 Dto")
+@Schema(name = "중복확인 응답 DTO")
 public class CheckDuplicationOutDto {
 
 
