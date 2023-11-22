@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.review.model.entity;
 
 import dev.yogizogi.domain.menu.model.entity.Menu;
+import dev.yogizogi.global.common.model.entity.BaseEntity;
 import dev.yogizogi.global.common.status.RecommendationStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MenuReview {
+public class MenuReview extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
