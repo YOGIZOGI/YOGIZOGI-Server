@@ -84,10 +84,6 @@ public class MenuReviewApiController {
 
         GetMenuReviewsOutDto res = menuReviewService.getMenuReviews(menuId);
 
-        if (res.getMenuReviews().size() == 0) {
-            res = null;
-        }
-
         return ResponseUtils.ok(
                 Success.builder()
                         .data(res)

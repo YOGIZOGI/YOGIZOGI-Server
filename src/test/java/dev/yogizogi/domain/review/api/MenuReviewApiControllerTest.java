@@ -10,7 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
 import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
+import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.dto.GetMenuReviewsFactory;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
@@ -110,16 +112,16 @@ class MenuReviewApiControllerTest {
     void 특정_메뉴에_대한_모든_리뷰_조회_데이터가_없는_경우() throws Exception {
 
         // given
-        Long 조회할_메뉴 = MenuFixtures.메뉴1_식별자;
+        Menu 조회할_메뉴 = MenuFactory.createMenu();
 
         // mocking
-        given(menuReviewService.getMenuReviews(eq(조회할_메뉴)))
+        given(menuReviewService.getMenuReviews(eq(조회할_메뉴.getId())))
                 .willReturn(GetMenuReviewsFactory.createMenuReviewOutDtoNoContent());
 
         // when
         // then
         mockMvc.perform(
-                        get("/api/reviews/menu-reviews/menus/" + 조회할_메뉴)
+                        get("/api/reviews/menu-reviews/menus/{menuId}", 조회할_메뉴.getId())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

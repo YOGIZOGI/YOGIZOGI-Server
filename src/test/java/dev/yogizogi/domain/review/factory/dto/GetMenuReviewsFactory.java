@@ -16,10 +16,7 @@ public class GetMenuReviewsFactory {
     }
 
     public static GetMenuReviewsOutDto createMenuReviewOutDtoNoContent() {
-        return GetMenuReviewsOutDto.of(
-                MenuFixtures.메뉴1_식별자,
-                GetMenuReviewFactory.getMenuReviewOutDtoNoContent()
-        );
+        return null;
     }
 
 

@@ -5,9 +5,9 @@ import dev.yogizogi.global.common.exception.BaseException;
 import lombok.Getter;
 
 @Getter
-public class NoPermissionRestaurantException extends BaseException {
+public class UnauthorizedRestaurantException extends BaseException {
 
-    public NoPermissionRestaurantException(ErrorCode errorCode) {
+    public UnauthorizedRestaurantException(ErrorCode errorCode) {
         super(errorCode);
     }
 
