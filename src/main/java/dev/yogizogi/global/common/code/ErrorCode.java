@@ -37,7 +37,7 @@ public enum ErrorCode {
      * - Forbidden (요청한 자원에 대해 권한 없음)
      */
     FAIL_TO_LOGIN(HttpStatus.FORBIDDEN, "핸드폰 번호 또는 비밀번호를 잘못 입력했습니다."),
-    FAIL_TO_REVIEW_NO_PERMISSION_RESTAURANT(HttpStatus.FORBIDDEN, "리뷰 권한이 없는 음식점입니다."),
+    FAIL_TO_REVIEW_UNAUTHORIZED_RESTAURANT(HttpStatus.FORBIDDEN, "권한이 없는 음식점입니다."),
 
     /**
      * Code : 404
@@ -50,7 +50,7 @@ public enum ErrorCode {
     NOT_EXIST_MENU(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴입니다."),
     NOT_EXIST_MEOK_MAP(HttpStatus.NOT_FOUND, "존재하지 않는 먹지도입니다."),
     NOT_EXIST_RESTAURANT_ON_MEOK_MAP(HttpStatus.NOT_FOUND, "먹지도에 존재하지 않는 음식점입니다."),
-
+    NOT_EXIST_MENU_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 메뉴 리뷰입니다."),
 
     /**
      * Code : 500

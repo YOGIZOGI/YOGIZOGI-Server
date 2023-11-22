@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "로그인 요청 Dto", description = "로그인에 필요한 정보")
+@Schema(name = "로그인 요청 DTO", description = "로그인에 필요한 정보")
 public class LoginInDto {
 
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.")

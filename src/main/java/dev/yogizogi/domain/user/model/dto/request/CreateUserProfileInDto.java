@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "프로필 생성 요청 Dto")
+@Schema(name = "프로필 생성 요청 DTO")
 public class CreateUserProfileInDto {
 
     @NotBlank

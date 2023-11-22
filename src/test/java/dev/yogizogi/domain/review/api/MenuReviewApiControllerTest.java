@@ -10,10 +10,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
 import dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures;
+import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.review.factory.dto.CreateMenuReviewFactory;
+import dev.yogizogi.domain.review.factory.dto.GetMenuReviewFactory;
 import dev.yogizogi.domain.review.factory.dto.GetMenuReviewsFactory;
+import dev.yogizogi.domain.review.factory.entity.MenuReviewFactory;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
+import dev.yogizogi.domain.review.model.entity.MenuReview;
 import dev.yogizogi.domain.review.service.MenuReviewService;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
@@ -110,16 +115,16 @@ class MenuReviewApiControllerTest {
     void 특정_메뉴에_대한_모든_리뷰_조회_데이터가_없는_경우() throws Exception {
 
         // given
-        Long 조회할_메뉴 = MenuFixtures.메뉴1_식별자;
+        Menu 조회할_메뉴 = MenuFactory.createMenu();
 
         // mocking
-        given(menuReviewService.getMenuReviews(eq(조회할_메뉴)))
+        given(menuReviewService.getMenuReviews(eq(조회할_메뉴.getId())))
                 .willReturn(GetMenuReviewsFactory.createMenuReviewOutDtoNoContent());
 
         // when
         // then
         mockMvc.perform(
-                        get("/api/reviews/menu-reviews/menus/" + 조회할_메뉴)
+                        get("/api/reviews/menu-reviews/menus/{menuId}", 조회할_메뉴.getId())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -129,6 +134,58 @@ class MenuReviewApiControllerTest {
                 .andExpect(
                         jsonPath("$.status").value("NO_CONTENT")
                 );
+    }
+
+    @Test
+    void 메뉴_리뷰_단일_조회() throws Exception {
+
+        // given
+        MenuReview 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReview();
+
+        // mocking
+        given(menuReviewService.getMenuReview(eq(조회할_메뉴_리뷰.getId())))
+                .willReturn(GetMenuReviewFactory.getMenuReviewOutDto());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/reviews/menu-reviews/{menuReviewId}", 조회할_메뉴_리뷰.getId())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.data.menuReviewId").value(조회할_메뉴_리뷰.getId())
+                );
+
+    }
+
+    @Test
+    void 메뉴_리뷰_단일_조회_데이터_없음() throws Exception {
+
+        // given
+        MenuReview 조회할_메뉴_리뷰 = MenuReviewFactory.creatMenuReview();
+
+        // mocking
+        given(menuReviewService.getMenuReview(eq(조회할_메뉴_리뷰.getId())))
+                .willReturn(GetMenuReviewFactory.getMenuReviewOutDtoNoContent());
+
+        // when
+        // then
+        mockMvc.perform(
+                        get("/api/reviews/menu-reviews/{menuReviewId}", 조회할_메뉴_리뷰.getId())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                        jsonPath("$.status").value("NO_CONTENT")
+                );
+
     }
 
 }

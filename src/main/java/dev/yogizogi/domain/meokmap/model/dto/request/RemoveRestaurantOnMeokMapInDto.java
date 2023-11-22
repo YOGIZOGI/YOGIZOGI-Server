@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "지도에 음식점 삭제 요청 Dto")
+@Schema(name = "지도에 음식점 삭제 요청 DTO")
 public class RemoveRestaurantOnMeokMapInDto {
 
     @Schema(description = "유저")

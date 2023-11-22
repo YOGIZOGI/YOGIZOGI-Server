@@ -39,4 +39,11 @@ public class MenuReviewFactory {
 
     }
 
+    public static List<MenuReview> creatMenuReviewsNoContent() {
+
+       return List.of();
+
+    }
+
+
 }

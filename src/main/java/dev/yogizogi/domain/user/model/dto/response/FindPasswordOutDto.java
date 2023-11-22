@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "비밀번호 찾기 응답 Dto")
+@Schema(name = "비밀번호 찾기 응답 DTO")
 public class FindPasswordOutDto {
 
     @Schema(description = "전송 결과", example = "SUCCESS", allowableValues = {"SUCCESS", "FAIL"})

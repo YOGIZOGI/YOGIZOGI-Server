@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "프로필 생성 응답 Dto")
+@Schema(name = "프로필 생성 응답 DTO")
 public class CreateUserProfileOutDto {
 
     @Schema(description = "등록한 닉네임", example = "요기조기")

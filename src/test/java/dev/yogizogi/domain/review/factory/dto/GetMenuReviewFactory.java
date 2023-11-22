@@ -8,22 +8,29 @@ import dev.yogizogi.domain.review.model.dto.response.GetMenuReviewOutDto;
 import java.util.List;
 
 public class GetMenuReviewFactory {
-    public static List<GetMenuReviewOutDto> getMenuReviewOutDto() {
 
-        List<GetMenuReviewOutDto> 응답 = List.of(
-                GetMenuReviewOutDto.of(
-                        MenuReviewFixtures.메뉴_리뷰1_식별자,
-                        ReviewFactory.createReview().getUser().getProfile().getNickname(),
-                        MeokProfileVOFactory.createMeokProfileVO(),
-                        MenuReviewVOFactory.creatMenuReviewVO()
-                )
+    public static GetMenuReviewOutDto getMenuReviewOutDto() {
+
+        return GetMenuReviewOutDto.of(
+                MenuReviewFixtures.메뉴_리뷰1_식별자,
+                ReviewFactory.createReview().getUser().getProfile().getNickname(),
+                MeokProfileVOFactory.createMeokProfileVO(),
+                MenuReviewVOFactory.creatMenuReviewVO()
         );
-
-        return 응답;
 
     }
 
-    public static List<GetMenuReviewOutDto> getMenuReviewOutDtoNoContent() {
+    public static GetMenuReviewOutDto getMenuReviewOutDtoNoContent() {
+        return null;
+    }
+
+    public static List<GetMenuReviewOutDto> getMenuReviewOutDtos() {
+
+        return List.of(getMenuReviewOutDto());
+
+    }
+
+    public static List<GetMenuReviewOutDto> getMenuReviewOutDtosNoContent() {
 
         List<GetMenuReviewOutDto> 응답 = List.of();
         return 응답;

@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "회원가입 요청 Dto")
+@Schema(name = "회원가입 요청 DTO")
 public class CreateUserInDto {
 
     @NotBlank(message="전화번호를 입력하세요.")

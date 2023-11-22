@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "메뉴 등록 응답 Dto")
+@Schema(name = "메뉴 등록 응답 DTO")
 public class CreateMenuOutDto {
 
     @Schema(description = "생성한 메뉴 식별자")
