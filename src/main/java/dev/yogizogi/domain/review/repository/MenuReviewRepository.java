@@ -12,4 +12,6 @@ public interface MenuReviewRepository extends JpaRepository<MenuReview, Long> {
     Optional<List<MenuReview>> findByMenu(Menu menu);
     Optional<List<MenuReview>> findAllByReview(Review review);
 
+    Optional<MenuReview> findById(Long id);
+
 }

@@ -7,8 +7,10 @@ import static dev.yogizogi.global.common.code.ErrorCode.NOT_EXIST_REVIEW;
 import dev.yogizogi.domain.menu.exception.NotExistMenuException;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.repository.MenuRepository;
+import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.domain.meokprofile.model.vo.MeokProfileVO;
 import dev.yogizogi.domain.review.exception.NoPermissionRestaurantException;
+import dev.yogizogi.domain.review.exception.NotExistMenuReviewException;
 import dev.yogizogi.domain.review.exception.NotExistReviewException;
 import dev.yogizogi.domain.review.model.dto.request.CreateMenuReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateMenuReviewOutDto;
@@ -21,6 +23,7 @@ import dev.yogizogi.domain.review.model.vo.MenuReviewVO;
 import dev.yogizogi.domain.review.repository.MenuReviewImageRepository;
 import dev.yogizogi.domain.review.repository.MenuReviewRepository;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
+import dev.yogizogi.domain.user.model.entity.User;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -96,4 +99,39 @@ public class MenuReviewService {
 
     }
 
-}
+    public GetMenuReviewOutDto getMenuReview(Long menuReviewId) {
+
+        MenuReview menuReview = menuReviewRepository.findById(menuReviewId)
+                .orElseThrow(() -> new NotExistMenuReviewException(NOT_EXIST_REVIEW));
+
+        User user = menuReview.getReview().getUser();
+
+        return GetMenuReviewOutDto.of(
+                menuReview.getId(),
+                user.getProfile().getNickname(),
+                convertToMeokProfileVO(user.getMeokProfile()),
+                convertToMenuReviewVo(menuReview)
+        );
+
+    }
+
+    private MeokProfileVO convertToMeokProfileVO(MeokProfile meokProfile) {
+        return  MeokProfileVO.builder()
+                .intensity(meokProfile.getIntensity())
+                .preference(meokProfile.getPreference())
+                .build();
+    }
+
+    private MenuReviewVO convertToMenuReviewVo(MenuReview menuReview) {
+        return  MenuReviewVO.builder()
+                .content(menuReview.getContent())
+                .recommendationStatus(menuReview.getRecommendationStatus())
+                .images(getImageUrl(menuReview))
+                .build();
+    }
+
+    private List<String> getImageUrl(MenuReview menuReview) {
+        return menuReview.getMenuReviewImages().stream()
+                .map(MenuReviewImage::getUrl)
+                .collect(Collectors.toList());
+    }}
