@@ -1,5 +1,7 @@
 package dev.yogizogi.domain.review.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.yogizogi.global.common.status.RecommendationStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -11,8 +13,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@JsonInclude(Include.NON_NULL)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MenuReviewVO {
+
+    @Schema(description = "메뉴 리뷰 식별자")
+    private Long id;
 
     @Schema(description = "메뉴 리뷰 내용")
     private String content;
@@ -24,12 +30,11 @@ public class MenuReviewVO {
     private List<String> images = new ArrayList<>();
 
     @Builder
-    public MenuReviewVO(String content, RecommendationStatus recommendationStatus, List<String> images) {
-
+    public MenuReviewVO(Long id, String content, RecommendationStatus recommendationStatus, List<String> images) {
+        this.id = id;
         this.content = content;
         this.recommendationStatus = recommendationStatus;
         this.images = images;
-
     }
 
     @Override

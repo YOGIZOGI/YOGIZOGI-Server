@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonInclude(Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Success<T>  implements Result {
+public class Success<T> implements Result {
 
     private String timestamp;
     private String trackingId;

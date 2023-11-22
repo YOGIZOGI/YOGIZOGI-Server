@@ -111,11 +111,9 @@ public class MenuReviewApiController {
 //    @GetMapping("/{menuReviewId}")
 //    public ResponseEntity getMenuReview(@PathVariable Long menuReviewId) {
 //
-//        GetMenuReviewOutDto res = menuReviewService.getMenuReview(menuReviewId);
-//
 //        return ResponseUtils.ok(
 //                Success.builder()
-//                        .data(res)
+//                        .data(menuReviewService.getMenuReview(menuReviewId))
 //                        .build()
 //        );
 //
