@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@Schema(name = "식당 등록 요청 DTO")
+@Schema(name = "음식점 등록 요청 DTO")
 public class CreateRestaurantInDto {
 
     @Schema(description = "이름", example = "요비")

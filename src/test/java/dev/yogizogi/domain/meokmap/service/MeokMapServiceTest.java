@@ -16,7 +16,7 @@ import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapRestaurantFixtures;
 import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.request.RemoveRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
 import dev.yogizogi.domain.meokmap.model.entity.MeokMapRestaurant;
 import dev.yogizogi.domain.meokmap.repository.MeokMapRepository;
@@ -241,7 +241,7 @@ class MeokMapServiceTest {
                 .willReturn(Optional.of(추가한_음식점들));
 
         // when
-        List<GetMeokMapOutDto> 응답 = meokMapService.getMeokMap(조회할_유저.getId());
+        List<RetrieveMeokMapOutDto> 응답 = meokMapService.retrieveMeokMap(조회할_유저.getId());
 
         // then
         for (int i = 0; i < 추가한_음식점들.size(); i++) {
@@ -266,7 +266,7 @@ class MeokMapServiceTest {
                 .willReturn(Optional.of(추가한_음식점들));
 
         // when
-        List<GetMeokMapOutDto> 응답 = meokMapService.getMeokMap(조회할_유저.getId());
+        List<RetrieveMeokMapOutDto> 응답 = meokMapService.retrieveMeokMap(조회할_유저.getId());
 
         // then
         Assertions.assertThat(응답).isNull();
@@ -288,7 +288,7 @@ class MeokMapServiceTest {
         // when
         // then
         Assertions.assertThatThrownBy(
-                () -> meokMapService.getMeokMap(조회할_유저.getId())
+                () -> meokMapService.retrieveMeokMap(조회할_유저.getId())
         ).isInstanceOf(NotExistMeokMapException.class);
 
     }

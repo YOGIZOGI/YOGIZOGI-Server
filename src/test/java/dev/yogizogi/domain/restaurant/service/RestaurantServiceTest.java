@@ -6,16 +6,18 @@ import static org.mockito.BDDMockito.given;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.yogizogi.domain.coordinate.factory.entity.CoordinateFactory;
 import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
+import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.factory.dto.CreateRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.CreateRestaurantOutDto;
-import dev.yogizogi.domain.restaurant.model.dto.response.GetRestaurantOutDto;
+import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.infra.kakao.maps.CoordinateService;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
+import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -84,38 +86,40 @@ class RestaurantServiceTest {
     void 특정_음식점_조회() {
 
         // given
-        String 조회할_음식점_상호명 = "요비";
         Restaurant 조회할_음식점 = RestaurantFactory.createRestaurant();
-        
+        List<Menu> 조회할_음식점_메뉴 = MenuFactory.createMenus();
+
         // mocking
-        ReflectionTestUtils.setField(조회할_음식점, "menus", MenuFactory.createMenus());
-        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명)))
+        ReflectionTestUtils.setField(조회할_음식점, "menus", 조회할_음식점_메뉴);
+
+        given(restaurantRepository.findById(eq(조회할_음식점.getId())))
                 .willReturn(Optional.of(조회할_음식점));
 
         // when
-        GetRestaurantOutDto 응답 = restaurantService.getRestaurant(조회할_음식점_상호명);
+        RetrieveRestaurantOutDto 응답 = restaurantService.retrieveRestaurant(조회할_음식점.getId());
 
         // then
-        Assertions.assertThat(응답.getRestaurantDetails().getName()).isEqualTo(조회할_음식점_상호명);
+        Assertions.assertThat(응답.getRestaurantDetails().getName()).isEqualTo(조회할_음식점.getRestaurantDetails().getName());
         Assertions.assertThat(응답.getMenus().size()).isEqualTo(2);
 
     }
 
     @Test
-    void 특정_음식점_조회_실패_존재하지_않는_음식() {
+    void 특정_음식점_조회_실패_존재하지_않는_음식점() {
 
         // given
-        String 조회할_음식점_상호명 = "요비";
+        Restaurant 조회할_음식점 = RestaurantFactory.createRestaurant();
 
         // mocking
-        given(restaurantRepository.findRestaurantByRestaurantDetails_Name(eq(조회할_음식점_상호명)))
+        given(restaurantRepository.findById(eq(조회할_음식점.getId())))
                 .willReturn(Optional.empty());
 
         // when
         // then
-        Assertions.assertThatThrownBy(
-                () -> restaurantService.getRestaurant(조회할_음식점_상호명))
+        Assertions
+                .assertThatThrownBy(() -> restaurantService.retrieveRestaurant(조회할_음식점.getId()))
                 .isInstanceOf(InvalidRestaurantTypeException.class);
+
     }
 
 

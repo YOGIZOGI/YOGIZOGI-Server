@@ -9,7 +9,7 @@ import dev.yogizogi.domain.meokmap.exception.FailToRemoveRestaurantOnMeokMapExce
 import dev.yogizogi.domain.meokmap.exception.NotExistMeokMapException;
 import dev.yogizogi.domain.meokmap.exception.NotExistRestaurantOnMeokMapException;
 import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
 import dev.yogizogi.domain.meokmap.model.entity.MeokMapRestaurant;
 import dev.yogizogi.domain.meokmap.repository.MeokMapRepository;
@@ -72,7 +72,7 @@ public class MeokMapService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetMeokMapOutDto> getMeokMap(UUID userId) {
+    public List<RetrieveMeokMapOutDto> retrieveMeokMap(UUID userId) {
 
         MeokMap meokMap = meokMapRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotExistMeokMapException(NOT_EXIST_MEOK_MAP));
@@ -84,7 +84,7 @@ public class MeokMapService {
         }
 
         return meokMapRestaurants.stream()
-                .map(m -> GetMeokMapOutDto.of(m.getRestaurant().getId(), m.getRestaurant().getRestaurantDetails()))
+                .map(m -> RetrieveMeokMapOutDto.of(m.getRestaurant().getId(), m.getRestaurant().getRestaurantDetails()))
                 .collect(Collectors.toList());
 
     }

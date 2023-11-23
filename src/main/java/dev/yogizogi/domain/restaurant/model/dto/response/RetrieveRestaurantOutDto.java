@@ -1,6 +1,6 @@
 package dev.yogizogi.domain.restaurant.model.dto.response;
 
-import dev.yogizogi.domain.menu.model.dto.response.GetMenusByRestaurantOutDto;
+import dev.yogizogi.domain.menu.model.entity.MenuVO;
 import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -11,8 +11,8 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "특정 식당 조회 응답 DTO")
-public class GetRestaurantOutDto {
+@Schema(name = "특정 음식점 조회 응답 DTO")
+public class RetrieveRestaurantOutDto {
 
     @Schema(description = "음식점 식별자")
     private UUID id;
@@ -21,10 +21,10 @@ public class GetRestaurantOutDto {
     private RestaurantDetails restaurantDetails;
 
     @Schema(description = "메뉴 리스트")
-    private List<GetMenusByRestaurantOutDto> menus;
+    private List<MenuVO> menus;
 
-    public static GetRestaurantOutDto of(UUID id, RestaurantDetails details, List<GetMenusByRestaurantOutDto> menus) {
-        return GetRestaurantOutDto.builder()
+    public static RetrieveRestaurantOutDto of(UUID id, RestaurantDetails details, List<MenuVO> menus) {
+        return RetrieveRestaurantOutDto.builder()
                 .id(id)
                 .restaurantDetails(details)
                 .menus(menus)

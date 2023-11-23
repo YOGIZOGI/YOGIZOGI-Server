@@ -9,8 +9,8 @@ import lombok.Getter;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@Schema(name = "내 지도 불러오기 응답 DTO")
-public class GetMeokMapOutDto {
+@Schema(name = "내 지도 조회 응답 DTO")
+public class RetrieveMeokMapOutDto {
 
     @Schema(description = "음식점 식별자")
     private UUID restaurantId;
@@ -18,8 +18,8 @@ public class GetMeokMapOutDto {
     @Schema(description = "음식점 정보")
     private RestaurantDetails restaurantDetails;
 
-    public static GetMeokMapOutDto of(UUID restaurantId, RestaurantDetails restaurantDetails) {
-        return GetMeokMapOutDto.builder()
+    public static RetrieveMeokMapOutDto of(UUID restaurantId, RestaurantDetails restaurantDetails) {
+        return RetrieveMeokMapOutDto.builder()
                 .restaurantId(restaurantId)
                 .restaurantDetails(restaurantDetails)
                 .build();

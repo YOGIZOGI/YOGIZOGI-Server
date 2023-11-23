@@ -1,15 +1,15 @@
 package dev.yogizogi.domain.restaurant.factory.dto;
 
-import dev.yogizogi.domain.menu.factory.dto.GetMenusByRestaurantFactory;
+import dev.yogizogi.domain.menu.factory.entity.MenuVOFactory;
 import dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures;
-import dev.yogizogi.domain.restaurant.model.dto.response.GetRestaurantOutDto;
+import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 
-public class GetRestaurantFactory {
+public class RetrieveRestaurantFactory {
 
-    public static GetRestaurantOutDto getRestaurantOutDto() {
+    public static RetrieveRestaurantOutDto getRestaurantOutDto() {
 
-        return GetRestaurantOutDto.of(
+        return RetrieveRestaurantOutDto.of(
                 RestaurantFixtures.식별자,
                 RestaurantDetails.builder()
                         .name(RestaurantFixtures.상호명)
@@ -17,7 +17,7 @@ public class GetRestaurantFactory {
                         .address(RestaurantFixtures.주소)
                         .imageUrl(RestaurantFixtures.음식점_사진)
                         .build(),
-                GetMenusByRestaurantFactory.getMenusByRestaurantOutDto()
+                MenuVOFactory.menuVOs()
         );
     }
 
