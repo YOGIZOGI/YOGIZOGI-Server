@@ -4,14 +4,14 @@ import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapRestaurantFixtures;
 import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import java.util.List;
 
-public class GetMeokMapFactory {
+public class RetrieveMeokMapFactory {
 
-    public static RetrieveMeokMapOutDto getMeokMapOutDto() {
+    public static RetrieveMeokMapOutDto retrieveMeokMapOutDto() {
         return RetrieveMeokMapOutDto.of(MeokMapRestaurantFixtures.음식점.getId(), MeokMapRestaurantFixtures.음식점.getRestaurantDetails());
     }
 
-    public static List<RetrieveMeokMapOutDto> getMeokMapOutDtos() {
-        return List.of(getMeokMapOutDto());
+    public static List<RetrieveMeokMapOutDto> retrieveMeokMapOutDtos() {
+        return List.of(retrieveMeokMapOutDto());
     }
 
 }
