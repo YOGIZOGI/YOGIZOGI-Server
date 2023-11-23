@@ -1,5 +1,7 @@
 package dev.yogizogi.domain.user.api;
 
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserProfileInDto;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
@@ -18,10 +20,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApiController {
 
     private final UserService userService;
+    private final MeokMapService meokMapService;
     private final JwtService jwtService;
 
     @Operation(summary = "회원 탈퇴")
@@ -143,6 +148,30 @@ public class UserApiController {
                                 jwtService.getUserId(), response.getNickname(), response.getImageUrl(), response.getIntroduction())
                         )
                         .build());
+
+    }
+
+    @Operation(
+            summary = "먹지도 조회",
+            description = "먹지도 조회"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "먹지도 조회 완료",
+                    content = @Content(schema = @Schema(implementation = RetrieveMeokMapOutDto.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저)")
+    })
+    @Parameter(name = "userId", description = "먹지도를 조회할 유저 식별자")
+    @GetMapping("/{userId}/meok-map")
+    public ResponseEntity retrieveMeokMap(@PathVariable String userId) {
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(meokMapService.retrieveMeokMap(UUID.fromString(userId)))
+                        .build()
+        );
 
     }
 

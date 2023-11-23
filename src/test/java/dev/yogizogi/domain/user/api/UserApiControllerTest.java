@@ -18,14 +18,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.yogizogi.domain.meokmap.factory.dto.RetrieveMeokMapFactory;
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.domain.user.factory.dto.CreateProfileFactory;
 import dev.yogizogi.domain.user.factory.dto.FindPasswordFactory;
+import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.request.CreateUserProfileInDto;
-import dev.yogizogi.domain.user.repository.UserRepository;
+import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.service.UserService;
 import dev.yogizogi.global.common.status.MessageStatus;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +43,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 @ActiveProfiles("test")
 @WebMvcTest(value = {UserApiController.class},
@@ -56,10 +62,10 @@ class UserApiControllerTest {
     private UserService userService;
 
     @MockBean
-    private JwtService jwtService;
+    private MeokMapService meokMapService;
 
     @MockBean
-    private UserRepository userRepository;
+    private JwtService jwtService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -75,8 +81,8 @@ class UserApiControllerTest {
         // when
         // then
         mockMvc.perform(
-                put("/api/users/delete")
-                        .param("phoneNumber", phoneNumber)
+                        put("/api/users/delete")
+                                .param("phoneNumber", phoneNumber)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -157,7 +163,8 @@ class UserApiControllerTest {
 
         // mocking
         given(jwtService.getUserId()).willReturn(등록할_유저_식별자);
-        given(userService.createProfile(eq(등록할_유저_식별자), eq(req.getNickname()), eq(req.getImageUrl()), eq(req.getIntroduction())))
+        given(userService.createProfile(eq(등록할_유저_식별자), eq(req.getNickname()), eq(req.getImageUrl()),
+                eq(req.getIntroduction())))
                 .willReturn(CreateProfileFactory.createUserProfileOutDto());
 
         // when
@@ -184,5 +191,34 @@ class UserApiControllerTest {
                 );
 
     }
+
+    @Test
+    void 먹지도_조회() throws Exception {
+
+        // given
+        User 조회할_사용자 = UserFactory.createUser();
+        List<RetrieveMeokMapOutDto> 응답 = RetrieveMeokMapFactory.retrieveMeokMapOutDtos();
+
+        // mocking
+        given(meokMapService.retrieveMeokMap(eq(조회할_사용자.getId()))).willReturn(응답);
+
+        // when
+        // then
+        ResultActions 결과 = mockMvc.perform(
+                        get("/api/users/{userId}/meok-map", 조회할_사용자.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding(StandardCharsets.UTF_8)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        for (int i = 0; i < 응답.size(); i++) {
+            결과.andExpect(jsonPath("$.data[%d].restaurantId", i).value(응답.get(i).getRestaurantId().toString()));
+        }
+
+
+    }
+
 
 }

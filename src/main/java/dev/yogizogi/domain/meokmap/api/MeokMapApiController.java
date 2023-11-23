@@ -3,7 +3,6 @@ package dev.yogizogi.domain.meokmap.api;
 import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.request.RemoveRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,29 +76,6 @@ public class MeokMapApiController {
                 Success.builder()
                         .data(meokMapService
                                 .removeRestaurantFromMeokMap(req.getUserId(), req.getRestaurantId()))
-                        .build()
-        );
-
-    }
-
-    @Operation(
-            summary = "먹지도 조회",
-            description = "먹지도에 등록한 모든 음식점을 조회"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "먹지도 조회 완료",
-                    content = @Content(schema = @Schema(implementation = RetrieveMeokMapOutDto.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저)")
-    })
-    @GetMapping("")
-    public ResponseEntity retrieveMeokMap() {
-
-        return ResponseUtils.ok(
-                Success.builder()
-                        .data(meokMapService.retrieveMeokMap(jwtService.getUserId()))
                         .build()
         );
 
