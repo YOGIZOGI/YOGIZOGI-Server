@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.meokmap.factory.dto.AddRestaurantOnMapFactory;
-import dev.yogizogi.domain.meokmap.factory.dto.GetMeokMapFactory;
+import dev.yogizogi.domain.meokmap.factory.dto.RetrieveMeokMapFactory;
 import dev.yogizogi.domain.meokmap.factory.dto.RemoveRestaurantOnMapFactory;
 import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapFixtures;
 import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapRestaurantFixtures;
@@ -124,7 +124,7 @@ class MeokMapApiControllerTest {
 
         // given
         UUID 사용자 = MeokMapFixtures.사용자.getId();
-        List<RetrieveMeokMapOutDto> 응답 = GetMeokMapFactory.getMeokMapOutDtos();
+        List<RetrieveMeokMapOutDto> 응답 = RetrieveMeokMapFactory.retrieveMeokMapOutDtos();
 
         // mocking
         given(jwtService.getUserId())
