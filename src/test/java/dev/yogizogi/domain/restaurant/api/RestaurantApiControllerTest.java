@@ -1,7 +1,5 @@
 package dev.yogizogi.domain.restaurant.api;
 
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴1_음식명;
-import static dev.yogizogi.domain.menu.factory.fixtures.MenuFixtures.메뉴2_음식명;
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.상호명;
 import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures.음식점_종류;
 import static org.mockito.ArgumentMatchers.eq;
@@ -15,13 +13,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.yogizogi.domain.menu.factory.entity.MenuFactory;
+import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.restaurant.factory.dto.CreateRestaurantFactory;
-import dev.yogizogi.domain.restaurant.factory.dto.GetRestaurantFactory;
+import dev.yogizogi.domain.restaurant.factory.dto.RetrieveRestaurantFactory;
 import dev.yogizogi.domain.restaurant.factory.entity.RestaurantFactory;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.service.RestaurantService;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 @ActiveProfiles("test")
 @WebMvcTest(value = {RestaurantApiController.class},
@@ -58,35 +59,36 @@ class RestaurantApiControllerTest {
     void 음식점_생성() throws Exception {
 
         // given
-        CreateRestaurantInDto req = CreateRestaurantFactory.createRestaurantInDto();
+        CreateRestaurantInDto 요청 = CreateRestaurantFactory.createRestaurantInDto();
 
         // mocking
-        given(restaurantService.createRestaurant(
-                eq(req.getName()), eq(req.getTel()), eq(req.getAddress()), eq(req.getImageUrl()), eq(req.getTypes())))
-                .willReturn(CreateRestaurantFactory.createRestaurantOutDto());
+        given(restaurantService
+                .createRestaurant(
+                        eq(요청.getName()),
+                        eq(요청.getTel()),
+                        eq(요청.getAddress()),
+                        eq(요청.getImageUrl()),
+                        eq(요청.getTypes())
+                )
+        ).willReturn(CreateRestaurantFactory.createRestaurantOutDto());
 
         // when
         // then
-        mockMvc.perform(
+        ResultActions 결과 = mockMvc.perform(
                         post("/api/restaurants/create")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding(StandardCharsets.UTF_8)
-                                .content(objectMapper.writeValueAsString(req))
+                                .content(objectMapper.writeValueAsString(요청))
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(
-                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(
-                        jsonPath("$.data.name").value(상호명)
-                )
-                .andExpect(
-                        jsonPath("$.data.types[0]").value(음식점_종류.get(0))
-                )
-                .andExpect(
-                        jsonPath("$.data.types[1]").value(음식점_종류.get(1))
-                );
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        결과.andExpect(jsonPath("$.data.name").value(상호명));
+
+        for (int i = 0; i < 요청.getTypes().size(); i++) {
+             결과.andExpect(jsonPath("$.data.types[%d]", i).value(음식점_종류.get(i)));
+        }
 
     }
 
@@ -95,35 +97,33 @@ class RestaurantApiControllerTest {
 
         // given
         Restaurant 조회할_음식점 = RestaurantFactory.createRestaurant();
-        ReflectionTestUtils.setField(조회할_음식점, "menus", MenuFactory.createMenus());
+        List<Menu> 조회할_음식점_메뉴 = MenuFactory.createMenus();
 
         // mocking
-        given(restaurantService.getRestaurant(eq(상호명))).willReturn(GetRestaurantFactory.getRestaurantOutDto());
+        ReflectionTestUtils.setField(조회할_음식점, "menus", MenuFactory.createMenus());
+
+        given(restaurantService.retrieveRestaurant(eq(조회할_음식점.getId())))
+                .willReturn(RetrieveRestaurantFactory.getRestaurantOutDto());
 
         // when
         // then
-        mockMvc.perform(
-                        get("/api/restaurants")
-                                .param("name", 상호명)
+        ResultActions 결과 = mockMvc
+                .perform(
+                        get("/api/restaurants/{restaurantId}", 조회할_음식점.getId())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(
-                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(
-                        jsonPath("$.data.restaurantDetails.name").value(상호명)
-                )
-                .andExpect(
-                        jsonPath("$.data.menus[0].menuDetails.name").value(메뉴1_음식명)
-                )
-                .andExpect(
-                        jsonPath("$.data.menus[1].menuDetails.name").value(메뉴2_음식명)
-                );
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+
+        결과.andExpect(jsonPath("$.data.restaurantDetails.name").value(조회할_음식점.getRestaurantDetails().getName()));
+
+        for (int i = 0; i < 조회할_음식점_메뉴.size(); i++) {
+            결과.andExpect(jsonPath("$.data.menus[%d].details.name", i).value(조회할_음식점_메뉴.get(i).getDetails().getName()));
+        }
+
 
     }
-
-
 
 
 }

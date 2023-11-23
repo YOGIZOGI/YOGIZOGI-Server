@@ -3,7 +3,7 @@ package dev.yogizogi.domain.meokmap.api;
 import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.request.RemoveRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.response.AddRestaurantOnMeokMapOutDto;
-import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import dev.yogizogi.global.common.model.response.Success;
@@ -91,16 +91,16 @@ public class MeokMapApiController {
             @ApiResponse(
                     responseCode = "200",
                     description = "먹지도 조회 완료",
-                    content = @Content(schema = @Schema(implementation = GetMeokMapOutDto.class))
+                    content = @Content(schema = @Schema(implementation = RetrieveMeokMapOutDto.class))
             ),
             @ApiResponse(responseCode = "404", description = "존재하지 않은 정보(유저)")
     })
     @GetMapping("")
-    public ResponseEntity getMeokMap() {
+    public ResponseEntity retrieveMeokMap() {
 
         return ResponseUtils.ok(
                 Success.builder()
-                        .data(meokMapService.getMeokMap(jwtService.getUserId()))
+                        .data(meokMapService.retrieveMeokMap(jwtService.getUserId()))
                         .build()
         );
 

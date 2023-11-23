@@ -19,7 +19,7 @@ import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapFixtures;
 import dev.yogizogi.domain.meokmap.factory.fixtures.MeokMapRestaurantFixtures;
 import dev.yogizogi.domain.meokmap.model.dto.request.AddRestaurantOnMeokMapInDto;
 import dev.yogizogi.domain.meokmap.model.dto.request.RemoveRestaurantOnMeokMapInDto;
-import dev.yogizogi.domain.meokmap.model.dto.response.GetMeokMapOutDto;
+import dev.yogizogi.domain.meokmap.model.dto.response.RetrieveMeokMapOutDto;
 import dev.yogizogi.domain.meokmap.service.MeokMapService;
 import dev.yogizogi.domain.security.service.JwtService;
 import java.nio.charset.StandardCharsets;
@@ -124,13 +124,13 @@ class MeokMapApiControllerTest {
 
         // given
         UUID 사용자 = MeokMapFixtures.사용자.getId();
-        List<GetMeokMapOutDto> 응답 = GetMeokMapFactory.getMeokMapOutDtos();
+        List<RetrieveMeokMapOutDto> 응답 = GetMeokMapFactory.getMeokMapOutDtos();
 
         // mocking
         given(jwtService.getUserId())
                 .willReturn(사용자);
 
-        given(meokMapService.getMeokMap(eq(사용자)))
+        given(meokMapService.retrieveMeokMap(eq(사용자)))
                 .willReturn(응답);
 
         // when
