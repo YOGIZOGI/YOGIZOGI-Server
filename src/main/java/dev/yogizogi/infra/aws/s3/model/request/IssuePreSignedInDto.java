@@ -2,9 +2,13 @@ package dev.yogizogi.infra.aws.s3.model.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(name = "객체 업로드 주소 발행 요청 DTO", description = "객체 업로드에 필요한 정보")
 public class IssuePreSignedInDto {
 

@@ -2,11 +2,14 @@ package dev.yogizogi.domain.authorization.model.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(name = "로그인 요청 DTO", description = "로그인에 필요한 정보")
 public class LoginInDto {
 
