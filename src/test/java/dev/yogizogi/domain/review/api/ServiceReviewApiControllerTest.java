@@ -53,7 +53,7 @@ class ServiceReviewApiControllerTest {
         CreateServiceReviewInDto 요청 = CreateServiceReviewFactory.createServiceReviewInDto();
 
         // mocking
-        given(serviceReviewService.createServiceReview(eq(요청.getReviewId()), eq(요청.getRating())))
+        given(serviceReviewService.createServiceReview(eq(요청.getReviewId()), eq(요청.getRating()), eq(요청.getYogiMoods())))
                 .willReturn(CreateServiceReviewFactory.createServiceReviewOutDto());
 
         // when

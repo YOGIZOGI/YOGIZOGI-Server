@@ -3,15 +3,16 @@ package dev.yogizogi.domain.review.service;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import dev.yogizogi.domain.review.exception.NotExistReviewException;
+import dev.yogizogi.domain.review.exception.InValidYogiMoodException;
+import dev.yogizogi.domain.review.exception.UnauthorizedReviewException;
 import dev.yogizogi.domain.review.factory.entity.ReviewFactory;
-import dev.yogizogi.domain.review.factory.fixtures.ReviewFixtures;
 import dev.yogizogi.domain.review.factory.fixtures.ServiceReviewFixtures;
 import dev.yogizogi.domain.review.model.dto.response.CreateServiceReviewOutDto;
+import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
 import dev.yogizogi.domain.review.repository.ServiceReviewRepository;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,38 +40,61 @@ class ServiceReviewServiceTest {
     void 서비스_리뷰_작성() {
 
         // given
-        UUID 서비스_리뷰를_관리하는_리뷰 = ReviewFixtures.식별자;
+        Review 서비스_리뷰를_관리하는_리뷰 = ReviewFactory.createReview();
         Double 등록할_평점 = ServiceReviewFixtures.평점;
+        List<String> 등록할_요기무드 = ServiceReviewFixtures.요기무드;
 
         // mocking
-        given(reviewRepository.findById(eq(서비스_리뷰를_관리하는_리뷰)))
+        given(reviewRepository.findById(eq(서비스_리뷰를_관리하는_리뷰.getId())))
                 .willReturn(Optional.of(ReviewFactory.createReview()));
 
         // when
         CreateServiceReviewOutDto 응답 = serviceReviewService
-                .createServiceReview(서비스_리뷰를_관리하는_리뷰, 등록할_평점);
+                .createServiceReview(서비스_리뷰를_관리하는_리뷰.getId(), 등록할_평점, 등록할_요기무드);
 
         // then
-        Assertions.assertThat(응답.getReviewId()).isEqualTo(서비스_리뷰를_관리하는_리뷰);
+        Assertions.assertThat(응답.getReviewId()).isEqualTo(서비스_리뷰를_관리하는_리뷰.getId());
 
     }
 
     @Test
-    void 서비스_리뷰_작성_실패() {
+    void 서비스_리뷰_작성_실패_권한없는_리뷰() {
 
         // given
-        UUID 서비스_리뷰를_관리하는_리뷰 = ReviewFixtures.식별자;
+        Review 서비스_리뷰를_관리하는_리뷰 = ReviewFactory.createReview();
         Double 등록할_평점 = ServiceReviewFixtures.평점;
+        List<String> 등록할_요기무드 = ServiceReviewFixtures.요기무드;
 
         // mocking
-        given(reviewRepository.findById(eq(서비스_리뷰를_관리하는_리뷰)))
+        given(reviewRepository.findById(eq(서비스_리뷰를_관리하는_리뷰.getId())))
                 .willReturn(Optional.empty());
 
         // when
         // then
         Assertions.assertThatThrownBy(
-                () ->  serviceReviewService.createServiceReview(서비스_리뷰를_관리하는_리뷰, 등록할_평점)
-        ).isInstanceOf(NotExistReviewException.class);
+                () ->  serviceReviewService.createServiceReview(서비스_리뷰를_관리하는_리뷰.getId(), 등록할_평점, 등록할_요기무드)
+        ).isInstanceOf(UnauthorizedReviewException.class);
+
+    }
+
+    @Test
+    void 서비스_리뷰_작성_실패_유효하지_않은_요기무드() {
+
+        // given
+        Review 서비스_리뷰를_관리하는_리뷰 = ReviewFactory.createReview();
+        Double 등록할_평점 = ServiceReviewFixtures.평점;
+        List<String> 등록할_요기무드 = ServiceReviewFixtures.유효하지_않은_요기무드;
+
+        // mocking
+        given(reviewRepository.findById(eq(서비스_리뷰를_관리하는_리뷰.getId())))
+                .willReturn(Optional.of(ReviewFactory.createReview()));
+
+
+        // when
+        // then
+        Assertions.assertThatThrownBy(
+                () ->  serviceReviewService.createServiceReview(서비스_리뷰를_관리하는_리뷰.getId(), 등록할_평점, 등록할_요기무드)
+        ).isInstanceOf(InValidYogiMoodException.class);
 
     }
 

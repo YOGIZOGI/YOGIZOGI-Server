@@ -10,7 +10,8 @@ public class CreateServiceReviewFactory {
     public static CreateServiceReviewInDto createServiceReviewInDto() {
         return new CreateServiceReviewInDto(
                 ReviewFixtures.식별자,
-                ServiceReviewFixtures.평점
+                ServiceReviewFixtures.평점,
+                ServiceReviewFixtures.요기무드
         );
     }
 
