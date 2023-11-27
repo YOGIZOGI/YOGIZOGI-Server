@@ -1,15 +1,15 @@
 package dev.yogizogi.domain.review.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,14 +32,13 @@ public class ServiceReview {
     @Column(columnDefinition = "TEXT")
     private Double rating;
 
-    @Enumerated(EnumType.STRING)
-    private List<YogiMood> yogiMoods;
+    @OneToMany(mappedBy = "serviceReview", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceReviewYogiMood> yogiMoods;
 
     @Builder
-    public ServiceReview(Review review, Double rating, List<YogiMood> yogiMoods) {
+    public ServiceReview(Review review, Double rating) {
         this.review = review;
         this.rating = rating;
-        this.yogiMoods = yogiMoods;
     }
 
 }

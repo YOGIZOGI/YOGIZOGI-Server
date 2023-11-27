@@ -9,14 +9,16 @@ import dev.yogizogi.domain.review.model.dto.request.CreateServiceReviewInDto;
 import dev.yogizogi.domain.review.model.dto.response.CreateServiceReviewOutDto;
 import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.domain.review.model.entity.ServiceReview;
+import dev.yogizogi.domain.review.model.entity.ServiceReviewYogiMood;
 import dev.yogizogi.domain.review.model.entity.YogiMood;
 import dev.yogizogi.domain.review.repository.ReviewRepository;
 import dev.yogizogi.domain.review.repository.ServiceReviewRepository;
+import dev.yogizogi.domain.review.repository.ServiceReviewYogiMoodRepository;
+import dev.yogizogi.domain.review.repository.YogiMoodRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,32 +29,51 @@ public class ServiceReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ServiceReviewRepository serviceReviewRepository;
+    private final YogiMoodRepository yogiMoodRepository;
+    private final ServiceReviewYogiMoodRepository serviceReviewYogiMoodRepository;
 
-    public CreateServiceReviewOutDto createServiceReview(UUID reviewId, Double rating, List<String> yogiMoods) {
+    public CreateServiceReviewOutDto createServiceReview(UUID reviewId, Double rating, List<String> yogiMoodsString) {
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new UnauthorizedReviewException(NOT_EXIST_REVIEW));
 
-        List<YogiMood> yogiMoodsEnum = convertToYogiMoodEnum(yogiMoods);
+        ServiceReview serviceReview = CreateServiceReviewInDto.toEntity(review, rating);
+        serviceReview = serviceReviewRepository.save(serviceReview);
 
-        ServiceReview serviceReview = CreateServiceReviewInDto.toEntity(review, rating, yogiMoodsEnum);
-        serviceReviewRepository.save(serviceReview);
+        List<ServiceReviewYogiMood> serviceReviewYogiMoods
+                = createServiceReviewYogiMood(serviceReview, convertToEntity(yogiMoodsString));
+
+        serviceReviewYogiMoodRepository.saveAll(serviceReviewYogiMoods);
 
         return CreateServiceReviewOutDto.of(serviceReview.getReview().getId(), serviceReview.getId());
 
     }
 
-    @NotNull
-    private static List<YogiMood> convertToYogiMoodEnum(List<String> yogiMoods) {
+    /**
+     * String으로 받은 YogiMood를 Entity로 변환
+     */
+    private List<YogiMood> convertToEntity(List<String> yogiMoodsString) {
+        return yogiMoodsString.stream()
+                .map(yogiMood ->
+                        yogiMoodRepository.findByName(yogiMood)
+                                .orElseThrow(() -> new InValidYogiMoodException(INVALID_YOGI_MOOD)))
+                .collect(Collectors.toList());
+    }
 
-        try {
-            return yogiMoods.stream()
-                    .map(YogiMood::valueOf)
-                    .collect(Collectors.toList());
-        } catch (IllegalArgumentException e) {
-            throw new InValidYogiMoodException(INVALID_YOGI_MOOD);
-        }
+    /**
+     * Service Review에 YogiMood에 대한 정보 저장
+     */
+    private List<ServiceReviewYogiMood> createServiceReviewYogiMood(ServiceReview serviceReview, List<YogiMood> yogiMoods) {
+
+        return yogiMoods.stream()
+                .map(yogiMood ->
+                        ServiceReviewYogiMood.builder()
+                                .serviceReview(serviceReview)
+                                .yogiMood(yogiMood)
+                                .build()
+                ).collect(Collectors.toList());
 
     }
+
 
 }
