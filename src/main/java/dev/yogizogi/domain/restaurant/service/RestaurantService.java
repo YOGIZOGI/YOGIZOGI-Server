@@ -1,5 +1,7 @@
 package dev.yogizogi.domain.restaurant.service;
 
+import static dev.yogizogi.global.common.code.ErrorCode.INVALID_YOGI_MOOD;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.yogizogi.domain.menu.model.entity.Menu;
 import dev.yogizogi.domain.menu.model.entity.MenuVO;
@@ -7,13 +9,23 @@ import dev.yogizogi.domain.restaurant.exception.InvalidRestaurantTypeException;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.CreateRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveRestaurantOutDto;
+import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveRestaurantsByYogiMoodsOutDto;
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.model.entity.RestaurantType;
+import dev.yogizogi.domain.restaurant.repository.RestaurantQuerydslRepository;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
+import dev.yogizogi.domain.review.exception.InValidYogiMoodException;
+import dev.yogizogi.domain.review.model.entity.Review;
+import dev.yogizogi.domain.review.model.entity.ServiceReview;
+import dev.yogizogi.domain.review.model.entity.ServiceReviewYogiMood;
+import dev.yogizogi.domain.review.model.entity.YogiMood;
+import dev.yogizogi.domain.review.repository.ServiceReviewYogiMoodRepository;
+import dev.yogizogi.domain.review.repository.YogiMoodRepository;
 import dev.yogizogi.global.common.code.ErrorCode;
 import dev.yogizogi.global.util.UuidUtils;
 import dev.yogizogi.infra.kakao.maps.CoordinateService;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,11 +38,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RestaurantService {
 
-    private final RestaurantRepository restaurantRepository;
     private final CoordinateService coordinateService;
 
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantQuerydslRepository restaurantQuerydslRepository;
+    private final ServiceReviewYogiMoodRepository serviceReviewYogiMoodRepository;
+    private final YogiMoodRepository yogiMoodRepository;
+
     public CreateRestaurantOutDto createRestaurant
-            (String name, String tel, String address, String imageUrl, List<String> typesString) throws JsonProcessingException {
+            (String name, String tel, String address, String imageUrl, List<String> typesString)
+            throws JsonProcessingException {
 
         Coordinate coordinate = coordinateService.recieveCoordinate(address);
 
@@ -85,6 +102,68 @@ public class RestaurantService {
                                 .details(menu.getDetails())
                                 .build()
                 ).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<RetrieveRestaurantsByYogiMoodsOutDto> retrieveRestaurantsByYogiMood(List<String> yogiMoodString) {
+
+        List<YogiMood> yogiMoods = convertToYogiMoodEntity(yogiMoodString);
+        List<Restaurant> restaurants = restaurantQuerydslRepository.findRestaurantsByYogiMoods(yogiMoods).get();
+
+        if (!hasContent(restaurants)) {
+            return Collections.emptyList();
+        }
+
+        return restaurants.stream()
+                .map(restaurant ->
+                        RetrieveRestaurantsByYogiMoodsOutDto
+                                .of(restaurant.getId(), restaurant.getRestaurantDetails())
+                ).collect(Collectors.toList());
+
+    }
+
+    private static boolean hasContent(List<Restaurant> findRestaurants) {
+
+        if (findRestaurants.isEmpty()) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * String으로 받은 YogiMood를 Entity로 변환
+     */
+    private List<YogiMood> convertToYogiMoodEntity(List<String> yogiMoodsString) {
+        return yogiMoodsString.stream()
+                .map(yogiMood ->
+                        yogiMoodRepository.findByName(yogiMood)
+                                .orElseThrow(() -> new InValidYogiMoodException(INVALID_YOGI_MOOD)))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * YogiMood를 포함하고 있는 모든 리뷰 가져오기
+     */
+    private List<Review> getReviewContainingYogiMood(List<YogiMood> yogiMoods) {
+
+        return yogiMoods.stream()
+                .flatMap(yogiMood -> yogiMood.getServiceReviewYogiMoods().stream())
+                .distinct()
+                .map(ServiceReviewYogiMood::getServiceReview)
+                .map(ServiceReview::getReview)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * 리뷰를 관리하고 있는 음식점 가져오기
+     */
+    private static List<Restaurant> getRestaurantsFromReview(List<Review> reviews) {
+        return reviews.stream()
+                .map(Review::getRestaurant)
+                .collect(Collectors.toList());
     }
 
 }

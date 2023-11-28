@@ -41,7 +41,7 @@ public class ServiceReviewService {
         serviceReview = serviceReviewRepository.save(serviceReview);
 
         List<ServiceReviewYogiMood> serviceReviewYogiMoods
-                = createServiceReviewYogiMood(serviceReview, convertToEntity(yogiMoodsString));
+                = createServiceReviewYogiMood(serviceReview, convertToYogiMoodEntity(yogiMoodsString));
 
         serviceReviewYogiMoodRepository.saveAll(serviceReviewYogiMoods);
 
@@ -52,7 +52,7 @@ public class ServiceReviewService {
     /**
      * String으로 받은 YogiMood를 Entity로 변환
      */
-    private List<YogiMood> convertToEntity(List<String> yogiMoodsString) {
+    private List<YogiMood> convertToYogiMoodEntity(List<String> yogiMoodsString) {
         return yogiMoodsString.stream()
                 .map(yogiMood ->
                         yogiMoodRepository.findByName(yogiMood)

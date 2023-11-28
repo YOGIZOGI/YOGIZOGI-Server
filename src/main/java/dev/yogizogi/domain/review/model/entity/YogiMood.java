@@ -1,9 +1,12 @@
 package dev.yogizogi.domain.review.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +32,9 @@ public class YogiMood {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "yogiMood", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceReviewYogiMood> serviceReviewYogiMoods;
 
     @Builder
     public YogiMood(String name) {
