@@ -112,7 +112,7 @@ class MenuReviewApiControllerTest {
     }
 
     @Test
-    void 특정_메뉴에_대한_모든_리뷰_조회_데이터가_없는_경우() throws Exception {
+    void 특정_메뉴에_대한_모든_리뷰_조회_데이터_없음() throws Exception {
 
         // given
         Menu 조회할_메뉴 = MenuFactory.createMenu();

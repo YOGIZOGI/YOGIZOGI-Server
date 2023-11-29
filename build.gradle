@@ -114,6 +114,7 @@ jacocoTestReport {
 							"**/health/**",
 							"**/model/*",
 							"**/exception/*",
+							"**/repository/*",
 							"**/global",
 							"**/infra"
 					] + Qdomains)

@@ -11,6 +11,7 @@ import static dev.yogizogi.domain.restaurant.factory.fixtures.RestaurantFixtures
 import dev.yogizogi.domain.restaurant.model.entity.Restaurant;
 import dev.yogizogi.domain.restaurant.model.entity.RestaurantDetails;
 import dev.yogizogi.infra.kakao.maps.model.entity.Coordinate;
+import java.util.List;
 
 public class RestaurantFactory {
 
@@ -51,6 +52,12 @@ public class RestaurantFactory {
                 .build();
 
         return restaurant;
+
+    }
+
+    public static List<Restaurant> createRestaurants() {
+
+        return List.of(createRestaurant());
 
     }
 

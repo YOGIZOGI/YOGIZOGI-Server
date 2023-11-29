@@ -15,9 +15,6 @@ import dev.yogizogi.domain.restaurant.model.entity.RestaurantType;
 import dev.yogizogi.domain.restaurant.repository.RestaurantQuerydslRepository;
 import dev.yogizogi.domain.restaurant.repository.RestaurantRepository;
 import dev.yogizogi.domain.review.exception.InValidYogiMoodException;
-import dev.yogizogi.domain.review.model.entity.Review;
-import dev.yogizogi.domain.review.model.entity.ServiceReview;
-import dev.yogizogi.domain.review.model.entity.ServiceReviewYogiMood;
 import dev.yogizogi.domain.review.model.entity.YogiMood;
 import dev.yogizogi.domain.review.repository.ServiceReviewYogiMoodRepository;
 import dev.yogizogi.domain.review.repository.YogiMoodRepository;
@@ -140,29 +137,6 @@ public class RestaurantService {
                 .map(yogiMood ->
                         yogiMoodRepository.findByName(yogiMood)
                                 .orElseThrow(() -> new InValidYogiMoodException(INVALID_YOGI_MOOD)))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * YogiMood를 포함하고 있는 모든 리뷰 가져오기
-     */
-    private List<Review> getReviewContainingYogiMood(List<YogiMood> yogiMoods) {
-
-        return yogiMoods.stream()
-                .flatMap(yogiMood -> yogiMood.getServiceReviewYogiMoods().stream())
-                .distinct()
-                .map(ServiceReviewYogiMood::getServiceReview)
-                .map(ServiceReview::getReview)
-                .collect(Collectors.toList());
-
-    }
-
-    /**
-     * 리뷰를 관리하고 있는 음식점 가져오기
-     */
-    private static List<Restaurant> getRestaurantsFromReview(List<Review> reviews) {
-        return reviews.stream()
-                .map(Review::getRestaurant)
                 .collect(Collectors.toList());
     }
 
