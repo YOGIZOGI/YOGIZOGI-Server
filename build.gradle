@@ -153,6 +153,7 @@ jacocoTestCoverageVerification {
 					"*.health.*",
 					"*.model.*",
 					"*.exception.*",
+					"*.repository.*",
 					"*.global.*",
 					"*.infra.*"
 			] + Qdomains
