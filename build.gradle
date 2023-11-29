@@ -114,6 +114,7 @@ jacocoTestReport {
 							"**/health/**",
 							"**/model/*",
 							"**/exception/*",
+							"**/repository/*",
 							"**/global",
 							"**/infra"
 					] + Qdomains)
@@ -152,6 +153,7 @@ jacocoTestCoverageVerification {
 					"*.health.*",
 					"*.model.*",
 					"*.exception.*",
+					"*.repository.*",
 					"*.global.*",
 					"*.infra.*"
 			] + Qdomains

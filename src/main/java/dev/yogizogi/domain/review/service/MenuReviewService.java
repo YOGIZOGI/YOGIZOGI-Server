@@ -85,7 +85,7 @@ public class MenuReviewService {
 
         List<MenuReview> findMenuReviews = menuReviewRepository.findByMenu(findMenu).get();
 
-        if (hasContent(findMenuReviews)) {
+        if (!hasContent(findMenuReviews)) {
             return null;
         }
 
@@ -105,9 +105,9 @@ public class MenuReviewService {
 
     private static boolean hasContent(List<MenuReview> findMenuReviews) {
         if (findMenuReviews.isEmpty()) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public GetMenuReviewOutDto getMenuReview(Long menuReviewId) {

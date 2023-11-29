@@ -4,8 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "지도에 음식점 삭제 요청 DTO")
 public class RemoveRestaurantOnMeokMapInDto {

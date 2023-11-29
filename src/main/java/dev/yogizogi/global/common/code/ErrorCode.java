@@ -24,6 +24,7 @@ public enum ErrorCode {
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
     INVALID_RESTAURANT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 음식점 종류입니다."),
+    INVALID_YOGI_MOOD(HttpStatus.BAD_REQUEST, "유효하지 않은 요기무드입니다."),
 
     /**
      * Code : 401
@@ -38,6 +39,7 @@ public enum ErrorCode {
      */
     FAIL_TO_LOGIN(HttpStatus.FORBIDDEN, "핸드폰 번호 또는 비밀번호를 잘못 입력했습니다."),
     FAIL_TO_REVIEW_UNAUTHORIZED_RESTAURANT(HttpStatus.FORBIDDEN, "권한이 없는 음식점입니다."),
+    FAIL_TO_REVIEW_UNAUTHORIZED_REVIEW(HttpStatus.NOT_FOUND, "권한이 없는 리뷰입니다."),
 
     /**
      * Code : 404

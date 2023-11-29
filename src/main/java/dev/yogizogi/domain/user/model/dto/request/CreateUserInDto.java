@@ -8,8 +8,10 @@ import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Schema(name = "회원가입 요청 DTO")
 public class CreateUserInDto {

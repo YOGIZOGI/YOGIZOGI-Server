@@ -50,7 +50,8 @@ public class ServiceReviewApiController {
                         .data(serviceReviewService
                                 .createServiceReview(
                                         req.getReviewId(),
-                                        req.getRating()
+                                        req.getRating(),
+                                        req.getYogiMoods()
                                 ))
                         .build()
         );

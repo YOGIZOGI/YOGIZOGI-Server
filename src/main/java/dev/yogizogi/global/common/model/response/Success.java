@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.yogizogi.global.common.status.response.ResponseStatus;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,11 +32,17 @@ public class Success<T> implements Result {
     }
 
     private ResponseStatus getStatus(T data) {
+
         if (data == null) {
             return ResponseStatus.NO_CONTENT;
         }
 
+        if (data instanceof Collection && ((Collection<?>) data).isEmpty()) {
+            return ResponseStatus.NO_CONTENT;
+        }
+
         return ResponseStatus.SUCCESS;
+
     }
 
 }
