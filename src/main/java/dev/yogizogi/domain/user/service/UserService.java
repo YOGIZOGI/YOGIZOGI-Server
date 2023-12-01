@@ -2,11 +2,11 @@ package dev.yogizogi.domain.user.service;
 
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 
+import dev.yogizogi.domain.meokprofile.repository.MeokProfileRepository;
 import dev.yogizogi.domain.user.exception.AlreadyUsePasswordException;
 import dev.yogizogi.domain.user.exception.NotExistPhoneNumberException;
 import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
-import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
@@ -29,6 +29,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final MeokProfileRepository meokProfileRepository;
 
     @Transactional(readOnly = true)
     public boolean isUsedNickname(String nickname) {
@@ -84,18 +85,17 @@ public class UserService {
 
     }
 
-    public DeleteUserOutDto deleteUser(String phoneNumber) throws NotExistPhoneNumberException {
+    public String deleteUser(String phoneNumber) throws NotExistPhoneNumberException {
 
         User deleteUser = userRepository.findByPhoneNumberAndStatus(phoneNumber, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         deleteUser.inactive();
 
-        return DeleteUserOutDto.of(
-                deleteUser.getPhoneNumber(),
-                deleteUser.getStatus()
-        );
+//        meokProfileRepository.delete(deleteUser.getMeokProfile());
+        userRepository.delete(deleteUser);
 
+        return DONE;
     }
 
 
