@@ -1,6 +1,5 @@
 package dev.yogizogi.domain.user.api;
 
-import static dev.yogizogi.domain.user.factory.dto.DeleteUserFactory.deleteUserOutDto;
 import static dev.yogizogi.domain.user.factory.fixtures.PasswordFixtures.변경할_비밀번호;
 import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.등록할_닉네임;
 import static dev.yogizogi.domain.user.factory.fixtures.ProfileFixtures.등록할_소개;
@@ -10,6 +9,7 @@ import static dev.yogizogi.domain.user.factory.fixtures.UserFixtures.핸드폰_�
 import static dev.yogizogi.global.common.model.constant.Format.DONE;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -76,12 +76,12 @@ class UserApiControllerTest {
         String phoneNumber = 핸드폰_번호;
 
         // mocking
-        given(userService.deleteUser(eq(핸드폰_번호))).willReturn(deleteUserOutDto());
+        given(userService.deleteUser(eq(핸드폰_번호))).willReturn(DONE);
 
         // when
         // then
         mockMvc.perform(
-                        put("/api/users/delete")
+                        delete("/api/users/delete")
                                 .param("phoneNumber", phoneNumber)
                 )
                 .andDo(print())
@@ -89,12 +89,7 @@ class UserApiControllerTest {
                 .andExpect(
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(
-                        jsonPath("$.data.phoneNumber").value(핸드폰_번호)
-                )
-                .andExpect(
-                        jsonPath("$.data.status").value("INACTIVE")
-                );
+                .andExpect(jsonPath("$.data").value(DONE));
 
     }
 

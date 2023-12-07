@@ -17,7 +17,6 @@ import dev.yogizogi.domain.user.exception.NotExistUserException;
 import dev.yogizogi.domain.user.exception.UserException;
 import dev.yogizogi.domain.user.factory.entity.UserFactory;
 import dev.yogizogi.domain.user.model.dto.response.CreateUserProfileOutDto;
-import dev.yogizogi.domain.user.model.dto.response.DeleteUserOutDto;
 import dev.yogizogi.domain.user.model.dto.response.FindPasswordOutDto;
 import dev.yogizogi.domain.user.model.entity.User;
 import dev.yogizogi.domain.user.repository.UserRepository;
@@ -91,10 +90,10 @@ class UserServiceTest {
                 .willReturn(Optional.of(UserFactory.createUserWithProfile()));
 
         // when
-        DeleteUserOutDto response = userService.deleteUser(removeUser.getPhoneNumber());
+        String 응답 = userService.deleteUser(removeUser.getPhoneNumber());
 
         // then
-        Assertions.assertThat(response.getStatus()).isEqualTo(BaseStatus.INACTIVE);
+        Assertions.assertThat(응답).isEqualTo(DONE);
 
     }
 

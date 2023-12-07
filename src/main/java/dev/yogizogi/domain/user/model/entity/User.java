@@ -1,6 +1,8 @@
 package dev.yogizogi.domain.user.model.entity;
 
+import dev.yogizogi.domain.meokmap.model.entity.MeokMap;
 import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
+import dev.yogizogi.domain.review.model.entity.Review;
 import dev.yogizogi.global.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,12 +45,19 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private FirstLoginStatus firstLoginStatus;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Authority> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meokprofile_id")
+    @JoinColumn(name = "meok_profile_id")
     private MeokProfile meokProfile;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Authority> roles = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MeokMap meokMap;
+
 
     public void setMeokProfile(MeokProfile meokProfile) {
         this.meokProfile = meokProfile;

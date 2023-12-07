@@ -24,6 +24,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,7 +57,7 @@ public class UserApiController {
             )
     })
     @Parameter(name = "phoneNumber", description = "삭제할 계정")
-    @PutMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity deleteUser(
             @RequestParam @Pattern(regexp = "^010\\d{8}$", message = "올바른 형식이 아닙니다.") String phoneNumber
     ) {
