@@ -103,11 +103,8 @@ public class MenuReviewService {
 
     }
 
-    private static boolean hasContent(List<MenuReview> findMenuReviews) {
-        if (findMenuReviews.isEmpty()) {
-            return false;
-        }
-        return true;
+    private static boolean hasContent(List<?> list) {
+        return !list.isEmpty();
     }
 
     public GetMenuReviewOutDto getMenuReview(Long menuReviewId) {

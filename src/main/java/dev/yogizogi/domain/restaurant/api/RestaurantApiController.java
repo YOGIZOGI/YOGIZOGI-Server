@@ -3,6 +3,7 @@ package dev.yogizogi.domain.restaurant.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.yogizogi.domain.restaurant.model.dto.request.CreateRestaurantInDto;
 import dev.yogizogi.domain.restaurant.model.dto.response.CreateRestaurantOutDto;
+import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveMenuReviewsByRestaurant;
 import dev.yogizogi.domain.restaurant.model.dto.response.RetrieveRestaurantOutDto;
 import dev.yogizogi.domain.restaurant.service.RestaurantService;
 import dev.yogizogi.global.common.model.response.Success;
@@ -95,6 +96,26 @@ public class RestaurantApiController {
         return ResponseUtils.ok(
                 Success.builder()
                         .data(restaurantService.retrieveRestaurantsByYogiMood(yogiMoods))
+                        .build());
+
+    }
+
+    @Operation(summary = "음식점의 모든 메뉴 리뷰 조회")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "메뉴 리뷰 조회 완료",
+                    content = @Content(schema = @Schema(implementation = RetrieveMenuReviewsByRestaurant.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 음식점")
+    })
+    @Parameter(name = "restaurantId", description = "조회할 음식점")
+    @GetMapping("/{restaurantId}/menu-reviews")
+    public ResponseEntity retrieveMenuReviewByRestaurant(@PathVariable String restaurantId) {
+
+        return ResponseUtils.ok(
+                Success.builder()
+                        .data(restaurantService.retrieveMenuReviewByRestaurant(restaurantId))
                         .build());
 
     }
