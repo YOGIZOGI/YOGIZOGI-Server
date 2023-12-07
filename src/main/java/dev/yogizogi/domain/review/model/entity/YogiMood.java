@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 //    LIGHT_MEAL, GOURMET_MEAL, PAIRING_MEAL,
 //
 //    // 만남의 목적
-//    BUSiNESS_MEETING, GROUP_MEETING, ANNIVERSARY;
+//    BUSINESS_MEETING, GROUP_MEETING, ANNIVERSARY;
 
 @Entity
 @Getter
