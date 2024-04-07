@@ -1,6 +1,5 @@
 package dev.yogizogi.domain.meokprofile.model.dto.request;
 
-import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
 import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,34 +19,21 @@ public class CreateMeokProfileInDto {
 
     @Min(value = 1) @Max(value = 5)
     @Schema(example = "4")
-    private Long spicyPreference;
+    private Integer spicyPreference;
 
     @Min(value = 1) @Max(value = 5)
     @Schema(example = "3")
-    private Long spicyIntensity;
-
-    @Min(value = 1) @Max(value = 5)
-    @Schema(example = "3")
-    private Long saltyPreference;
+    private Integer saltyPreference;
 
     @Min(value = 1) @Max(value = 5)
     @Schema(example = "2")
-    private Long saltyIntensity;
-
-    @Min(value = 1) @Max(value = 5)
-    @Schema(example = "2")
-    private Long sweetnessPreference;
-
-    @Min(value = 1) @Max(value = 5)
-    @Schema(example = "3")
-    private Long sweetnessIntensity;
+    private Integer sweetnessPreference;
 
     @Builder
-    public static MeokProfile toEntity(Preference preference, Intensity intensity) {
+    public static MeokProfile toEntity(Preference preference) {
 
         return MeokProfile.builder()
                 .preference(preference)
-                .intensity(intensity)
                 .build();
 
     }

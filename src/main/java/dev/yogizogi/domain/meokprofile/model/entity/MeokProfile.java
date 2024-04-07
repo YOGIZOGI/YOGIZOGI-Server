@@ -23,17 +23,13 @@ public class MeokProfile {
     private Long id;
 
     @Embedded
-    private Intensity intensity;
-
-    @Embedded
     private Preference preference;
 
     @OneToOne(mappedBy = "meokProfile", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
 
     @Builder
-    public MeokProfile(Intensity intensity, Preference preference) {
-        this.intensity = intensity;
+    public MeokProfile(Preference preference) {
         this.preference = preference;
     }
 

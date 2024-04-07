@@ -176,7 +176,6 @@ public class RestaurantService {
                 .profile(userProfile)
                 .meokProfile(MeokProfileVO.builder()
                         .preference(meokProfile.getPreference())
-                        .intensity(meokProfile.getIntensity())
                         .build())
                 .content(menuReview.getContent())
                 .recommendationStatus(menuReview.getRecommendationStatus())

@@ -2,7 +2,6 @@ package dev.yogizogi.domain.meokprofile.service;
 
 import dev.yogizogi.domain.meokprofile.model.dto.request.CreateMeokProfileInDto;
 import dev.yogizogi.domain.meokprofile.model.dto.response.CreateMeokProfileOutDto;
-import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
 import dev.yogizogi.domain.meokprofile.model.entity.MeokProfile;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
 import dev.yogizogi.domain.meokprofile.repository.MeokProfileRepository;
@@ -27,15 +26,13 @@ public class MeokProfileService {
     private final MeokProfileRepository meokProfileRepository;
 
     public CreateMeokProfileOutDto createMeokProfile(
-            UUID userId, long spicyPreference, long spicyIntensity,
-            long saltyPreference, long saltyIntensity, long sweetnessPreference, long sweetnessIntensity) {
+            UUID userId, Integer spicyPreference, Integer saltyPreference, Integer sweetnessPreference) {
 
         User findUser = userRepository.findByIdAndStatus(userId, BaseStatus.ACTIVE)
                 .orElseThrow(() -> new NotExistUserException(ErrorCode.NOT_EXIST_USER));
 
         MeokProfile meokProfile = CreateMeokProfileInDto.toEntity(
-                createPreference(spicyPreference, saltyPreference, sweetnessPreference),
-                createIntensity(spicyIntensity, saltyIntensity, sweetnessIntensity)
+                createPreference(spicyPreference, saltyPreference, sweetnessPreference)
         );
 
         meokProfileRepository.save(meokProfile);
@@ -43,21 +40,12 @@ public class MeokProfileService {
         findUser.updateFirstLoginStatus(FirstLoginStatus.INACTIVE);
         findUser.setMeokProfile(meokProfile);
 
-        return CreateMeokProfileOutDto.of(
-                meokProfile.getPreference(), meokProfile.getIntensity()
-        );
+        return CreateMeokProfileOutDto.of(meokProfile.getPreference());
 
     }
 
-    private static Intensity createIntensity(long spicyIntensity, long saltyIntensity, long sweetnessIntensity) {
-        return Intensity.builder()
-                .spicyIntensity(spicyIntensity)
-                .saltyIntensity(saltyIntensity)
-                .sweetnessIntensity(sweetnessIntensity)
-                .build();
-    }
-
-    private static Preference createPreference(long spicyPreference, long saltyPreference, long sweetnessPreference) {
+    private static Preference createPreference(
+        Integer spicyPreference, Integer saltyPreference, Integer sweetnessPreference) {
         return Preference.builder()
                 .spicyPreference(spicyPreference)
                 .saltyPreference(saltyPreference)

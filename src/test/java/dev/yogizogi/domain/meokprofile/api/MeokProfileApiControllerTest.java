@@ -62,11 +62,8 @@ class MeokProfileApiControllerTest {
         given(meokProfileService.createMeokProfile(
                 eq(등록할_식별자),
                         eq(req.getSpicyPreference()),
-                        eq(req.getSpicyIntensity()),
                         eq(req.getSaltyPreference()),
-                        eq(req.getSaltyIntensity()),
-                        eq(req.getSweetnessPreference()),
-                        eq(req.getSweetnessIntensity())))
+                        eq(req.getSweetnessPreference())))
                 .willReturn(CreateMeokProfileFactory.createMeokProfileOutDto());
 
         // when
@@ -91,15 +88,6 @@ class MeokProfileApiControllerTest {
                 )
                 .andExpect(
                         jsonPath("$.data.preference.sweetnessPreference").value(req.getSweetnessPreference())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.spicyIntensity").value(req.getSpicyIntensity())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.saltyIntensity").value(req.getSaltyIntensity())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.sweetnessIntensity").value(req.getSweetnessIntensity())
                 );
 
     }

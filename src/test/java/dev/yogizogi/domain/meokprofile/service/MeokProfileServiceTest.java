@@ -1,11 +1,8 @@
 package dev.yogizogi.domain.meokprofile.service;
 
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.단맛_강도;
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.단맛_선호도;
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.등록할_식별자;
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.매운맛_강도;
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.매운맛_선호도;
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.짠맛_강도;
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.짠맛_선호도;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -50,17 +47,13 @@ class MeokProfileServiceTest {
 
         // when
         CreateMeokProfileOutDto req = meokProfileService
-                .createMeokProfile(등록할_식별자, 매운맛_선호도, 매운맛_강도, 짠맛_선호도, 짠맛_강도, 단맛_선호도, 단맛_강도);
+                .createMeokProfile(등록할_식별자, 매운맛_선호도, 짠맛_선호도, 단맛_선호도);
 
 
         // then
         Assertions.assertThat(req.getPreference().getSpicyPreference()).isEqualTo(매운맛_선호도);
         Assertions.assertThat(req.getPreference().getSaltyPreference()).isEqualTo(짠맛_선호도);
         Assertions.assertThat(req.getPreference().getSweetnessPreference()).isEqualTo(단맛_선호도);
-        Assertions.assertThat(req.getIntensity().getSpicyIntensity()).isEqualTo(매운맛_강도);
-        Assertions.assertThat(req.getIntensity().getSaltyIntensity()).isEqualTo(짠맛_강도);
-        Assertions.assertThat(req.getIntensity().getSweetnessIntensity()).isEqualTo(단맛_강도);
-
 
     }
 
@@ -75,7 +68,7 @@ class MeokProfileServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> meokProfileService
-                        .createMeokProfile(등록할_식별자, 매운맛_선호도, 매운맛_강도, 짠맛_선호도, 짠맛_강도, 단맛_선호도, 단맛_강도)
+                        .createMeokProfile(등록할_식별자, 매운맛_선호도, 짠맛_선호도, 단맛_선호도)
                 )
                 .isInstanceOf(NotExistUserException.class);
 

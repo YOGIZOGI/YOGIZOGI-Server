@@ -16,18 +16,18 @@ public class Preference {
 
     @Min(value = 1) @Max(value = 5)
     @Schema(description = "매운맛 선호도", example = "4")
-    private Long spicyPreference;
+    private Integer spicyPreference;
 
     @Min(value = 1) @Max(value = 5)
     @Schema(description = "단맛 선호도", example = "3")
-    private Long sweetnessPreference;
+    private Integer sweetnessPreference;
 
     @Min(value = 1) @Max(value = 5)
     @Schema(description = "짠맛 선호도", example = "2")
-    private Long saltyPreference;
+    private Integer saltyPreference;
 
     @Builder
-    public Preference(Long spicyPreference, Long saltyPreference, Long sweetnessPreference) {
+    public Preference(Integer spicyPreference, Integer saltyPreference, Integer sweetnessPreference) {
         this.spicyPreference = spicyPreference;
         this.saltyPreference = saltyPreference;
         this.sweetnessPreference = sweetnessPreference;

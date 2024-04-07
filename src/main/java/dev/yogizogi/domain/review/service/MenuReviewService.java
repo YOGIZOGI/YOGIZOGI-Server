@@ -125,7 +125,6 @@ public class MenuReviewService {
 
     private MeokProfileVO convertToMeokProfileVO(MeokProfile meokProfile) {
         return MeokProfileVO.builder()
-                .intensity(meokProfile.getIntensity())
                 .preference(meokProfile.getPreference())
                 .build();
     }

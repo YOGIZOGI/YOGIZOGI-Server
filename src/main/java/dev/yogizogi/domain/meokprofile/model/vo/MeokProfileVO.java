@@ -1,6 +1,5 @@
 package dev.yogizogi.domain.meokprofile.model.vo;
 
-import dev.yogizogi.domain.meokprofile.model.entity.Intensity;
 import dev.yogizogi.domain.meokprofile.model.entity.Preference;
 import dev.yogizogi.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,15 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MeokProfileVO {
 
-    @Schema(description = "강도")
-    private Intensity intensity;
-
     @Schema(description = "선호도")
     private Preference preference;
 
     @Builder
-    public MeokProfileVO(User user, Intensity intensity, Preference preference) {
-        this.intensity = intensity;
+    public MeokProfileVO(User user, Preference preference) {
         this.preference = preference;
     }
 
@@ -35,12 +30,12 @@ public class MeokProfileVO {
         if (!(o instanceof MeokProfileVO that)) {
             return false;
         }
-        return intensity.equals(that.intensity) && preference.equals(that.preference);
+        return preference.equals(that.preference);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(intensity, preference);
+        return Objects.hash(preference);
     }
 
 }
