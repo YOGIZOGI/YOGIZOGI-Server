@@ -48,6 +48,7 @@ public class MeokProfileApiController {
                 Success.builder()
                         .data(meokProfileService.createMeokProfile(
                                 jwtService.getUserId(),
+                                response.getTags(),
                                 response.getSpicyPreference(),
                                 response.getSaltyPreference(),
                                 response.getSweetnessPreference()

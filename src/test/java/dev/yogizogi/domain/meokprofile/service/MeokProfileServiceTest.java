@@ -1,9 +1,6 @@
 package dev.yogizogi.domain.meokprofile.service;
 
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.단맛_선호도;
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.등록할_식별자;
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.매운맛_선호도;
-import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.짠맛_선호도;
+import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
@@ -47,8 +44,7 @@ class MeokProfileServiceTest {
 
         // when
         CreateMeokProfileOutDto req = meokProfileService
-                .createMeokProfile(등록할_식별자, 매운맛_선호도, 짠맛_선호도, 단맛_선호도);
-
+                .createMeokProfile(등록할_식별자, 먹태그, 매운맛_선호도, 짠맛_선호도, 단맛_선호도);
 
         // then
         Assertions.assertThat(req.getPreference().getSpicyPreference()).isEqualTo(매운맛_선호도);
@@ -68,7 +64,7 @@ class MeokProfileServiceTest {
         // then
         Assertions.assertThatThrownBy(
                 () -> meokProfileService
-                        .createMeokProfile(등록할_식별자, 매운맛_선호도, 짠맛_선호도, 단맛_선호도)
+                        .createMeokProfile(등록할_식별자, 먹태그, 매운맛_선호도, 짠맛_선호도, 단맛_선호도)
                 )
                 .isInstanceOf(NotExistUserException.class);
 

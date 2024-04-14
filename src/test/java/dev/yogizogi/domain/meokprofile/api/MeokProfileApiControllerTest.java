@@ -61,6 +61,7 @@ class MeokProfileApiControllerTest {
 
         given(meokProfileService.createMeokProfile(
                 eq(등록할_식별자),
+                        eq(req.getTags()),
                         eq(req.getSpicyPreference()),
                         eq(req.getSaltyPreference()),
                         eq(req.getSweetnessPreference())))
