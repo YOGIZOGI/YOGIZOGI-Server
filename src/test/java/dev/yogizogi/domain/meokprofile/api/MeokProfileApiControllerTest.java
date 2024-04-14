@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.meokprofile.api;
 
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.등록할_식별자;
+import static dev.yogizogi.domain.meokprofile.model.entity.Tag.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -80,6 +81,12 @@ class MeokProfileApiControllerTest {
                 .andExpect(
                         content()
                                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(
+                    jsonPath("$.data.tags[0]").value(LOVE_SPICY.toString())
+                )
+                .andExpect(
+                    jsonPath("$.data.tags[1]").value(LOVE_MINT.toString())
                 )
                 .andExpect(
                         jsonPath("$.data.preference.spicyPreference").value(req.getSpicyPreference())
