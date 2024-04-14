@@ -1,9 +1,13 @@
 package dev.yogizogi.domain.meokprofile.model.entity;
 
+import java.util.List;
+
 import dev.yogizogi.domain.user.model.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,8 +26,8 @@ public class MeokProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Intensity intensity;
+    @Enumerated(EnumType.STRING)
+    private List<Tag> tags;
 
     @Embedded
     private Preference preference;
@@ -32,8 +36,8 @@ public class MeokProfile {
     private User user;
 
     @Builder
-    public MeokProfile(Intensity intensity, Preference preference) {
-        this.intensity = intensity;
+    public MeokProfile(List<Tag> tags, Preference preference) {
+        this.tags = tags;
         this.preference = preference;
     }
 

@@ -23,6 +23,7 @@ public enum ErrorCode {
     ALREADY_USE_NICKNAME(HttpStatus.BAD_REQUEST, "이미 사용중인 닉네임입니다."),
     ALREADY_USE_PASSWORD(HttpStatus.BAD_REQUEST, "이미 사용중인 비밀번호입니다."),
 
+    INVALID_MEOK_TAG(HttpStatus.BAD_REQUEST, "유효하지 않은 먹태그입니다."),
     INVALID_RESTAURANT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 음식점 종류입니다."),
     INVALID_YOGI_MOOD(HttpStatus.BAD_REQUEST, "유효하지 않은 요기무드입니다."),
 

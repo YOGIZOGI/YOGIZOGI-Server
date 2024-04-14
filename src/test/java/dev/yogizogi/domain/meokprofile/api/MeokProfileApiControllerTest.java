@@ -1,6 +1,7 @@
 package dev.yogizogi.domain.meokprofile.api;
 
 import static dev.yogizogi.domain.meokprofile.factory.fixtures.MeokProfileFixtures.등록할_식별자;
+import static dev.yogizogi.domain.meokprofile.model.entity.Tag.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,12 +62,10 @@ class MeokProfileApiControllerTest {
 
         given(meokProfileService.createMeokProfile(
                 eq(등록할_식별자),
+                        eq(req.getTags()),
                         eq(req.getSpicyPreference()),
-                        eq(req.getSpicyIntensity()),
                         eq(req.getSaltyPreference()),
-                        eq(req.getSaltyIntensity()),
-                        eq(req.getSweetnessPreference()),
-                        eq(req.getSweetnessIntensity())))
+                        eq(req.getSweetnessPreference())))
                 .willReturn(CreateMeokProfileFactory.createMeokProfileOutDto());
 
         // when
@@ -84,6 +83,12 @@ class MeokProfileApiControllerTest {
                                 .contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(
+                    jsonPath("$.data.tags[0]").value(LOVE_SPICY.toString())
+                )
+                .andExpect(
+                    jsonPath("$.data.tags[1]").value(LOVE_MINT.toString())
+                )
+                .andExpect(
                         jsonPath("$.data.preference.spicyPreference").value(req.getSpicyPreference())
                 )
                 .andExpect(
@@ -91,15 +96,6 @@ class MeokProfileApiControllerTest {
                 )
                 .andExpect(
                         jsonPath("$.data.preference.sweetnessPreference").value(req.getSweetnessPreference())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.spicyIntensity").value(req.getSpicyIntensity())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.saltyIntensity").value(req.getSaltyIntensity())
-                )
-                .andExpect(
-                        jsonPath("$.data.intensity.sweetnessIntensity").value(req.getSweetnessIntensity())
                 );
 
     }
